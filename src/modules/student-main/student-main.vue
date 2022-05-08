@@ -1,0 +1,201 @@
+<template>
+  <div
+    :class="`${isMobile() ? 'st-wrapper' : 'st-wrapper pc'}`"
+    :style="getMainStyle()"
+  >
+    <desktopRightSide
+      v-show="
+        !isMobile() &&
+        store.getters.getStudentToken &&
+        componentname != 'StudentGroupPage' &&
+        componentname != 'CustomGroupPage'
+      "
+    />
+
+    <router-view> </router-view>
+    <alert
+      messages
+      label="پیام ناخوانده"
+      :text="text"
+      @convertBoolean="toggleShowNotification"
+      v-if="store.getters.getShowModal"
+    >
+      <div class="btns">
+        <button @click="redirectToChat">انتقال به صفحه چت</button>
+      </div>
+    </alert>
+  </div>
+</template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import desktopRightSide from '@/modules/desktop-rightside.vue';
+import detectMobile from '@/mixins/detectMobile';
+import { store, useChatStore, useStudentStore } from '@/store';
+import router from '@/router';
+import { connection } from '@/main';
+import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
+// import { ChatActionTypes } from '@/store/modules/chat/action-types';
+// import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
+
+@Options({
+  components: { desktopRightSide }
+})
+export default class Main extends Vue {
+  public windowHeight = window.innerHeight;
+  public store = store;
+  public ismobile = detectMobile.methods.isMobile();
+  public text = '';
+
+  async mounted() {
+    if (!store.getters.getStudentToken) return;
+    connection.connect().on('connect', () => {
+      connection.emit('register', {
+        _id: useStudentStore().getters.getCurrentStudent?._id,
+        userType: 'student'
+      });
+
+      if (useChatStore().getters.getShowModal === false) {
+        return;
+      } else if (useChatStore().getters.getMessages?.length) {
+        store.commit(ChatMutationTypes.TOGGLE_MODAL);
+        this.text = `شما ${
+          useChatStore().getters.getMessages?.length
+        } پیام ناخوانده دارید`;
+      }
+    });
+
+    connection.on('new-message', () => {
+      if (
+        this.componentname != 'ContactBackupChat' &&
+        this.componentname != 'ContactBackupInfo' &&
+        this.componentname != 'ContactBackup'
+      ) {
+        this.text = `شما ${
+          useChatStore().getters.getMessages?.length
+        } پیام ناخوانده دارید`;
+        this.toggleShowNotification();
+      }
+    });
+  }
+
+  toggleShowNotification() {
+    store.commit(ChatMutationTypes.TOGGLE_MODAL);
+  }
+
+  get messages() {
+    return useChatStore().getters.getMessages;
+  }
+
+  get componentname() {
+    return this.$route.name;
+  }
+
+  // get showNotification() {
+  //   return useChatStore().getters.getShowModal
+  // }
+
+  onResize(): void {
+    (this as any).windowHeight = window.innerHeight;
+  }
+
+  redirectToChat(): void {
+    this.toggleShowNotification();
+    router.push({ name: 'ContactBackup' });
+  }
+
+  getMainStyle() {
+    let fraction = '';
+
+    // We Want One Part page on the roadmap pages
+    if (
+      !this.ismobile &&
+      store.getters.getStudentToken &&
+      this.$route.name != 'StudentGroupPage' &&
+      this.$route.name != 'CustomGroupPage'
+    ) {
+      fraction = '40% 60%';
+    } else {
+      fraction = '1fr';
+    }
+
+    return {
+      height: `${(this as any).windowHeight - 1}px`,
+      'grid-template-columns': fraction
+    };
+  }
+}
+</script>
+<style lang="scss">
+.startAnimeation {
+  opacity: 0;
+}
+
+.endAnimation {
+  opacity: 1;
+}
+
+.st-wrapper {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  background: #f4f4f4;
+  display: grid;
+  font-family: IRANSans;
+  transition: opacity 0.9s ease-in-out;
+}
+
+.pc {
+  width: 100vw;
+  height: 100vh;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.75s ease-out;
+}
+
+.slide-enter-to {
+  position: absolute;
+  left: 0;
+}
+
+.slide-enter-from {
+  position: absolute;
+  left: -100%;
+}
+
+.slide-leave-to {
+  position: absolute;
+  right: -100%;
+}
+
+.slide-leave-from {
+  position: absolute;
+  right: 0;
+}
+
+.btns {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4rem;
+  margin-bottom: 2.5rem;
+  button {
+    padding: 5% 18%;
+    border-radius: 1rem;
+    border: none;
+
+    &:first-child {
+      background-color: #4ac367;
+      color: #fff;
+      margin-left: 0.3rem;
+    }
+
+    &:last-child {
+      background-color: #d3d7e0;
+      color: #646464;
+    }
+  }
+}
+</style>
