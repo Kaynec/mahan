@@ -16,6 +16,9 @@
   background-color: #252525;
   opacity: 0.5;
 }
+.alertify .ajs-modal {
+  z-index: 100000001;
+}
 
 .alertify-notifier .alertify .ajs-modal {
   position: fixed;
@@ -27,6 +30,7 @@
   overflow-y: auto;
   z-index: 100000000;
 }
+
 .alertify .ajs-dialog {
   position: relative;
   margin: 5% auto;

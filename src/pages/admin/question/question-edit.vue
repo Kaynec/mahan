@@ -23,13 +23,7 @@
       <div class="form-row">
         <div class="form-group col-md-8 col-sm-12">
           <label for="text">متن سوال:</label>
-          <ckeditor
-            :editor="editor"
-            class="form-control"
-            v-model="model.text"
-            :config="editorConfig"
-            @blur="v$.text.$touch()"
-          ></ckeditor>
+          <textarea class="form-control" v-model="model.text"></textarea>
 
           <span class="form-text text-danger" v-if="v$.text.$error">
             عنوان سوال باید بیشتر از سه حرف باشد
@@ -391,13 +385,10 @@
       <div class="form-row">
         <div class="form-group col-md-8 col-sm-12">
           <label for="text">پاسخ تشریحی:</label>
-          <ckeditor
-            :editor="editor"
+          <textarea
             class="form-control"
             v-model="model.descriptiveAnswer.text"
-            :config="editorConfig"
-            @blur="v$.text.$touch()"
-          ></ckeditor>
+          ></textarea>
         </div>
         <!--  -->
         <div class="form-group col-md-4 col-sm-12">
@@ -431,7 +422,9 @@
       <!--  -->
       <!-- End Of Row -->
 
-      <button class="btn btn-secondary ml-3 mt-4" @click="cancel">برگشت</button>
+      <button type="button" class="btn btn-secondary ml-3 mt-4" @click="cancel">
+        برگشت
+      </button>
       <button type="submit" class="btn btn-primary mt-4">ذخیره</button>
     </form>
   </div>
@@ -447,8 +440,6 @@ import { required, minLength, helpers } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
 import { jsonToFormData } from '@/api/helper';
 import { baseUrl } from '@/api/apiclient';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import CKEditor from '@ckeditor/ckeditor5-vue';
 const alertify = require('@/assets/alertifyjs/alertify');
 
 export default defineComponent({
@@ -458,23 +449,8 @@ export default defineComponent({
       default: ''
     }
   },
-  components: {
-    // Use the <ckeditor> component in this view.
-    ckeditor: CKEditor.component
-  },
 
   setup(props) {
-    let editor = ref(ClassicEditor);
-    let editorConfig = ref({
-      language: {
-        // The UI will be in English.
-        ui: 'fa',
-
-        // But the content will be edited in Arabic.
-        content: 'fa'
-      }
-    });
-
     const route = useRoute();
     // INCASE OF UPDATE SHOW THE ASSOCIATED SESSION AND COURSE
     let currentGrade = ref(route.params.gradeId);
@@ -555,7 +531,7 @@ export default defineComponent({
         model.value._id = data._id;
         model.value.text = data.text;
         model.value.options = data.options;
-        model.value.images = data.images;
+        model.value.images = data.images ? data.images : [];
         model.value.course = data.course._id;
         model.value.session = data.session._id;
         if (data.descriptiveAnswer) {
@@ -694,13 +670,15 @@ export default defineComponent({
         }
         model.value.text && (tmp.text = model.value.text);
         let formData = jsonToFormData(tmp);
-        for (const questionImage of model.value.images) {
-          if (!questionImage._id)
-            formData.append(
-              'questionImg',
-              questionImage.file,
-              questionImage.file.name
-            );
+        if (model.value.images) {
+          for (const questionImage of model.value.images) {
+            if (!questionImage._id)
+              formData.append(
+                'questionImg',
+                questionImage.file,
+                questionImage.file.name
+              );
+          }
         }
         for (const image of model.value.descriptiveAnswer.images) {
           if (!image._id)
@@ -746,7 +724,6 @@ export default defineComponent({
     // cancel //
     const cancel = () => {
       router.push({ name: 'question', params: route.params });
-      alertify.notify('cancelled action');
     };
 
     const addImage = (images) => {
@@ -778,9 +755,7 @@ export default defineComponent({
       filteredFields,
       grades,
       addImage,
-      getQuestionImageUrl,
-      editorConfig,
-      editor
+      getQuestionImageUrl
     };
   }
 });
