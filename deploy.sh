@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Build project
-npm run build
+# npm run build
 
 # Copy files and set env
 ssh root@185.18.214.200 "rm -Rf /var/www/production && mkdir -p /var/www/production"
