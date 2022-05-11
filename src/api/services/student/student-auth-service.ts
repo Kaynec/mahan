@@ -18,6 +18,52 @@ class StudentAuthService {
     });
   }
 
+  async sendCodeForForgetPassword(usernameObject: { username: string }) {
+    return instance.post(
+      'auth/student/sendCodeForForgetPassword',
+      usernameObject,
+      {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
+  async changePassword(usernameObject: {
+    username: string;
+    code: string;
+    newPassword: string;
+  }) {
+    return instance.post(
+      'auth/student/changePasswordForForgetPassword',
+      usernameObject,
+      {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
+  async activateCodeForgetPassword(usernameAndCode: {
+    username: string;
+    code: string;
+  }) {
+    return instance.post(
+      'auth/student/verifyCodeForForgetPassword',
+      usernameAndCode,
+      {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
   async loginOnce(user) {
     return instance.post('auth/student/login-once', user, {
       headers: {

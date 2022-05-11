@@ -59,6 +59,12 @@
     <!-- Form -->
     <form @submit.prevent="onSubmit" class="animate__animated animate__fadeIn">
       <div class="input">
+        <span style="white-space: nowrap; padding: 0"> نام کاربری </span>
+        <input type="text" v-model="model.username" maxlength="20" disabled />
+      </div>
+
+      <!--  -->
+      <div class="input">
         <span style="white-space: nowrap; padding: 0"> نام </span>
         <input
           type="text"
@@ -246,6 +252,8 @@ export default defineComponent({
     const currentUser = ref(store.getters.getCurrentStudent);
 
     const model = reactive({
+      username: currentUser.value.username,
+
       firstname: currentUser.value.firstname,
       lastname: currentUser.value.lastname,
       stateId: currentUser.value.stateId,

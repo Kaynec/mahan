@@ -838,7 +838,6 @@
 }
 .alertify-notifier {
   position: fixed;
-  width: 100vw;
   overflow: visible;
   z-index: 1982;
   -webkit-transform: translate3d(0, 0, 0);
@@ -846,9 +845,8 @@
 }
 .alertify-notifier .ajs-message {
   position: relative;
-  width: 260px;
   max-height: 0;
-  padding: 0;
+  padding: 1.5rem;
   opacity: 0;
   margin: 0;
   -webkit-transform: translate3d(0, 0, 0);
@@ -857,6 +855,10 @@
   transition-duration: 250ms;
   -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
+  border-radius: 10px;
+  color: white;
+  width: 90vw;
+  max-width: 450px;
 }
 .alertify-notifier .ajs-message.ajs-visible {
   -webkit-transition-duration: 0.5s;
@@ -869,13 +871,13 @@
   margin-top: 10px;
 }
 .alertify-notifier .ajs-message.ajs-success {
-  background: rgba(91, 189, 114, 0.95);
+  background: rgba(91, 189, 114, 0.98);
 }
 .alertify-notifier .ajs-message.ajs-error {
-  background: rgba(217, 92, 92, 0.95);
+  background: rgba(217, 92, 92, 0.98);
 }
 .alertify-notifier .ajs-message.ajs-warning {
-  background: rgba(252, 248, 215, 0.95);
+  background: rgba(252, 248, 215, 0.98);
 }
 .alertify-notifier .ajs-message .ajs-close {
   position: absolute;
@@ -891,56 +893,12 @@
   border-top-right-radius: 2px;
 }
 .alertify-notifier.ajs-top {
-  /* top: 10vh; */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 10vh;
+  margin: 0 auto;
+  position: fixed;
+  right: 5vw;
 }
-/* .alertify-notifier.ajs-bottom {
-  bottom: 10vh;
-}
-.alertify-notifier.ajs-right {
-  right: 10vw;
-}
-.alertify-notifier.ajs-right .ajs-message {
-  right: -30vw;
-}
-.alertify-notifier.ajs-right .ajs-message.ajs-visible {
-  right: 290px;
-}
-.alertify-notifier.ajs-left {
-  left: 10vw;
-}
-.alertify-notifier.ajs-left .ajs-message {
-  left: -30vw;
-}
-.alertify-notifier.ajs-left .ajs-message.ajs-visible {
-  left: 0;
-}
-.alertify-notifier.ajs-center {
-  left: 50vw;
-} */
-.alertify-notifier.ajs-center .ajs-message {
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-}
-.alertify-notifier.ajs-center .ajs-message.ajs-visible {
-  left: 50%;
-  -webkit-transition-timing-function: cubic-bezier(0.57, 0.43, 0.1, 0.65);
-  transition-timing-function: cubic-bezier(0.57, 0.43, 0.1, 0.65);
-}
-.alertify-notifier.ajs-center.ajs-top .ajs-message {
-  top: -300px;
-}
-.alertify-notifier.ajs-center.ajs-top .ajs-message.ajs-visible {
-  top: 0;
-}
-.alertify-notifier.ajs-center.ajs-bottom .ajs-message {
-  bottom: -300px;
-}
-.alertify-notifier.ajs-center.ajs-bottom .ajs-message.ajs-visible {
-  bottom: 0;
-}
+
 .ajs-no-transition.alertify .ajs-dialog,
 .ajs-no-transition.alertify .ajs-dimmer,
 .ajs-no-transition.alertify .ajs-modal {

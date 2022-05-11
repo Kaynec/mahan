@@ -3,10 +3,9 @@
  * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
  * Copyright 2019 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) 
  * Licensed under GPL 3 <https://opensource.org/licenses/gpl-3.0>*/
-
 .alertify .ajs-dimmer {
   position: fixed;
-  z-index: 100000000;
+  z-index: 1981;
   top: 0;
   right: 0;
   bottom: 0;
@@ -17,10 +16,6 @@
   opacity: 0.5;
 }
 .alertify .ajs-modal {
-  z-index: 100000001;
-}
-
-.alertify-notifier .alertify .ajs-modal {
   position: fixed;
   top: 0;
   right: 0;
@@ -28,7 +23,7 @@
   bottom: 0;
   padding: 0;
   overflow-y: auto;
-  z-index: 100000000;
+  z-index: 1981;
 }
 
 .alertify .ajs-dialog {
@@ -127,8 +122,8 @@
   bottom: 0;
   z-index: 1;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNy8xMS8xNEDQYmMAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAAQ0lEQVQYlaXNMQoAIAxD0dT7H657l0KX3iJuUlBUNOsPPCGJm7VDp6ryeMxMuDsAQH7owW3pyn3RS26iKxERMLN3ugOaAkaL3sWVigAAAABJRU5ErkJggg==);
-  -webkit-transform: scaleX(1);
-  transform: scaleX(1);
+  -webkit-transform: scaleX(1) /*rtl:scaleX(-1)*/;
+  transform: scaleX(1) /*rtl:scaleX(-1)*/;
   cursor: se-resize;
 }
 .alertify.ajs-no-overflow .ajs-body .ajs-content {
@@ -174,16 +169,16 @@
 .alertify.ajs-maximized .ajs-commands button.ajs-maximize {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNy8xMy8xNOrZqugAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAASklEQVQYlZWQ0QkAMQhDtXRincOZX78KVtrDCwgqJNEoIB3MPLj7lRUROlpyVXGzby6zWuY+kz6tj5sBMTMAyVV3/595RbOh3cAXsww1raeiOcoAAAAASUVORK5CYII=);
 }
-.alertify.ajs-maximized .ajs-dialog,
-.alertify.ajs-resizable .ajs-dialog {
+.alertify.ajs-resizable .ajs-dialog,
+.alertify.ajs-maximized .ajs-dialog {
   padding: 0;
 }
-.alertify.ajs-maximized .ajs-commands,
-.alertify.ajs-resizable .ajs-commands {
+.alertify.ajs-resizable .ajs-commands,
+.alertify.ajs-maximized .ajs-commands {
   margin: 14px 24px 0 0;
 }
-.alertify.ajs-maximized .ajs-header,
-.alertify.ajs-resizable .ajs-header {
+.alertify.ajs-resizable .ajs-header,
+.alertify.ajs-maximized .ajs-header {
   position: absolute;
   top: 0;
   left: 0;
@@ -191,13 +186,13 @@
   margin: 0;
   padding: 16px 24px;
 }
-.alertify.ajs-maximized .ajs-body,
-.alertify.ajs-resizable .ajs-body {
+.alertify.ajs-resizable .ajs-body,
+.alertify.ajs-maximized .ajs-body {
   min-height: 224px;
   display: inline-block;
 }
-.alertify.ajs-maximized .ajs-body .ajs-content,
-.alertify.ajs-resizable .ajs-body .ajs-content {
+.alertify.ajs-resizable .ajs-body .ajs-content,
+.alertify.ajs-maximized .ajs-body .ajs-content {
   position: absolute;
   top: 50px;
   right: 24px;
@@ -205,8 +200,8 @@
   left: 24px;
   overflow: auto;
 }
-.alertify.ajs-maximized .ajs-footer,
-.alertify.ajs-resizable .ajs-footer {
+.alertify.ajs-resizable .ajs-footer,
+.alertify.ajs-maximized .ajs-footer {
   position: absolute;
   left: 0;
   right: 0;
@@ -280,7 +275,7 @@
 }
 .ajs-no-overflow {
   overflow: hidden !important;
-  outline: 0;
+  outline: none;
 }
 .ajs-no-overflow.ajs-fixed {
   position: fixed;
@@ -306,7 +301,7 @@
   }
   .alertify:not(.ajs-maximized).ajs-resizable .ajs-dialog {
     min-width: initial;
-    min-width: auto;
+    min-width: auto /*IE fallback*/;
   }
 }
 @-moz-document url-prefix() {
@@ -331,8 +326,8 @@
   opacity: 0;
 }
 .alertify.ajs-in:not(.ajs-hidden) .ajs-dialog {
-  -webkit-animation-duration: 0.5s;
-  animation-duration: 0.5s;
+  -webkit-animation-duration: 500ms;
+  animation-duration: 500ms;
 }
 .alertify.ajs-out.ajs-hidden .ajs-dialog {
   -webkit-animation-duration: 250ms;
@@ -444,11 +439,11 @@
 }
 @-webkit-keyframes ajs-pulseIn {
   0%,
-  100%,
   20%,
   40%,
   60%,
-  80% {
+  80%,
+  100% {
     -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
@@ -482,11 +477,11 @@
 }
 @keyframes ajs-pulseIn {
   0%,
-  100%,
   20%,
   40%,
   60%,
-  80% {
+  80%,
+  100% {
     -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
@@ -842,6 +837,7 @@
 }
 .alertify-notifier {
   position: fixed;
+  width: 0;
   overflow: visible;
   z-index: 1982;
   -webkit-transform: translate3d(0, 0, 0);
@@ -852,7 +848,7 @@
   max-height: 0;
   padding: 1.5rem;
   opacity: 0;
-  margin: 0;
+  margin: 0 auto;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   -webkit-transition-duration: 250ms;
@@ -865,8 +861,8 @@
   max-width: 450px;
 }
 .alertify-notifier .ajs-message.ajs-visible {
-  -webkit-transition-duration: 0.5s;
-  transition-duration: 0.5s;
+  -webkit-transition-duration: 500ms;
+  transition-duration: 500ms;
   -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 1;
@@ -896,6 +892,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   border-top-right-radius: 2px;
 }
+
 .alertify-notifier.ajs-top {
   top: 10vh;
   margin: 0 auto;
@@ -903,9 +900,54 @@
   right: 5vw;
 }
 
-.ajs-no-transition.alertify .ajs-dialog,
+/* .alertify-notifier.ajs-bottom {
+  bottom: 10px;
+}
+.alertify-notifier.ajs-right {
+  right: 10px;
+}
+.alertify-notifier.ajs-right .ajs-message {
+  right: -320px;
+}
+.alertify-notifier.ajs-right .ajs-message.ajs-visible {
+  right: 290px;
+}
+.alertify-notifier.ajs-left {
+  left: 10px;
+}
+.alertify-notifier.ajs-left .ajs-message {
+  left: -300px;
+}
+.alertify-notifier.ajs-left .ajs-message.ajs-visible {
+  left: 0;
+}
+.alertify-notifier.ajs-center {
+  left: 50%;
+} */
+/* .alertify-notifier.ajs-center .ajs-message {
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.alertify-notifier.ajs-center .ajs-message.ajs-visible {
+  left: 50%;
+  -webkit-transition-timing-function: cubic-bezier(0.57, 0.43, 0.1, 0.65);
+  transition-timing-function: cubic-bezier(0.57, 0.43, 0.1, 0.65);
+}
+.alertify-notifier.ajs-center.ajs-top .ajs-message {
+  top: -300px;
+}
+.alertify-notifier.ajs-center.ajs-top .ajs-message.ajs-visible {
+  top: 0;
+}
+.alertify-notifier.ajs-center.ajs-bottom .ajs-message {
+  bottom: -300px;
+}
+.alertify-notifier.ajs-center.ajs-bottom .ajs-message.ajs-visible {
+  bottom: 0;
+} */
 .ajs-no-transition.alertify .ajs-dimmer,
-.ajs-no-transition.alertify .ajs-modal {
+.ajs-no-transition.alertify .ajs-modal,
+.ajs-no-transition.alertify .ajs-dialog {
   -webkit-transition: none !important;
   transition: none !important;
   -webkit-animation: none !important;
@@ -918,9 +960,9 @@
   animation: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
-  .alertify .ajs-dialog,
   .alertify .ajs-dimmer,
-  .alertify .ajs-modal {
+  .alertify .ajs-modal,
+  .alertify .ajs-dialog {
     -webkit-transition: none !important;
     transition: none !important;
     -webkit-animation: none !important;

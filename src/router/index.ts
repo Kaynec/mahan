@@ -61,6 +61,10 @@ const Home = () => import('@/pages/student/home/home.vue');
 const StudentSignup = () => import('@/pages/student/signup/signup.vue');
 const StudentPasswordRecover = () =>
   import('@/pages/student/password-recover/password-recover.vue');
+
+const StudentPasswordChange = () =>
+  import('@/pages/student/password-change/password-change.vue');
+
 const StudentAuthentication = () =>
   import('@/pages/student/authentication/StudentAuthentication.vue');
 const StudentSetting = () => import('@/pages/student/setting/setting.vue');
@@ -490,6 +494,14 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
         beforeEnter: ifStudentNotAuthenticated
       },
+
+      {
+        path: 'password-change/:code',
+        name: 'StudentPasswordChange',
+        component: StudentPasswordChange,
+        beforeEnter: ifStudentNotAuthenticated
+      },
+
       {
         path: 'Authentication',
         name: 'StudentAuthentication',

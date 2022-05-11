@@ -75,7 +75,7 @@
           class="reset-password hover-make-big"
           @click="moveToPasswordRecover()"
         >
-          ورود با رمز عبور یکبار مصرف
+          فراموشی رمز عبور
         </span>
       </div>
     </div>
@@ -109,7 +109,8 @@
           `
                 : ''
             }`"
-            >شماره تلفن همراه
+          >
+            نام کاربری
           </span>
         </label>
         <p
@@ -174,7 +175,7 @@
           class="reset-password hover-make-big"
           @click="moveToPasswordRecover()"
         >
-          ورود با رمز عبور یکبار مصرف
+          فراموشی رمز عبور
         </span>
       </div>
     </div>
@@ -188,6 +189,7 @@ import { StudentActionTypes } from '@/store/modules/student/action-types';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import { minLength, helpers, required } from '@vuelidate/validators';
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   setup() {
@@ -209,11 +211,12 @@ export default defineComponent({
             StudentActionTypes.AUTH_REQUEST_STUDENT,
             model
           );
+          isRequesting.value = false;
 
           if (authCheck) {
             await store.dispatch(StudentActionTypes.CURRENT_STUDENT);
             router.push({ name: 'Home' });
-            isRequesting.value = false;
+            alertify.success(' ورود با موفقیت انجام شد ');
           }
         } catch (e) {
           isRequesting.value = false;
@@ -235,7 +238,7 @@ export default defineComponent({
       password: {
         required: helpers.withMessage('لطفا رمز خود را وارد کنید', required),
         minLength: helpers.withMessage(
-          'رمز عبور باید حداقل 6 رقم باشد',
+          'رمز عبور باید حداقل 8 رقم باشد',
           minLength(8)
         )
       }

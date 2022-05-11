@@ -6,23 +6,21 @@
       @submit.prevent="sendToStudentAuthentication()"
       class="Rectangle animate__animated animate__fadeIn"
     >
-      <span class="Rectangle-header hover-make-big">
-        ورود با رمز عبور یکبار مصرف
-      </span>
+      <span class="Rectangle-header hover-make-big"> تغییر رمز عبور </span>
 
-      <span class="Rectangle-label"> لطفا شماره همراه خود را وارد کنید </span>
+      <span class="Rectangle-label"> لطفا نام کاربری خود را وارد کنید </span>
 
       <label class="floating-label">
         <input
-          v-model="model.phone"
+          v-model="model.username"
           placeholder="*********۰۹"
-          @blur="v$.phone.$touch()"
+          @blur="v$.username.$touch()"
           type="text"
           id="name"
         />
         <span
           :style="`${
-            model.phone
+            model.username
               ? `
            transform: translateY(-0.25rem);
     right: 1%;
@@ -33,11 +31,11 @@
               : ''
           }`"
         >
-          شماره تلفن</span
+          نام کاربری</span
         >
       </label>
       <span
-        v-for="(error, index) in v$.phone.$errors"
+        v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
         style="font-family: IRANSans"
@@ -71,23 +69,21 @@
     />
     <!-- Main Part -->
     <form @submit.prevent="sendToStudentAuthentication()" class="Rectangle">
-      <span class="Rectangle-header hover-make-big">
-        ورود با رمز عبور یکبار مصرف
-      </span>
+      <span class="Rectangle-header hover-make-big"> تغییر رمز عبور </span>
 
-      <span class="Rectangle-label"> لطفا شماره همراه خود را وارد کنید </span>
+      <span class="Rectangle-label"> لطفا نام کاربری خود را وارد کنید </span>
 
       <label class="floating-label">
         <input
-          v-model="model.phone"
+          v-model="model.username"
           placeholder="*********۰۹"
-          @blur="v$.phone.$touch()"
+          @blur="v$.username.$touch()"
           type="text"
           id="name"
         />
         <span
           :style="`${
-            model.phone
+            model.username
               ? `
            transform: translateY(-0.25rem);
     right: 1%;
@@ -98,11 +94,11 @@
               : ''
           }`"
         >
-          شماره تلفن</span
+          نام کاربری</span
         >
       </label>
       <span
-        v-for="(error, index) in v$.phone.$errors"
+        v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
         style="font-family: IRANSans"
@@ -118,7 +114,7 @@
           role="status"
           aria-hidden="true"
         ></span>
-        <span v-else> ارسال رمز عبور </span>
+        <span v-else> ارسال کد تایید </span>
       </button>
 
       <span @click="cancel()" class="cancel hover-make-big">
@@ -142,7 +138,7 @@ export default defineComponent({
     const isSendingAMainReq = ref(false);
 
     const model = reactive({
-      phone: ''
+      username: ''
     });
 
     const sendToStudentAuthentication = async () => {
@@ -152,19 +148,22 @@ export default defineComponent({
         isSendingAMainReq.value = true;
 
         try {
-          const res = await StudentAuthServiceApi.resendVerificationCode({
-            phone: model.phone
+          const res = await StudentAuthServiceApi.sendCodeForForgetPassword({
+            username: model.username
           });
           isSendingAMainReq.value = false;
           if (res.data) {
             alertify.success(res.data.message);
             router.push({
               name: 'StudentAuthentication',
-              params: { model: JSON.stringify(model.phone) }
+              params: {
+                model: JSON.stringify(model.username)
+              }
             });
           }
         } catch (e) {
           console.error(e);
+          isSendingAMainReq.value = false;
         }
       }
     };
@@ -173,18 +172,14 @@ export default defineComponent({
     };
 
     const rules = computed(() => ({
-      phone: {
+      username: {
         required: helpers.withMessage(
-          'لطفا   شماره همراه خود  را وارد کنید',
+          'لطفا نام کاربری خود  را وارد کنید',
           required
         ),
         minLength: helpers.withMessage(
-          'شماره همراه باید 11 رقم باشد',
-          minLength(11)
-        ),
-        maxLength: helpers.withMessage(
-          'شماره همراه باید 11 رقم باشد',
-          maxLength(11)
+          'نام کاربری باید حداقل 5 حرف باشد',
+          minLength(5)
         )
       }
     }));

@@ -361,6 +361,7 @@ import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
 import { StudentGradeApi } from '@/api/services/student/student-grade-service';
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
 import { useRoute } from 'vue-router';
+import alertify from '@/assets/alertifyjs/alertify';
 // import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
@@ -428,7 +429,6 @@ export default defineComponent({
         })?.orientations;
       }
     };
-    // Submit The Information
     const register = async () => {
       if (!v$.value.$invalid) {
         isRequesting.value = true;
@@ -451,15 +451,18 @@ export default defineComponent({
 
           try {
             const signUp = await StudentAuthServiceApi.signUp(objToSignUpWith);
+            console.log(signUp.data.token);
             isRequesting.value = false;
-            if (signUp)
+            if (signUp) {
               router.push({
                 name: 'StudentAuthentication',
                 params: {
                   model: JSON.stringify(temp),
-                  token: signUp.data.token
+                  token: signUp.data.token,
+                  whatToAuthenticate: 'signup'
                 }
               });
+            }
           } catch (e) {
             isRequesting.value = false;
           }
