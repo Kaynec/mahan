@@ -66,8 +66,14 @@ export default defineComponent({
       const res = await StudentSelfTestApi.AllCourses();
       allCourses.value = res.data.data;
       allCourses.value.forEach((element, idx) => {
-        const imageUrl = `${baseUrl}course/download-image/${element.image}`;
-        allCourses.value[idx].img = imageUrl;
+        if (element.image) {
+          const imageUrl = `${baseUrl}course/download-image/${element.image}`;
+
+          allCourses.value[idx].img = imageUrl;
+        } else {
+          allCourses.value[idx].img =
+            'https://api.mahanplus.com/api/course/download-image/image-1643532340814-image2.png';
+        }
       });
     })();
 

@@ -6,7 +6,7 @@
         برگشت به صفحه قبلی
       </button>
       <button class="button-linear" @click="goStudentHome">
-        رفتن به صفحه دانش آموز
+        رفتن به صفحه دانشجو
       </button>
       <button class="button-linear" @click="goMentorHome">
         رفتن به صفحه مشاور

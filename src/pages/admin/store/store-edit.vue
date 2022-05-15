@@ -205,8 +205,7 @@ export default defineComponent({
       },
       price: { required: helpers.withMessage('قیمت ضروری است', required) },
       specialPrice: {},
-      demo: {},
-      original: {
+      demo: {
         required: helpers.withMessage(
           'فایل اصلی ضروری است',
           requiredIf(() => {
@@ -214,6 +213,7 @@ export default defineComponent({
           })
         )
       },
+      original: {},
       coverImage: {
         required: helpers.withMessage(
           'فایل کاور محصول ضروری است',
@@ -229,7 +229,7 @@ export default defineComponent({
     // Handle The File
     const changeFile = async (e: any, description: string) => {
       const file = await e.target.files[0];
-      model[description] = await file;
+      model.value[description] = await file;
       // if (description == 'demo') model.demo = await file;
       // else if (description == 'original') model.original = await file;
     };
@@ -253,7 +253,8 @@ export default defineComponent({
             typeof model.value[key] === 'object' &&
             key != 'demo' &&
             key != 'original' &&
-            key != 'coverImage'
+            key != 'coverImage' &&
+            key != 'category'
           ) {
             for (let subKey in model.value[key]) {
               temp.append(`${key}[${subKey}]`, model.value[key][subKey]);
@@ -267,7 +268,7 @@ export default defineComponent({
             title: model.value.title,
             price: model.value.price,
             specialPrice: model.value.specialPrice,
-            category: model.value.category
+            category: { _id: model.value.category.id }
           } as any;
           // model.coverImageFile && (tmp.coverImageFile = model.coverImageFile);
           // console.log(model);
@@ -278,6 +279,8 @@ export default defineComponent({
             });
           });
         } else {
+          model.value.category &&
+            temp.append('category[_id]', model.value.category._id);
           model.value.demo && temp.append('demo', model.value.demo);
           model.value.original && temp.append('original', model.value.original);
           model.value.coverImage &&

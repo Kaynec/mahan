@@ -54,6 +54,18 @@ export default defineComponent({
         { label: 'نام', data: 'firstname', responsivePriority: 3 },
         { label: 'نام خانوادگی', data: 'lastname', responsivePriority: 3 },
         {
+          label: 'وضعیت',
+          data: 'verified',
+          responsivePriority: 3,
+          render(data: any) {
+            let text = 'تایید نشده';
+            if (data) {
+              text = 'تایید شده';
+            }
+            return `<span>${text}</ span>`;
+          }
+        },
+        {
           className: 'edit-control',
           orderable: false,
           defaultContent: '',
@@ -62,6 +74,18 @@ export default defineComponent({
           action: 'update',
           render: function (data: any) {
             return `<button type="button" data-edit-id="${data}" class="btn btn-default edit-button">نمایش</button>`;
+          },
+          responsivePriority: 2
+        },
+        {
+          className: 'delete-control',
+          orderable: false,
+          defaultContent: '',
+          label: '',
+          data: '_id',
+          action: 'delete',
+          render: function (data: any) {
+            return `<button type="button" data-delete-id="${data}" class="btn btn-danger edit-button">حذف</button>`;
           },
           responsivePriority: 2
         }
@@ -78,7 +102,6 @@ export default defineComponent({
   },
   methods: {
     editStudent(student: any) {
-      debugger;
       alertify.defaults.glossary.ok = 'باشه';
       alertify.alert(`
       <div class="form-row">
