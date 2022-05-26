@@ -422,7 +422,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -432,7 +432,7 @@ export default defineComponent({
   background: #f4f4f4;
   height: 100%;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
 
   .progress-count {
     width: 100%;

@@ -1,5 +1,5 @@
 <template>
-  <MinimalHeader title="کتاب" onePageBack="SelfTest" v-if="isMobile()" />
+  <MinimalHeader title="کتاب" v-if="isMobile()" />
   <main class="book">
     <DesktopMinimalHeader v-if="!isMobile()" />
     <canvas v-if="!isLoading" id="canvas"></canvas>
@@ -38,8 +38,11 @@ export default defineComponent({
   components: { DesktopMinimalHeader, MinimalHeader },
   setup() {
     const route = useRoute();
-    const pdfHref = route.params.filename;
-    const pdfUrl = `${baseUrl}session/download-file/${pdfHref}`;
+    // const pdfHref = route.params.filename;
+    //
+
+    const pdfUrl = (baseUrl + route.params.filename) as string;
+
     const isLoading = ref(true);
     const allPages = ref(0);
     const pageNumber = ref(1);
@@ -60,11 +63,13 @@ export default defineComponent({
       renderPage(pageNumber.value);
     };
 
+    console.log(pdfUrl);
+
     returnAProtectedUrl(pdfUrl).then((res) => {
       isLoading.value = false;
       import('pdfjs-dist/legacy/build/pdf.min.js').then(async (pdfjsLib) => {
         pdfjsLib.GlobalWorkerOptions.workerSrc =
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js';
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.worker.min.js';
 
         // Asynchronous download of PDF
         pdfjsLib
@@ -122,7 +127,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
   background: transparent;
   display: flex;
   align-items: center;

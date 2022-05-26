@@ -4,15 +4,7 @@
     <Header />
     <!-- Main Content -->
     <div
-      class="
-        w-100
-        d-flex
-        justify-content-center
-        align-items-center
-        flex-column
-        p-2
-        animate__animated animate__fadeIn
-      "
+      class="w-100 d-flex justify-content-center align-items-center flex-column p-2 animate__animated animate__fadeIn"
     >
       <!--  TextDetail="۲۲ آزمون برای رقابت"  -->
       <!-- Exams -->

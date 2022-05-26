@@ -156,7 +156,7 @@ export default defineComponent({
 .comp-test-answer {
   width: 100%;
   height: 100%;
-  max-width: 750px;
+  max-width: 1000px;
 
   .difficulty {
     display: flex;

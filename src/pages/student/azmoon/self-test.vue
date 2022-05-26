@@ -113,10 +113,10 @@ export default defineComponent({
   position: relative;
   height: 100%;
   overflow: hidden;
-  max-width: 750px;
+  max-width: 1000px;
   .hero {
     width: 100%;
-    max-width: 750px;
+    max-width: 1000px;
     max-height: 300px;
     img {
       width: 100%;

@@ -82,7 +82,7 @@ import router from '@/router';
 import Footer from '@/modules/student-modules/footer/footer.vue';
 import Header from '@/modules/student-modules/header/header.vue';
 import Azmoon from '@/modules/student-modules/azmoon/azmoon.vue';
-import { useStudentStore } from '@/store';
+import { store, useStudentStore } from '@/store';
 
 @Options({
   components: {

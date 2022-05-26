@@ -196,7 +196,7 @@ export default defineComponent({
   position: relative;
   overflow: hidden;
   height: 100%;
-  max-width: 750px;
+  max-width: 1000px;
 
   .navbar {
     width: 100%;

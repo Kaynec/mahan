@@ -60,7 +60,7 @@ export default defineComponent({
   background-color: #f4f4f4;
   font-family: IRANSans;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
 
   .iframe {
     width: 100%;

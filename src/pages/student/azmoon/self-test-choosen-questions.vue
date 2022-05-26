@@ -194,7 +194,7 @@ export default defineComponent({
 .self-test-questions {
   height: 100%;
   width: 100%;
-  max-width: 750px;
+  max-width: 1000px;
   position: relative;
   overflow: hidden;
 

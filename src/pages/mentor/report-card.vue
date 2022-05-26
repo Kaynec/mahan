@@ -246,7 +246,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   overflow: hidden;
-  max-width: 750px;
+  max-width: 1000px;
 
   .wrapper {
     width: 100%;

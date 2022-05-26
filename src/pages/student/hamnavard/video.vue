@@ -262,7 +262,7 @@ main {
   .video-container {
     width: 80%;
     margin: 0 auto;
-    max-width: 750px;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -313,7 +313,7 @@ main {
     height: 50%;
     max-height: 550px;
     margin: 0 auto;
-    max-width: 750px;
+    max-width: 1000px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -383,7 +383,7 @@ main {
   left: 0;
   right: 0;
   margin: 1rem auto;
-  max-width: 750px;
+  max-width: 1000px;
 
   .progress-container {
     display: flex;
@@ -428,7 +428,7 @@ main {
   margin: -0.3rem auto;
   left: 0;
   right: 0;
-  max-width: 750px;
+  max-width: 1000px;
 }
 
 .loader-wrapper {

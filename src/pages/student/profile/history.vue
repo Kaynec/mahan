@@ -62,7 +62,7 @@ export default defineComponent({
   font-family: IRANSans;
   height: 100%;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
   // padding-top: 8vh;
   .container {
     width: 90%;

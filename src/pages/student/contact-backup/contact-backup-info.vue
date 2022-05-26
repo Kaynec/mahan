@@ -130,7 +130,7 @@ export default defineComponent({
   overflow-x: hidden;
   width: 100%;
   height: 100%;
-  max-width: 750px;
+  max-width: 1000px;
 
   .hero-container {
     width: 100%;

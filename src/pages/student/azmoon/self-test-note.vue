@@ -105,7 +105,7 @@ export default defineComponent({
   flex-direction: column;
   height: 100%;
   font-family: IRANSans;
-  max-width: 750px;
+  max-width: 1000px;
 
   .currentNote {
     padding: 0.9rem;
