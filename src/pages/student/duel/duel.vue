@@ -107,10 +107,23 @@
     >
       <div
         style="z-index: 5; color: #fff"
-        class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
+        class="
+          d-inline-flex
+          flex-column
+          justify-content-between
+          align-items-center
+          w-100
+          flex-child
+        "
       >
         <div
-          class="d-inline-flex flex-column justify-content-center align-items-center w-100"
+          class="
+            d-inline-flex
+            flex-column
+            justify-content-center
+            align-items-center
+            w-100
+          "
         >
           <Dialog
             label="پاسخنامه"
