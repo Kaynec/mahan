@@ -35,16 +35,33 @@
     </div>
 
     <div
-      class="showMessage flex-column d-flex justify-content-end align-items-center"
+      class="
+        showMessage
+        flex-column
+        d-flex
+        justify-content-end
+        align-items-center
+      "
       v-if="showMessage"
     >
       <div
         style="color: #fff; max-width: 600px"
-        class="d-inline-flex flex-column justify-content-between align-items-center flex-child"
+        class="
+          d-inline-flex
+          flex-column
+          justify-content-between
+          align-items-center
+          flex-child
+        "
       >
         <div
           style="color: #fff; max-width: 600px"
-          class="d-inline-flex flex-column justify-content-center align-items-center"
+          class="
+            d-inline-flex
+            flex-column
+            justify-content-center
+            align-items-center
+          "
         >
           <AcceptRequest :data="currentItem" @convertBoolean="denyOrAccept" />
         </div>

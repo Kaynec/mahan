@@ -1,7 +1,20 @@
 <template>
   <div class="container" v-if="isLoading">
     <div
-      class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv warning animate__animated animate__fadeIn"
+      class="
+        card
+        w-100
+        d-inline-flex
+        align-items-center
+        m-1
+        position-relative
+        flex-row flex-wrap
+        border border-white
+        rounded-10
+        customDiv
+        warning
+        animate__animated animate__fadeIn
+      "
       @click="moveToReportCardOrExam(item)"
       v-for="item in azmoonData"
       :key="item"

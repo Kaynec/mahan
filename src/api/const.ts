@@ -25,6 +25,11 @@ export const menus = [
     code: 5
   },
   {
+    name: 'فاکتورها',
+    url: '/admin/order',
+    code: 13
+  },
+  {
     name: 'اطلاعیه ها',
     url: '/admin/announcement',
     code: 6
