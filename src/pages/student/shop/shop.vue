@@ -27,20 +27,22 @@
       </div>
     </section>
     <!--  -->
-    <div class="btns animate__animated animate__fadeIn">
+
+    <div class="btns">
       <button
         @click="() => (currentState = 'yourProduct')"
         :class="{ active: currentState == 'yourProduct' }"
       >
-        محصولات خریداری شده
+        محصولات شما
       </button>
       <button
         @click="() => (currentState = 'newsetProduct')"
         :class="{ active: currentState == 'newsetProduct' }"
       >
-        تازه‌ترین محصولات ماهان
+        تازه ترین محصولات
       </button>
     </div>
+
     <!-- Cards -->
     <div class="Cards">
       <template v-if="currentState == 'yourProduct'">
@@ -48,7 +50,7 @@
         <section
           class="Card animate__animated animate__fadeIn"
           v-for="product in yourProduct"
-          @click.self="openSingleBookPage(product)"
+          @click="showYourProductAlert"
           :key="product"
         >
           <div v-if="!product.img" class="spinner-border" role="status">
@@ -62,10 +64,10 @@
           />
           <div class="txts" @click="openSingleBookPage(product)">
             <p class="title">{{ product.title }}</p>
-            <p class="price">
+            <!-- <p class="price">
               قیمت : {{ toPersianNumbers(product.price) }} تومان
-            </p>
-            <p class="special-price">
+            </p> -->
+            <!-- <p class="special-price">
               تخفیف %{{
                 toPersianNumbers(
                   Math.round(
@@ -76,10 +78,10 @@
               }}
               :
               {{ toPersianNumbers(product.specialPrice) }} تومان
-            </p>
+            </p> -->
           </div>
           <!--  -->
-          <div class="plus">
+          <!-- <div class="plus">
             <img
               src="@/assets/img/shop/pluss.png"
               @click.stop="addToBasket(product)"
@@ -90,7 +92,7 @@
                 {{ toPersianNumbers(i) }} عدد
               </option>
             </select>
-          </div>
+          </div> -->
         </section>
       </template>
 
@@ -184,14 +186,20 @@
         <div
           class="Card animate__animated animate__fadeIn"
           v-for="product in yourProduct"
-          @click="openSingleBookPage(product)"
+          @click="showYourProductAlert"
           :key="product"
         >
           <div v-if="!product.img" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
+          <img
+            class="animate__animatd animate__fadeIn"
+            v-else
+            :src="product.img"
+            alt="product img"
+          />
 
-          <p>{{ product.name }}</p>
+          <p>{{ product.title }}</p>
         </div>
       </template>
 
@@ -296,15 +304,24 @@ export default defineComponent({
 
       const getBoughtProducts = await getBoughtProductsRes.json();
 
+      let boughtImgPromises = [] as any;
+
       if (getBoughtProducts.data) {
         getBoughtProducts.data.forEach((child) =>
           yourProduct.value.push(child)
         );
         yourProduct.value.forEach((data, idx) => {
           const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-          yourProduct.value[idx] = imageUrl;
+          boughtImgPromises.push(returnAProtectedUrl(imageUrl));
         });
       }
+
+      const boughtimages = await Promise.all(boughtImgPromises);
+      boughtimages.forEach((img, idx) => {
+        console.log(img, idx);
+        // Setting The Image and also quantity to default of 1
+        yourProduct.value[idx].img = img;
+      });
 
       isFetching.value = false;
     })();
@@ -370,6 +387,10 @@ export default defineComponent({
       }
     };
 
+    function showYourProductAlert() {
+      alertify.error('لطفا برای مشاهده محصول از اپلیکیشن ماهان استفاده کنید');
+    }
+
     return {
       currentState,
       productCategories,
@@ -382,7 +403,8 @@ export default defineComponent({
       openSingleBookPage,
       isFetching,
       toPersianNumbers,
-      addToBasket
+      addToBasket,
+      showYourProductAlert
     };
   }
 });
