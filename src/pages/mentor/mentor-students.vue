@@ -1,23 +1,11 @@
 <template>
   <MentorDesktopHeader v-if="!isMobile()" />
   <div
-    class="
-      show-dialog
-      flex-column
-      d-flex
-      justify-content-center
-      align-items-center
-    "
+    class="show-dialog flex-column d-flex justify-content-center align-items-center"
     v-if="showDialog"
   >
     <div
-      class="
-        d-inline-flex
-        flex-child flex-column
-        justify-content-between
-        align-items-center
-        w-100
-      "
+      class="d-inline-flex flex-child flex-column justify-content-between align-items-center w-100"
     >
       <div
         style="
@@ -26,13 +14,7 @@
           align-items: center;
           justify-content: center;
         "
-        class="
-          d-inline-flex
-          flex-column
-          justify-content-center
-          align-items-center
-          w-100
-        "
+        class="d-inline-flex flex-column justify-content-center align-items-center w-100"
       >
         <MentorDialog
           componentName="MentorChat"
@@ -83,15 +65,7 @@
           <h5>{{ item.grade.title }} {{ item.field.title }}</h5>
         </div>
         <i
-          class="
-            fas
-            fa-angle-left
-            position-absolute
-            top-50
-            start-0
-            translate-middle
-            ml-3
-          "
+          class="fas fa-angle-left position-absolute top-50 start-0 translate-middle ml-3"
         ></i>
       </div>
     </div>
@@ -146,7 +120,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .list {
-  max-width: 750px;
+  max-width: 1000px;
   font-family: IRANSans;
   position: relative;
   width: 100%;
@@ -244,7 +218,7 @@ export default defineComponent({
 
 .flex-child {
   width: 100%;
-  max-width: 750px;
+  max-width: 1000px;
   z-index: 9999;
   overflow: hidden;
 }

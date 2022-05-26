@@ -75,10 +75,7 @@
 
       <p
         @click="resendVerificationCode()"
-        class="
-          text-custom text text-nowrap text-center text-secondary
-          hover-make-big
-        "
+        class="text-custom text text-nowrap text-center text-secondary hover-make-big"
         style="font-family: IRANSans; font-size: 0.75rem"
       >
         ارسال مجدد کد
@@ -112,8 +109,8 @@ import { store, useStudentStore } from '@/store';
 import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { StudentActionTypes } from '@/store/modules/student/action-types';
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
-const alertify = require('../../../assets/alertifyjs/alertify');
 import { baseUrl } from '@/api/apiclient';
+const alertify = require('../../../assets/alertifyjs/alertify');
 
 export default defineComponent({
   props: {
@@ -129,8 +126,6 @@ export default defineComponent({
     } else {
       model.value = JSON.parse(useStudentStore().getters.getAuthObject as any);
     }
-
-    console.log(props);
 
     const isSendingAMainReq = ref(false);
 

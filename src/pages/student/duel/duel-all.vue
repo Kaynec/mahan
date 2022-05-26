@@ -58,7 +58,7 @@ export default defineComponent({
   font-family: IRANSans;
   height: 100%;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
 
   .list {
     width: 95%;

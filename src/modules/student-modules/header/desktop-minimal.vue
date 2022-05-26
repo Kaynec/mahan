@@ -177,6 +177,8 @@ export default defineComponent({
     const goback = () => {
       if (componentName.value == 'StudentGroupPage') {
         router.push({ name: 'Home' });
+      } else if (componentName.value == 'PDF') {
+        router.go(-1);
       } else {
         router.push({ name: 'SelfTest' });
       }

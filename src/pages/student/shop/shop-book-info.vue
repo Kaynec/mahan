@@ -80,7 +80,10 @@
       </div>
     </div>
     <!-- Preview -->
-    <div class="preview animate__animated animate__fadeIn">
+    <div
+      class="preview animate__animated animate__fadeIn"
+      @click="openPdfPage(model._id)"
+    >
       <img
         class="purple-book"
         src="@/assets/img/shop/bitmap.png"
@@ -92,25 +95,9 @@
     <!-- Text Detail -->
     <div class="text">
       <div class="text-intro">
-        <p>9 آزمون سراسری کنکور کارشناسی ارشد</p>
-        <p>3 آزمون شبیه‌سازی کارشناسی ارشد</p>
-        <p>مجموعه سوالات به همراه پاسخنامه تشریحی و تحلیل کنکور 3 سال اخیر</p>
+        <p v-html="model.description"></p>
       </div>
-
-      <h5>8 آزمون شامل سه بخش اصلی است</h5>
-
-      <p>
-        در بخش اول، روند تغییرات و سرفصل‎های پراهمیت‌تر از نگاه طراحان کنکور
-        تحلیل گردیده که با عنوان تحلیل کنکور کارشناسی ارشد در کتاب گنجانده شده
-        است.
-      </p>
-      <p>
-        بخش سوم شامل 3 دوره آزمون‎های شبیه‎سازی شده ماهان می‎باشد که براساس
-        تغییرات سال 98 کنکور تالیف شده است تا داوطلبین محترم نمونه سوالات بیشتری
-        جهت آمادگی کنکور در اختیار داشته باشند.
-      </p>
     </div>
-
     <ShopFooter />
   </div>
 </template>
@@ -130,6 +117,7 @@ import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import alertify from '@/assets/alertifyjs/alertify';
+import router from '@/router';
 
 const props = defineProps({
   item: { type: String, default: '{}' }
@@ -144,6 +132,15 @@ if (props.item != '{}') {
   store.commit(StudentMutationTypes.SET_CURRENT_SHOP_INFO, model.value);
 }
 model.value = store.getters.getCurrentShopInfo;
+
+function openPdfPage(filename) {
+  router.push({
+    name: 'PDF',
+    params: {
+      filename: `product/demo/${filename}`
+    }
+  });
+}
 
 const objectToAddToBasket = reactive({
   item: { product: { _id: model.value._id }, quantity: 0 }
@@ -244,7 +241,7 @@ const updateCount = async () => {
   background: #f4f4f4;
   width: 100%;
   height: 100%;
-  max-width: 750px;
+  max-width: 1000px;
   .card {
     display: flex;
     flex-direction: row;

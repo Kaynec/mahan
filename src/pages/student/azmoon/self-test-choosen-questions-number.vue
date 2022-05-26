@@ -121,7 +121,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   font-family: IRANSans;
-  max-width: 750px;
+  max-width: 1000px;
 
   .progress-count {
     width: 100%;

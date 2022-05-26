@@ -55,7 +55,7 @@ export default defineComponent({
   overflow: hidden;
   height: 100%;
   width: 100%;
-  max-width: 750px;
+  max-width: 1000px;
 
   .hero {
     width: 100%;

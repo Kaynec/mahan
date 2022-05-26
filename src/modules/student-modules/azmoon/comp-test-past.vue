@@ -1,20 +1,7 @@
 <template>
   <div class="container" v-if="isLoading">
     <div
-      class="
-        card
-        w-100
-        d-inline-flex
-        align-items-center
-        m-1
-        position-relative
-        flex-row flex-wrap
-        border border-white
-        rounded-10
-        customDiv
-        warning
-        animate__animated animate__fadeIn
-      "
+      class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv warning animate__animated animate__fadeIn"
       @click="moveToReportCardOrExam(item)"
       v-for="item in azmoonData"
       :key="item"
@@ -69,6 +56,9 @@ import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import compareAsc from 'date-fns/compareAsc';
 import CompTestDetail from '@/modules/student-modules/azmoon/comp-test-detail.vue';
 import JalaliConverter from '@/utilities/date-converter';
+import { useStudentStore } from '@/store';
+const alertify = require('../../../assets/alertifyjs/alertify');
+
 export default defineComponent({
   components: { CompTestDetail },
   setup() {
@@ -76,6 +66,7 @@ export default defineComponent({
     const azmoonData = reactive([] as any);
 
     StudentExamApi.getAll().then((res) => {
+      console.log(res);
       res.data.data.forEach((date: any) => {
         const splitted = date.date.split('/');
         const jalalidateConvertedToMiladi = new Date(
@@ -124,6 +115,11 @@ export default defineComponent({
     const currentItem = ref({});
     const showCompDetail = ref(false);
     const changeShowDetail = () => {
+      const isPurchased = (useStudentStore().getters.getCurrentStudent as any)
+        ?.purchased;
+
+      alertify.error('لطفا نسخه برنامه را خریداری کنید');
+
       showCompDetail.value = !showCompDetail.value;
     };
 

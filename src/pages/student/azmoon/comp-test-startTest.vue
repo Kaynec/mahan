@@ -201,7 +201,7 @@ export default defineComponent({
 .start {
   width: 100%;
   height: 100%;
-  max-width: 750px;
+  max-width: 1000px;
   font-family: IRANSans;
   position: relative;
   overflow-x: hidden;
@@ -366,7 +366,7 @@ export default defineComponent({
     position: sticky;
     margin: 0 auto;
     width: 95%;
-    max-width: 750px;
+    max-width: 1000px;
   }
 
   button {

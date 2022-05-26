@@ -243,7 +243,7 @@ export default defineComponent({
 .start {
   width: 100%;
   height: 100%;
-  max-width: 750px;
+  max-width: 1000px;
   background-color: #f4f4f4;
   font-family: IRANSans;
   position: relative;
@@ -409,7 +409,7 @@ export default defineComponent({
     position: sticky;
     margin: 0 auto;
     width: 95%;
-    max-width: 750px;
+    max-width: 1000px;
   }
 
   button {

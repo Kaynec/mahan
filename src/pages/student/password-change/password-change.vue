@@ -243,6 +243,7 @@ const sendToHome = async () => {
   height: 100vh;
   padding: 37px 24.6px 156px 24px;
   background-color: #f6f8fa;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -289,8 +290,6 @@ const sendToHome = async () => {
   }
 
   .Rectangle-header {
-    // width: 175px;
-    // height: 28px;
     margin: 0 47px 23px 48px;
     font-family: IRANSans;
     font-size: 19px;

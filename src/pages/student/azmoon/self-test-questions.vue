@@ -215,6 +215,9 @@ export default defineComponent({
       });
 
       const amountToslice = res.data.data.totalQuestion;
+
+      console.log(res.data.data);
+
       model.value.questions.splice(0, amountToslice);
 
       if (model.value.questions.length <= 0) {
@@ -392,7 +395,7 @@ export default defineComponent({
   min-height: 100%;
   position: relative;
   overflow-x: hidden;
-  max-width: 750px;
+  max-width: 1000px;
 
   .progress-count {
     width: 100%;

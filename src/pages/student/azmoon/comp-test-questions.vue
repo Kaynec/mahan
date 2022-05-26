@@ -390,7 +390,7 @@ export default defineComponent({
   overflow-x: hidden;
   height: 100%;
   width: 100%;
-  max-width: 750px;
+  max-width: 1000px;
 
   .progress-count {
     width: 100%;

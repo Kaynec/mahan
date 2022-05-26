@@ -45,7 +45,7 @@
             <h1>خواندن کتاب</h1>
             <h2>{{ circle.title }}</h2>
 
-            <button @click="showPdf(circle)" class="green">
+            <button @click="showPdf(circle, i, index)" class="green">
               شروع خواندن کتاب
             </button>
             <img
@@ -65,7 +65,10 @@
           <div class="control" v-else-if="circle.state === 1">
             <h1>آزمون خودسنجی</h1>
             <h2>{{ circle.title }}</h2>
-            <button class="green" @click="moveToSelfTestQuestions(circle._id)">
+            <button
+              class="green"
+              @click="moveToSelfTestQuestions(i, circle._id)"
+            >
               شروع آزمون
             </button>
 
@@ -172,6 +175,7 @@ import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minim
 import { baseUrl } from '@/api/apiclient';
 import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
+const alertify = require('../../../assets/alertifyjs/alertify');
 import Alert from '@/modules/student-modules/alert/alert.vue';
 
 export default defineComponent({
@@ -200,7 +204,7 @@ export default defineComponent({
 
     (async () => {
       const res = await StudentSelfTestApi.getOneCourse(Route.params.id as any);
-      console.log(res);
+
       const historyOfExamPromises = [] as any;
       // Looping Through Sessions of the Course
       if (res.data.data.sessions) {
@@ -238,11 +242,14 @@ export default defineComponent({
       isLoading.value = false;
     })();
 
-    const moveToSelfTestQuestions = (id) => {
-      router.push({
-        name: 'SelfTestQuestions',
-        params: { id }
-      });
+    const moveToSelfTestQuestions = (index, id) => {
+      if (index >= 1) {
+        alertify.error('شما قادر به انجام این کار نیستید');
+      } else
+        router.push({
+          name: 'SelfTestQuestions',
+          params: { id }
+        });
     };
 
     const moveImg = (amountToAdd: number) => {
@@ -306,11 +313,16 @@ export default defineComponent({
       }
     };
 
-    const showPdf = (pdf) => {
+    const showPdf = (pdf, index) => {
+      if (index >= 1) {
+        alertify.error('شما قادر به انجام این کار نیستید');
+        return;
+      }
+
       if (pdf.book) {
         router.push({
           name: 'PDF',
-          params: { filename: pdf.book }
+          params: { filename: `session/download-file/${pdf.book}` }
         });
       } else {
         messageToShow.value = ' خطای دریافت';

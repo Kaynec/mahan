@@ -181,7 +181,7 @@ export default defineComponent({
   font-family: IRANSans;
   height: 100%;
   position: relative;
-  max-width: 750px;
+  max-width: 1000px;
   overflow: hidden;
 
   .label {

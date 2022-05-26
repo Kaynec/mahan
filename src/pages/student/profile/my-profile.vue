@@ -162,7 +162,7 @@ body {
   flex-direction: column;
   overflow: hidden;
   display: flex;
-  max-width: 750px;
+  max-width: 1000px;
 
   .info {
     width: 95%;

@@ -4,7 +4,9 @@ const alertify = require('../assets/alertifyjs/alertify');
 
 export const baseUrlDomain = process.env.VUE_APP_BASE_URL;
 
-export const baseUrl = `${baseUrlDomain}/api/`;
+// export const baseUrl = `${baseUrlDomain}/api/`;
+
+export const baseUrl = `https://api.mahanplus.com/api/`;
 
 export const instance = axios.create({
   baseURL: baseUrl,

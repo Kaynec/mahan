@@ -492,7 +492,7 @@ export default defineComponent({
 }
 
 .desktop {
-  max-width: 750px;
+  max-width: 1000px;
   padding-top: 8vh;
   position: relative;
 
