@@ -295,14 +295,13 @@ export default defineComponent({
       );
 
       const getBoughtProducts = await getBoughtProductsRes.json();
-
       if (getBoughtProducts.data) {
         getBoughtProducts.data.forEach((child) =>
           yourProduct.value.push(child)
         );
         yourProduct.value.forEach((data, idx) => {
           const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-          yourProduct.value[idx] = imageUrl;
+          yourProduct.value[idx].img = imageUrl;
         });
       }
 

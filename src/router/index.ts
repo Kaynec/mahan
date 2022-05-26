@@ -30,6 +30,9 @@ const QuestionEdit = () => import('@/pages/admin/question/question-edit.vue');
 const Store = () => import('@/pages/admin/store/store.vue');
 const StoreEdit = () => import('@/pages/admin/store/store-edit.vue');
 
+const Order = () => import('@/pages/admin/order/order.vue');
+const OrderEdit = () => import('@/pages/admin/order/order-edit.vue');
+
 const Category = () => import('@/pages/admin/category/category.vue');
 const CategoryEdit = () => import('@/pages/admin/category/category-edit.vue');
 
@@ -351,7 +354,23 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
         component: StoreEdit
       },
-
+      {
+        path: 'order',
+        name: 'order',
+        component: Order
+      },
+      {
+        path: 'order-create',
+        name: 'order-create',
+        props: true,
+        component: OrderEdit
+      },
+      {
+        path: 'order-edit/:orderId',
+        name: 'order-edit',
+        props: true,
+        component: OrderEdit
+      },
       {
         path: 'category',
         name: 'category',
