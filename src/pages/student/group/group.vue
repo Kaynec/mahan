@@ -17,10 +17,6 @@
     </nav>
     <DesktopMinimalHeader v-if="!isMobile()" />
 
-    <h1 class="center" v-if="!allExams.length">
-      محتوایی برای نمایش وجود ندارد
-    </h1>
-
     <section class="circles" ref="circles" v-if="allExams && allExams.length">
       <div
         class="circle animate__animatd animate__fadeIn"
