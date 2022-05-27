@@ -1,8 +1,7 @@
 import { instance } from '../../apiclient';
-import { UserDocuments } from '@/@types';
-class StudentService {
+class OrientationService {
   async get(id: string) {
-    return instance.get(`student/${id}`, {
+    return instance.get(`orientation/${id}`, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
         'Content-Type': 'application/json'
@@ -10,23 +9,23 @@ class StudentService {
     });
   }
   async getAll() {
-    return instance.get(`student`, {
+    return instance.get(`orientation/`, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
         'Content-Type': 'application/json'
       }
     });
   }
-  async create(user: UserDocuments) {
-    return instance.post(`student`, user, {
+  async create(orientation) {
+    return instance.post(`orientation`, orientation, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
         'Content-Type': 'application/json'
       }
     });
   }
-  async update(id: number, user: Partial<UserDocuments>) {
-    return instance.put(`student/${id}`, user, {
+  async update(id: number, orientation) {
+    return instance.put(`orientation/${id}`, orientation, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
         'Content-Type': 'application/json'
@@ -34,25 +33,13 @@ class StudentService {
     });
   }
   async delete(id: string) {
-    return instance.delete(`student/${id}`, {
+    return instance.delete(`orientation/${id}`, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
         'Content-Type': 'application/json'
       }
     });
   }
-  async changeType(id: string, type: boolean) {
-    return instance.post(
-      `student/change-type/${id}`,
-      { purchased: type },
-      {
-        headers: {
-          // Overwrite Axios's automatically set Content-Type
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-  }
 }
 
-export const StudentServiceApi = new StudentService();
+export const OrientationServiceApi = new OrientationService();

@@ -15,6 +15,11 @@ export const menus = [
     code: 3
   },
   {
+    name: 'گرایش ها',
+    url: '/admin/orientation',
+    code: 14
+  },
+  {
     name: 'درس ها',
     url: '/admin/course',
     code: 4

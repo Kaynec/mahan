@@ -20,6 +20,9 @@ const Mentor = () => import('@/pages/admin/mentor/mentor.vue');
 const MentorEdit = () => import('@/pages/admin/mentor/mentor-edit.vue');
 const Admin = () => import('@/pages/admin/admin/admin.vue');
 const AdminEdit = () => import('@/pages/admin/admin/admin-edit.vue');
+const Orientation = () => import('@/pages/admin/orientation/orientation.vue');
+const OrientationEdit = () =>
+  import('@/pages/admin/orientation/orientation-edit.vue');
 const Course = () => import('@/pages/admin/course/course.vue');
 const CourseEdit = () => import('@/pages/admin/course/course-edit.vue');
 const Session = () => import('@/pages/admin/session/session.vue');
@@ -281,6 +284,24 @@ const routes: Array<RouteRecordRaw> = [
         component: MentorEdit
       },
 
+      {
+        path: 'orientation/:gradeId?/:groupId?/:fieldId?',
+        name: 'orientation',
+        props: true,
+        component: Orientation
+      },
+      {
+        path: 'orientation-create/:gradeId?/:groupId?/:fieldId?',
+        name: 'orientation-create',
+        props: true,
+        component: OrientationEdit
+      },
+      {
+        path: 'orientation-edit/:orientationId/:gradeId?/:groupId?/:fieldId?',
+        name: 'orientation-edit',
+        props: true,
+        component: OrientationEdit
+      },
       {
         path: 'course/:gradeId?/:groupId?/:fieldId?',
         name: 'course',
