@@ -20,6 +20,9 @@ const Mentor = () => import('@/pages/admin/mentor/mentor.vue');
 const MentorEdit = () => import('@/pages/admin/mentor/mentor-edit.vue');
 const Admin = () => import('@/pages/admin/admin/admin.vue');
 const AdminEdit = () => import('@/pages/admin/admin/admin-edit.vue');
+const Orientation = () => import('@/pages/admin/orientation/orientation.vue');
+const OrientationEdit = () =>
+  import('@/pages/admin/orientation/orientation-edit.vue');
 const Course = () => import('@/pages/admin/course/course.vue');
 const CourseEdit = () => import('@/pages/admin/course/course-edit.vue');
 const Session = () => import('@/pages/admin/session/session.vue');
@@ -136,6 +139,7 @@ const ContactBackupChat = () =>
   import('@/pages/student/contact-backup/contact-backup-chat.vue');
 
 const ClassRoom = () => import('@/pages/student/class/class-room.vue');
+const ClassList = () => import('@/pages/student/class/class-list.vue');
 const selfTestNote = () => import('@/pages/student/azmoon/self-test-note.vue');
 const ClassAdobe = () => import('@/pages/student/class/class-adobe.vue');
 
@@ -281,6 +285,24 @@ const routes: Array<RouteRecordRaw> = [
         component: MentorEdit
       },
 
+      {
+        path: 'orientation/:gradeId?/:groupId?/:fieldId?',
+        name: 'orientation',
+        props: true,
+        component: Orientation
+      },
+      {
+        path: 'orientation-create/:gradeId?/:groupId?/:fieldId?',
+        name: 'orientation-create',
+        props: true,
+        component: OrientationEdit
+      },
+      {
+        path: 'orientation-edit/:orientationId/:gradeId?/:groupId?/:fieldId?',
+        name: 'orientation-edit',
+        props: true,
+        component: OrientationEdit
+      },
       {
         path: 'course/:gradeId?/:groupId?/:fieldId?',
         name: 'course',
@@ -831,6 +853,13 @@ const routes: Array<RouteRecordRaw> = [
         path: 'class-room',
         name: 'ClassRoom',
         component: ClassRoom,
+        beforeEnter: ifStudentAuthenticated,
+        props: true
+      },
+      {
+        path: 'class-list/:classId/:classCode',
+        name: 'ClassList',
+        component: ClassList,
         beforeEnter: ifStudentAuthenticated,
         props: true
       },

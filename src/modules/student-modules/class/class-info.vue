@@ -18,8 +18,8 @@
           </div>
         </div>
         <div class="btns">
-          <a @click="openLink(onlineUrl)">آنلاین</a>
-          <a @click="openLink(offlineUrl)">آفلاین</a>
+          <a @click="openLink(data)">آنلاین</a>
+          <a @click="openOfllineLink(data)">آفلاین</a>
         </div>
       </div>
       <img
@@ -33,46 +33,33 @@
 </template>
 
 <script>
-import { StudentClassApi } from '@/api/services/student/student-class-service';
-import { defineComponent, ref } from 'vue';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import { defineComponent } from 'vue';
+import router from '@/router';
+import { useStudentStore } from '@/store';
 export default defineComponent({
   props: {
     data: { required: true }
   },
   setup(props, { emit }) {
-    const onlineUrl = ref('');
-    const offlineUrl = ref('');
-    //
-    (async () => {
-      const classId = props.data.classId;
-
-      const res = await StudentClassApi.onlineClass({
-        classId
-      });
-
-      const response = await StudentClassApi.offlineClass({
-        classId,
-        path: '/pe6clapx31hl/'
-      });
-      offlineUrl.value = response.data.data;
-      onlineUrl.value = res.data.data;
-    })();
-    //
     const click = () => {
       setTimeout(() => {
         emit('convertBoolean');
       }, 150);
     };
 
-    const openLink = () => {
-      alertify
-        .alert('برای باز کردن لینک لطفا از اپلیکیشن موبایل ماهان استفاده کنید')
-        .set('basic', true);
-      emit('convertBoolean');
+    const openLink = (item) => {
+      const token = useStudentStore().getters.getStudentToken;
+      window.open(`mahan-video:&online&${item.classId}&${token}`, '_self');
     };
 
-    return { click, onlineUrl, offlineUrl, openLink };
+    const openOfllineLink = (item) => {
+      router.push({
+        name: 'ClassList',
+        params: { classId: item.classId, classCode: item.classCode }
+      });
+    };
+
+    return { click, openLink, openOfllineLink };
   }
 });
 </script>

@@ -165,13 +165,12 @@
         </div>
 
         <div class="form-group col-md-4 col-sm-12">
-          <label for="point">امتیاز:</label>
+          <label for="purchased">نوع کاربر:</label>
           <input
-            type="number"
+            type="checkbox"
             class="form-control"
-            id="point"
-            readonly="readonly"
-            v-model="model.point"
+            id="purchased"
+            v-model="model.purchased"
           />
         </div>
         <div class="form-group col-md-4 col-sm-12">

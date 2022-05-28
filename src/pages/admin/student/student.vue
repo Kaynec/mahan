@@ -66,6 +66,20 @@ export default defineComponent({
           }
         },
         {
+          label: 'نوع کاربر',
+          data: (data) => {
+            return data;
+          },
+          responsivePriority: 3,
+          render(data: any) {
+            let text = 'رایگان';
+            if (data.purchased) {
+              text = 'ویژه';
+            }
+            return `<span>${text}</ span><button type="button" data-change-id="${data._id}" class="btn btn-warning edit-button mr-2">تغییر نوع</button>`;
+          }
+        },
+        {
           className: 'edit-control',
           orderable: false,
           defaultContent: '',
@@ -101,6 +115,15 @@ export default defineComponent({
     };
   },
   methods: {
+    changeType(student: any) {
+      let that = this;
+      StudentServiceApi.changeType(student._id, !student.purchased).then(
+        (result) => {
+          alertify.success(result.data.message);
+          (that.$refs.grid as any).getDatatable().ajax.reload();
+        }
+      );
+    },
     editStudent(student: any) {
       alertify.defaults.glossary.ok = 'باشه';
       alertify.alert(`
@@ -234,6 +257,16 @@ export default defineComponent({
     let gridRef = this.$refs.grid as any;
     if (gridRef.getDatatable()) {
       let that = this;
+      gridRef.getDatatableBody().on('click', '[data-change-id]', (e: any) => {
+        let id = $(e.currentTarget).data().changeId;
+        let filteredData = gridRef
+          .getDatatable()
+          .data()
+          .filter(function (value: any) {
+            return value._id == id;
+          });
+        if (filteredData.length > 0) that.changeType(filteredData[0]);
+      });
       gridRef.getDatatableBody().on('click', '[data-edit-id]', (e: any) => {
         let id = $(e.currentTarget).data().editId;
         let filteredData = gridRef
