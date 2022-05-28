@@ -303,23 +303,16 @@ export default defineComponent({
       );
 
       const getBoughtProducts = await getBoughtProductsRes.json();
-<<<<<<< HEAD
 
       let boughtImgPromises = [] as any;
 
-=======
->>>>>>> 170a5c6e6d5a9bbf27a9c960f39d98221ee7d097
       if (getBoughtProducts.data) {
         getBoughtProducts.data.forEach((child) =>
           yourProduct.value.push(child)
         );
         yourProduct.value.forEach((data, idx) => {
           const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-<<<<<<< HEAD
           boughtImgPromises.push(returnAProtectedUrl(imageUrl));
-=======
-          yourProduct.value[idx].img = imageUrl;
->>>>>>> 170a5c6e6d5a9bbf27a9c960f39d98221ee7d097
         });
       }
 
