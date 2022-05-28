@@ -44,8 +44,12 @@
         />
       </div>
 
-      <div class="Cart" v-show="isMobile()" @click="moveToBookList">
+      <!-- <div class="Cart" v-show="isMobile()" @click="moveToBookList">
         <img src="@/assets/img/home-icons/book@2x.png" alt="booklist" />
+      </div> -->
+
+      <div class="Cart" v-show="isMobile()" @click="MoveToProfile">
+        <img src="@/assets/img/home-icons/profile.png" alt="profile" />
       </div>
 
       <div class="Cart" v-show="isMobile()" @click="MoveToCLassRoom">
@@ -153,6 +157,14 @@ export default class Login extends Vue {
     setTimeout(() => {
       router.push({
         name: 'ClassRoom'
+      });
+    }, 100);
+  }
+
+  public MoveToProfile(): void {
+    setTimeout(() => {
+      router.push({
+        name: 'MyProfile'
       });
     }, 100);
   }
