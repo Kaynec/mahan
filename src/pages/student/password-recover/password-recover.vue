@@ -329,7 +329,9 @@ export default defineComponent({
   padding: 26px 20px 14px 21px;
   border-radius: 10px;
   text-align: center;
-  background-color: rgba(128, 128, 128, 0.226);
+  // background-color: rgba(128, 128, 128, 0.7);
+  background: #ccc;
+  // background: red;
   margin: 2rem;
   text-align: center;
 }

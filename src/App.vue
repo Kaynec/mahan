@@ -14,7 +14,6 @@ const loading = ref(true);
 
 onMounted(() => {
   document.addEventListener('readystatechange', (e) => {
-    console.log(document.readyState);
     if (document.readyState == 'complete') {
       // run code here
       loading.value = false;
