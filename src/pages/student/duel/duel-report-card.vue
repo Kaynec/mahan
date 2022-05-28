@@ -270,14 +270,16 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   font-family: IRANSans;
   position: relative;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
 
   .wrapper {
     width: 100%;
-    overflow: scroll;
+    overflow-y: auto;
+    padding-bottom: 3rem;
     height: 100%;
     max-height: 96%;
     display: grid;

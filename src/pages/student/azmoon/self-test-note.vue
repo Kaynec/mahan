@@ -106,7 +106,6 @@ export default defineComponent({
   height: 100%;
   font-family: IRANSans;
   max-width: 1000px;
-  padding-bottom: 10rem;
 
   .currentNote {
     padding: 0.9rem;
@@ -141,7 +140,8 @@ export default defineComponent({
   .textarea {
     width: 100%;
     flex-grow: 1;
-    overflow: auto;
+    overflow-y: auto;
+    padding-bottom: 3rem;
     display: flex;
     align-items: stretch;
     justify-content: stretch;

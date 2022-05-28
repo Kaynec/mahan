@@ -416,10 +416,11 @@ export default defineComponent({
 .shop,
 .desktop {
   position: relative;
-  overflow-x: hidden;
   height: 100%;
   width: 100%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 3rem;
 
   .grid {
     display: grid;
@@ -518,7 +519,7 @@ export default defineComponent({
 
 .desktop {
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   padding-top: 8vh;
   position: relative;
 

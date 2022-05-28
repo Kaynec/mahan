@@ -23,6 +23,7 @@
   bottom: 0;
   padding: 0;
   overflow-y: auto;
+  padding-bottom: 3rem;
   z-index: 1981;
 }
 

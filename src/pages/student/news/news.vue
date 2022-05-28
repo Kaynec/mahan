@@ -61,7 +61,6 @@ export default defineComponent({
   font-family: IRANSans;
   position: relative;
   max-width: 1000px;
-  padding-bottom: 10rem;
 
   .iframe {
     width: 100%;

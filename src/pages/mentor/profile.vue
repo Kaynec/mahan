@@ -132,7 +132,7 @@ body {
   width: 100%;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   font-family: IRANSans;
   position: relative;
   display: flex;
@@ -259,6 +259,7 @@ body {
   .container {
     width: 100%;
     overflow-y: auto;
+    padding-bottom: 3rem;
     padding-bottom: 5rem;
 
     .dialog {

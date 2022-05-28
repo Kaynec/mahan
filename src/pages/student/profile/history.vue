@@ -63,7 +63,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   // padding-top: 8vh;
   .container {
     width: 90%;

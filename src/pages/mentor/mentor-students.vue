@@ -121,7 +121,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .list {
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   font-family: IRANSans;
   position: relative;
   width: 100%;
@@ -137,7 +137,8 @@ export default defineComponent({
     margin: 0 auto;
     height: 100%;
     max-height: 96%; //change here
-    overflow: auto;
+    overflow-y: auto;
+    padding-bottom: 3rem;
     /* width */
     &::-webkit-scrollbar {
       width: 10px;
@@ -220,7 +221,7 @@ export default defineComponent({
 .flex-child {
   width: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   z-index: 9999;
   overflow: hidden;
 }

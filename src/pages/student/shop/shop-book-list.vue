@@ -242,12 +242,13 @@ export default defineComponent({
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  padding-bottom: 3rem;
   background: #f4f4f4;
   width: 100%;
   height: 100%;
   font-family: IRANSans;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   .card-container {
     width: 100%;
     display: flex;

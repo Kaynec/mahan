@@ -202,11 +202,12 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   font-family: IRANSans;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  padding-bottom: 3rem;
 
   .time {
     width: 95%;
@@ -368,7 +369,6 @@ export default defineComponent({
     margin: 0 auto;
     width: 95%;
     max-width: 1000px;
-    padding-bottom: 10rem;
   }
 
   button {

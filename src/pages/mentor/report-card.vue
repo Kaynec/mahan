@@ -247,13 +247,13 @@ export default defineComponent({
   position: relative;
   overflow: hidden;
   max-width: 1000px;
-  padding-bottom: 10rem;
 
   .wrapper {
     width: 100%;
     height: 100%;
     max-height: 96%;
-    overflow: scroll;
+    overflow-y: auto;
+    padding-bottom: 3rem;
   }
 
   .label {

@@ -295,14 +295,15 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   font-family: IRANSans;
   position: relative;
   overflow: hidden;
 
   .wrapper {
     width: 100%;
-    overflow: scroll;
+    overflow-y: auto;
+    padding-bottom: 3rem;
     height: 100%;
     max-height: 96%;
     display: grid;
@@ -425,7 +426,6 @@ export default defineComponent({
     margin: 10px auto;
     display: flex;
     flex-direction: column;
-    padding-bottom: 10rem;
 
     .card {
       width: 100%;

@@ -182,7 +182,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   overflow: hidden;
 
   .label {
@@ -380,7 +380,8 @@ export default defineComponent({
 
 .Cards {
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
   height: 100%;
   max-height: 96%;
   padding-bottom: 28rem;

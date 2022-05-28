@@ -197,7 +197,6 @@ export default defineComponent({
   overflow: hidden;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
 
   .navbar {
     width: 100%;
@@ -249,6 +248,7 @@ export default defineComponent({
   .chat-section {
     width: 100%;
     overflow-y: auto;
+    padding-bottom: 3rem;
 
     .msg {
       width: 100%;

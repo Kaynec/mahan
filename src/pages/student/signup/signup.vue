@@ -620,6 +620,7 @@ export default defineComponent({
     padding: 2.5rem 1.25rem;
     margin: 2.5rem 0;
     overflow-y: auto;
+    padding-bottom: 3rem;
     .select {
       width: 100%;
       padding: 10px;
@@ -659,7 +660,8 @@ export default defineComponent({
   align-items: center;
   flex-direction: column;
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
   // overflow-x: hidden;
 
   .text-header {

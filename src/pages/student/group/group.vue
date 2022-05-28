@@ -228,7 +228,8 @@ export default defineComponent({
 .roadmap {
   font-family: IRANSans;
   position: relative;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
   width: 100%;
   height: 100%;
   display: flex;

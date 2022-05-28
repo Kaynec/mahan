@@ -117,7 +117,8 @@ nav {
   padding: 0;
   transition: 0.4s ease all;
   z-index: 99999999;
-  overflow: scroll;
+  overflow-y: auto;
+  padding-bottom: 3rem;
 
   li {
     width: 100%;
@@ -127,7 +128,8 @@ nav {
     transition: 0.4s ease all;
     color: #171717;
     background-color: #fff;
-    overflow: scroll;
+    overflow-y: auto;
+    padding-bottom: 3rem;
 
     &:first-child {
       background-color: #646464;

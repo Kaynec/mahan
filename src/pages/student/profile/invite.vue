@@ -97,7 +97,8 @@ export default defineComponent({
   font-family: IRANSans;
   height: 100%;
   padding-top: 8vh;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
 
   .container {
     width: 90%;

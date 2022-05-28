@@ -238,11 +238,12 @@ const updateCount = async () => {
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  padding-bottom: 3rem;
   background: #f4f4f4;
   width: 100%;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   .card {
     display: flex;
     flex-direction: row;

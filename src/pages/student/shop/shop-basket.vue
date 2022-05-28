@@ -347,7 +347,8 @@ export default defineComponent({
 @import '@/css-variable/Global.scss';
 .shop-basket {
   position: relative;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
   background: #f4f4f4;
   font-family: IRANSans;
   width: 100%;

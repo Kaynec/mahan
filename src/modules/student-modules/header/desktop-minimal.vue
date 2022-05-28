@@ -375,7 +375,8 @@ nav {
   padding: 0;
   transition: 0.4s ease all;
   z-index: 99999999;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
   // padding-bottom: 5rem;
 
   li {

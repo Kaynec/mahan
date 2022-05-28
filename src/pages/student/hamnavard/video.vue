@@ -263,7 +263,7 @@ main {
     width: 80%;
     margin: 0 auto;
     max-width: 1000px;
-    padding-bottom: 10rem;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -315,7 +315,7 @@ main {
     max-height: 550px;
     margin: 0 auto;
     max-width: 1000px;
-    padding-bottom: 10rem;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -386,7 +386,6 @@ main {
   right: 0;
   margin: 1rem auto;
   max-width: 1000px;
-  padding-bottom: 10rem;
 
   .progress-container {
     display: flex;
@@ -432,7 +431,6 @@ main {
   left: 0;
   right: 0;
   max-width: 1000px;
-  padding-bottom: 10rem;
 }
 
 .loader-wrapper {

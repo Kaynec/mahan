@@ -163,7 +163,6 @@ body {
   overflow: hidden;
   display: flex;
   max-width: 1000px;
-  padding-bottom: 10rem;
 
   .info {
     width: 95%;
@@ -285,6 +284,7 @@ body {
   .container {
     width: 100%;
     overflow-y: auto;
+    padding-bottom: 3rem;
     padding-bottom: 5rem;
 
     .dialog {

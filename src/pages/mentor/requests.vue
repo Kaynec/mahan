@@ -190,7 +190,7 @@ export default defineComponent({
   font-family: IRANSans;
   position: relative;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   .container {
     width: 95%;
     margin: 1.5rem auto;

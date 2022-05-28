@@ -55,7 +55,7 @@ export default defineComponent({
   background-color: #f4f4f4;
   font-family: IRANSans;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   // padding-top: 8vh;
 
   .container {

@@ -66,13 +66,13 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   // padding-top: 5vh;
 
   .hero {
     width: 100%;
     max-width: 1000px;
-    padding-bottom: 10rem;
+
     max-height: 300px;
     margin-top: 15px;
     img {

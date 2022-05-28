@@ -131,6 +131,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  padding-bottom: 3rem;
   overflow-x: hidden;
 }
 .card {

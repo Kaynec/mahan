@@ -160,7 +160,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   .quiz-card {
     width: 90%;
     margin: 1rem auto;

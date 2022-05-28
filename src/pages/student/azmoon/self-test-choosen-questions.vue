@@ -195,7 +195,7 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   position: relative;
   overflow: hidden;
 

@@ -39,6 +39,7 @@ export default defineComponent({
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  padding-bottom: 3rem;
   height: 100%;
 }
 </style>

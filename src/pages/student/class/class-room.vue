@@ -97,6 +97,7 @@ export default defineComponent({
     grid-gap: 0.7rem;
     padding: 0.9rem;
     overflow-y: auto;
+    padding-bottom: 3rem;
     height: 50vh;
     max-height: fit-content;
 
@@ -149,7 +150,7 @@ export default defineComponent({
 
 .pc {
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   padding-top: 8vh;
 
   .hero {
@@ -168,6 +169,7 @@ export default defineComponent({
     grid-gap: 0.7rem;
     padding: 0.9rem;
     overflow-y: auto;
+    padding-bottom: 3rem;
     height: 50vh;
     max-height: fit-content;
     width: 100%;

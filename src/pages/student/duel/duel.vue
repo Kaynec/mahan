@@ -343,7 +343,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   overflow: hidden;
 
   .wrapper-pc {
@@ -372,7 +372,8 @@ export default defineComponent({
       }
     }
     .card-container {
-      overflow: auto;
+      overflow-y: auto;
+      padding-bottom: 3rem;
       margin-top: 2rem;
     }
   }
@@ -453,9 +454,10 @@ export default defineComponent({
     margin: 0 auto;
     height: calc(100vh - 150px);
     max-height: 96%;
-    overflow: scroll;
+    overflow-y: auto;
+    padding-bottom: 3rem;
     transform: translateY(-2.5rem);
-    padding-bottom: 10rem;
+
     .orange {
       display: inline-flex;
       width: fit-content;

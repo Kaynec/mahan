@@ -264,7 +264,7 @@ export default defineComponent({
 
     .c-video {
       max-width: 1000px;
-      padding-bottom: 10rem;
+
       max-height: 700px;
       position: relative;
       margin: 2rem auto 0;

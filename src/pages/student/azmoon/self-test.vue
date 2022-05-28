@@ -114,11 +114,11 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   .hero {
     width: 100%;
     max-width: 1000px;
-    padding-bottom: 10rem;
+
     max-height: 300px;
     img {
       width: 100%;
@@ -133,7 +133,8 @@ export default defineComponent({
     grid-auto-rows: repeat(auto-fit, minmax(180px, 1fr));
     grid-gap: 0.7rem;
     padding: 0.9rem;
-    overflow: auto;
+    overflow-y: auto;
+    padding-bottom: 3rem;
     height: 70vh;
     max-height: fit-content;
     padding-bottom: 8rem;

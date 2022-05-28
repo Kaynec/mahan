@@ -126,14 +126,15 @@ export default defineComponent({
   height: 100%;
   position: relative;
   max-width: 1000px;
-  padding-bottom: 10rem;
+
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   position: relative;
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 3rem;
 
   .controls {
     width: 90vw;
@@ -171,7 +172,8 @@ export default defineComponent({
     margin-top: 8px;
     padding: 0.73rem 2rem;
     border-radius: 10px;
-    overflow: auto;
+    overflow-y: auto;
+    padding-bottom: 3rem;
 
     span {
       border-right: 2px solid #ddd;

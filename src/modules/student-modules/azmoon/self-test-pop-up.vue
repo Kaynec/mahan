@@ -82,6 +82,7 @@ export default defineComponent({
 .flex-child {
   min-height: 60vh;
   max-height: 90%;
-  overflow: scroll;
+  overflow-y: auto;
+  padding-bottom: 3rem;
 }
 </style>
