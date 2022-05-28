@@ -12,66 +12,53 @@
         v-for="item in data"
         :key="item._id"
       >
-        <!-- <img :src="currentImg()" alt="colored img" /> -->
         <i class="fas fa-angle-left"></i>
         <div>
-          <span> {{ item.title }}</span
+          <span> {{ item.name }}</span
           ><br />
-          <span> {{ item.teacher }} </span>
+          <span> {{ item.startTime }} </span><br />
+          <span> {{ item.duration }} </span>
         </div>
       </div>
     </section>
   </main>
-  <!--  -->
-  <ClassInfo
-    v-if="classInfo"
-    @convertBoolean="toggleClassInfo"
-    :data="currentItem"
-    :recorded="false"
-  />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
-import ClassInfo from '@/modules/student-modules/class/class-info.vue';
 import { StudentClassApi } from '@/api/services/student/student-class-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import { useRoute } from 'vue-router';
+import { useStudentStore } from '@/store';
 export default defineComponent({
-  components: { SmallHeader, ClassInfo, DesktopMinimalHeader },
+  components: { SmallHeader, DesktopMinimalHeader },
   setup() {
+    const route = useRoute();
     // Change THis With The Current Data
     const data = ref([]);
     const currentItem = ref({});
-    StudentClassApi.getAll().then((res) => {
+    StudentClassApi.recordedClassHistory({
+      classId: route.params.classId,
+      classCode: route.params.classCode
+    }).then((res) => {
       data.value = res.data.data;
     });
 
-    const images = [
-      'class/purple@3x.png',
-      'class/orange@3x.png',
-      'class/pink@3x.png',
-      'class/green@3x.png'
-    ];
-
-    const currentImg = () => {
-      return require('../../../assets/img/' +
-        images[Math.floor(Math.random() * images.length)]);
-    };
+    const token = useStudentStore().getters.getStudentToken;
 
     const classInfo = ref(false);
     const toggleClassInfo = () => (classInfo.value = !classInfo.value);
     const toggleClassInfoAndCurrentItem = (item) => {
-      currentItem.value = item;
-      classInfo.value = !classInfo.value;
+      window.open(
+        `mahan-video:&offline&${route.params.classId}&${token}&${item.path}`,
+        '_self'
+      );
     };
 
     return {
-      classInfo,
       toggleClassInfo,
       data,
-      images,
-      currentImg,
       currentItem,
       toggleClassInfoAndCurrentItem
     };

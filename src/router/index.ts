@@ -139,6 +139,7 @@ const ContactBackupChat = () =>
   import('@/pages/student/contact-backup/contact-backup-chat.vue');
 
 const ClassRoom = () => import('@/pages/student/class/class-room.vue');
+const ClassList = () => import('@/pages/student/class/class-list.vue');
 const selfTestNote = () => import('@/pages/student/azmoon/self-test-note.vue');
 const ClassAdobe = () => import('@/pages/student/class/class-adobe.vue');
 
@@ -852,6 +853,13 @@ const routes: Array<RouteRecordRaw> = [
         path: 'class-room',
         name: 'ClassRoom',
         component: ClassRoom,
+        beforeEnter: ifStudentAuthenticated,
+        props: true
+      },
+      {
+        path: 'class-list/:classId/:classCode',
+        name: 'ClassList',
+        component: ClassList,
         beforeEnter: ifStudentAuthenticated,
         props: true
       },
