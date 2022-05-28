@@ -1,13 +1,6 @@
 <template>
   <div
-    class="
-      calendar-add
-      flex-column
-      d-flex
-      justify-content-center
-      align-items-center
-      animate__animated animate__fadeIn
-    "
+    class="calendar-add flex-column d-flex justify-content-center align-items-center animate__animated animate__fadeIn"
   >
     <form @submit.prevent="onSubmit">
       <!-- Add Ability To Change The Stuff Later -->

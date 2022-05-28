@@ -9,11 +9,11 @@
           alt="header"
         />
         <div class="cart-container">
-          <div class="Cart" @click="moveToComponent('ShopBookList')">
+          <div class="Cart" @click="moveToComponent('MyProfile')">
             <img
-              src="@/assets/img/home-icons/book.png"
-              :class="`${componentname == 'ShopBookList' ? 'active' : ''}`"
-              alt="ShopBookList"
+              src="@/assets/img/home-icons/profile.png"
+              :class="`${componentname == 'MyProfile' ? 'active' : ''}`"
+              alt="StudentProfile"
             />
           </div>
 
@@ -161,12 +161,12 @@ aside {
   .cart-container {
     width: 100%;
     height: 100%;
-    margin: 2rem auto;
+    margin: 0.25rem auto;
     display: grid;
     grid-template-columns: repeat(2, 35%);
     align-content: center;
     justify-content: center;
-    grid-gap: 1rem;
+    grid-gap: 0.75rem;
     .Cart {
       img {
         max-width: 100%;

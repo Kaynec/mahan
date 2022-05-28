@@ -75,10 +75,7 @@
 
       <p
         @click="resendVerificationCode()"
-        class="
-          text-custom text text-nowrap text-center text-secondary
-          hover-make-big
-        "
+        class="text-custom text text-nowrap text-center text-secondary hover-make-big"
         style="font-family: IRANSans; font-size: 0.75rem"
       >
         ارسال مجدد کد

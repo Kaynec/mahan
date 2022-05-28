@@ -6,7 +6,7 @@
 <style lang="scss">
 @import '@/index.scss';
 </style>
-<script setup>
+<script lang="ts" setup>
 import SplashScreen from '@/modules/splash.vue';
 import { ref, onMounted } from 'vue-demi';
 

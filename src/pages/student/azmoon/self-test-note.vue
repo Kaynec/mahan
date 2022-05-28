@@ -106,6 +106,7 @@ export default defineComponent({
   height: 100%;
   font-family: IRANSans;
   max-width: 1000px;
+  padding-bottom: 10rem;
 
   .currentNote {
     padding: 0.9rem;

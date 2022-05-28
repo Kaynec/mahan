@@ -149,6 +149,7 @@ export default defineComponent({
 
 .pc {
   max-width: 1000px;
+  padding-bottom: 10rem;
   padding-top: 8vh;
 
   .hero {

@@ -480,6 +480,7 @@ export default defineComponent({
   position: relative;
   overflow-x: hidden;
   max-width: 1000px;
+  padding-bottom: 10rem;
   // padding-top: 8vh;
   .img-container {
     width: 100%;

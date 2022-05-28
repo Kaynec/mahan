@@ -2,14 +2,7 @@
   <div class="alert flex-column d-flex justify-content-end align-items-center">
     <div
       style="z-index: 5; color: #fff"
-      class="
-        d-inline-flex
-        flex-column
-        justify-content-between
-        align-items-center
-        w-100
-        flex-child
-      "
+      class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
     >
       <div class="content">
         <h5>{{ label }}</h5>

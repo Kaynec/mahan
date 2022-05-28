@@ -2,19 +2,7 @@
   <div class="container" v-if="isLoading">
     <div
       @click="moveToReportCardOrExam(item)"
-      class="
-        card
-        w-100
-        d-inline-flex
-        align-items-center
-        m-1
-        position-relative
-        flex-row flex-wrap
-        border border-white
-        rounded-10
-        customDiv
-        warning
-      "
+      class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv warning"
       v-for="item in azmoonData"
       v-bind:key="item"
     >

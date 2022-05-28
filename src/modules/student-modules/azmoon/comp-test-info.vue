@@ -1,32 +1,13 @@
 <template>
   <div
-    class="
-      comp-test-info
-      flex-column
-      d-flex
-      justify-content-end
-      align-items-center
-    "
+    class="comp-test-info flex-column d-flex justify-content-end align-items-center"
   >
     <div
       style="z-index: 5; color: #fff"
-      class="
-        d-inline-flex
-        flex-column
-        justify-content-between
-        align-items-center
-        w-100
-        flex-child
-      "
+      class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
     >
       <div
-        class="
-          d-inline-flex
-          flex-column
-          justify-content-center
-          align-items-center
-          w-100
-        "
+        class="d-inline-flex flex-column justify-content-center align-items-center w-100"
       >
         <Dialog label="برترینهای آزمون" />
         <Dialog label="پاسخنامه" />

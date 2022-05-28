@@ -169,6 +169,7 @@ button {
 
 .edit-pc {
   max-width: 1000px;
+  padding-bottom: 10rem;
   height: 100%;
   overflow: hidden;
 

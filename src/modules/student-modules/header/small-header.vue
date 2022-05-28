@@ -109,6 +109,7 @@ export default defineComponent({
   color: #000;
   background: transparent;
   max-width: 1000px;
+  padding-bottom: 10rem;
   margin-top: 5em;
   top: 0;
   padding: 0 20px;

@@ -315,7 +315,7 @@ export default defineComponent({
 
     const showPdf = (pdf, index) => {
       if (index >= 1) {
-        alertify.error('شما قادر به انجام این کار نیستید');
+        alertify.error('لطفا اول برنامه را خریداری کنید');
         return;
       }
 

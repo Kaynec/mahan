@@ -126,17 +126,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { OrderServiceApi } from '@/api/services/admin/order-service';
+import { StoreServiceApi } from '@/api/services/admin/store-service';
+import { StudentServiceApi } from '@/api/services/admin/student-service';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
-import { OrderServiceApi } from '@/api/services/admin/order-service';
-import { StudentServiceApi } from '@/api/services/admin/student-service';
-import { StoreServiceApi } from '@/api/services/admin/store-service';
+import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-const alertify = require('@/assets/alertifyjs/alertify');
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+const alertify = require('@/assets/alertifyjs/alertify');
 export default defineComponent({
   components: {
     vSelect

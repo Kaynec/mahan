@@ -396,6 +396,7 @@ export default defineComponent({
   position: relative;
   overflow-x: hidden;
   max-width: 1000px;
+  padding-bottom: 10rem;
 
   .progress-count {
     width: 100%;

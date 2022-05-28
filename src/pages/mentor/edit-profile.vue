@@ -431,6 +431,7 @@ export default defineComponent({
   font-family: IRANSans;
   height: 100%;
   max-width: 1000px;
+  padding-bottom: 10rem;
   position: relative;
   .img-container {
     width: 100%;

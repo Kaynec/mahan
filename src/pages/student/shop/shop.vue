@@ -33,7 +33,7 @@
         @click="() => (currentState = 'yourProduct')"
         :class="{ active: currentState == 'yourProduct' }"
       >
-        محصولات شما
+        ماهان من
       </button>
       <button
         @click="() => (currentState = 'newsetProduct')"
@@ -170,7 +170,7 @@
         @click="() => (currentState = 'yourProduct')"
         :class="{ active: currentState == 'yourProduct' }"
       >
-        محصولات شما
+        ماهان من
       </button>
       <button
         @click="() => (currentState = 'newsetProduct')"
@@ -303,23 +303,17 @@ export default defineComponent({
       );
 
       const getBoughtProducts = await getBoughtProductsRes.json();
-<<<<<<< HEAD
 
       let boughtImgPromises = [] as any;
 
-=======
->>>>>>> 170a5c6e6d5a9bbf27a9c960f39d98221ee7d097
       if (getBoughtProducts.data) {
         getBoughtProducts.data.forEach((child) =>
           yourProduct.value.push(child)
         );
         yourProduct.value.forEach((data, idx) => {
           const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-<<<<<<< HEAD
           boughtImgPromises.push(returnAProtectedUrl(imageUrl));
-=======
           yourProduct.value[idx].img = imageUrl;
->>>>>>> 170a5c6e6d5a9bbf27a9c960f39d98221ee7d097
         });
       }
 
@@ -425,6 +419,7 @@ export default defineComponent({
   overflow-x: hidden;
   height: 100%;
   width: 100%;
+  overflow: auto;
 
   .grid {
     display: grid;
@@ -523,6 +518,7 @@ export default defineComponent({
 
 .desktop {
   max-width: 1000px;
+  padding-bottom: 10rem;
   padding-top: 8vh;
   position: relative;
 

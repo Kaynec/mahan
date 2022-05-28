@@ -16,15 +16,7 @@
     <img v-else src="../../assets/img/vpn-key-red.png" alt="vpn key red" />
     <span> {{ label }} </span>
     <i
-      class="
-        fas
-        fa-angle-left
-        position-absolute
-        top-50
-        start-0
-        translate-middle
-        ml-3
-      "
+      class="fas fa-angle-left position-absolute top-50 start-0 translate-middle ml-3"
     ></i>
   </div>
 </template>

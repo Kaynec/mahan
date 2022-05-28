@@ -4,18 +4,7 @@
     ref="Card"
     @touchstart="touchstart"
     @touchend="touchend"
-    class="
-      card
-      w-100
-      d-inline-flex
-      align-items-center
-      m-1
-      position-relative
-      flex-row flex-wrap
-      border border-white
-      rounded-10
-      customDiv
-    "
+    class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv"
   >
     <img
       v-if="!active"
@@ -42,15 +31,7 @@
       </span>
     </div>
     <i
-      class="
-        fas
-        fa-angle-left
-        position-absolute
-        top-50
-        start-0
-        translate-middle
-        ml-3
-      "
+      class="fas fa-angle-left position-absolute top-50 start-0 translate-middle ml-3"
     ></i>
   </div>
 </template>

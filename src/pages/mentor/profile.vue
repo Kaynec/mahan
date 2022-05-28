@@ -132,6 +132,7 @@ body {
   width: 100%;
   height: 100%;
   max-width: 1000px;
+  padding-bottom: 10rem;
   font-family: IRANSans;
   position: relative;
   display: flex;

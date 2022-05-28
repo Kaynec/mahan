@@ -63,8 +63,6 @@ export default defineComponent({
       renderPage(pageNumber.value);
     };
 
-    console.log(pdfUrl);
-
     returnAProtectedUrl(pdfUrl).then((res) => {
       isLoading.value = false;
       import('pdfjs-dist/legacy/build/pdf.min.js').then(async (pdfjsLib) => {
@@ -128,6 +126,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   max-width: 1000px;
+  padding-bottom: 10rem;
   background: transparent;
   display: flex;
   align-items: center;

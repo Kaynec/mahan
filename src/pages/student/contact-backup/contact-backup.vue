@@ -169,6 +169,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-width: 1000px;
+  padding-bottom: 10rem;
 
   h6 {
     margin: 20px;

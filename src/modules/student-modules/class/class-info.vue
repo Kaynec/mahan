@@ -2,14 +2,7 @@
   <div class="class-info">
     <div
       style="z-index: 5; color: #fff"
-      class="
-        d-inline-flex
-        flex-column
-        justify-content-between
-        align-items-center
-        w-100
-        flex-child
-      "
+      class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
     >
       <div class="text-card">
         <h5>نوع برگزاری کلاس</h5>

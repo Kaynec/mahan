@@ -3,19 +3,7 @@
     <div
       v-for="item in azmoonData"
       :key="item"
-      class="
-        card
-        w-100
-        d-inline-flex
-        align-items-center
-        m-1
-        position-relative
-        flex-row flex-wrap
-        border border-white
-        rounded-10
-        customDiv
-        animate__animated animate__fadeIn
-      "
+      class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv animate__animated animate__fadeIn"
       @click="openStartTest(item._id)"
     >
       <div class="d-flex flex-column mt-1 p-0 m-0">

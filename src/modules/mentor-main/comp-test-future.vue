@@ -3,18 +3,7 @@
     <div
       v-for="item in azmoonData"
       :key="item"
-      class="
-        card
-        w-100
-        d-inline-flex
-        align-items-center
-        m-1
-        position-relative
-        flex-row flex-wrap
-        border border-white
-        rounded-10
-        customDiv
-      "
+      class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv"
     >
       <div class="d-flex flex-column mt-1 p-0 m-0">
         <span class="label text-dark text-right mb-2 text-bold">

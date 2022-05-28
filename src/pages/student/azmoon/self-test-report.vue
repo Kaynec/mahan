@@ -182,6 +182,7 @@ export default defineComponent({
   height: 100%;
   position: relative;
   max-width: 1000px;
+  padding-bottom: 10rem;
   overflow: hidden;
 
   .label {

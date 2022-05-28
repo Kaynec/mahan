@@ -163,6 +163,7 @@ body {
   overflow: hidden;
   display: flex;
   max-width: 1000px;
+  padding-bottom: 10rem;
 
   .info {
     width: 95%;

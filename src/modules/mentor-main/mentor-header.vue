@@ -108,7 +108,7 @@ nav {
 }
 
 .pc-content {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.17);
@@ -116,6 +116,8 @@ nav {
   margin: 5.5rem 0 0 1rem;
   padding: 0;
   transition: 0.4s ease all;
+  z-index: 99999999;
+  overflow: scroll;
 
   li {
     width: 100%;
@@ -123,6 +125,9 @@ nav {
     border-radius: 5px;
     cursor: pointer;
     transition: 0.4s ease all;
+    color: #171717;
+    background-color: #fff;
+    overflow: scroll;
 
     &:first-child {
       background-color: #646464;
@@ -141,12 +146,7 @@ nav {
       }
     }
 
-    &:nth-of-type(2) {
-      color: #171717;
-      background-color: #fff;
-    }
-
-    &:nth-of-type(3) {
+    &:last-child {
       color: #ed1b24;
       background-color: #fff;
     }
