@@ -168,10 +168,8 @@ import { useRoute } from 'vue-router';
 import { jsonToFormData } from '@/api/helper';
 import { baseUrl } from '@/api/apiclient';
 import { HamnavardServiceApi } from '@/api/services/admin/hamnavard-service';
-import { SkeletonBlock } from 'skeleton-elements/vue';
 
 export default defineComponent({
-  components: { SkeletonBlock },
   props: {
     hamnavardId: {
       type: String,
@@ -355,8 +353,7 @@ export default defineComponent({
       addVideo,
       getHamnavardVideoUrl,
       error,
-      isLoading,
-      SkeletonBlock
+      isLoading
     };
   }
 });

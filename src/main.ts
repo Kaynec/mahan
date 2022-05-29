@@ -7,7 +7,6 @@ import detectMobile from './mixins/detectMobile';
 import SocketIO from 'socket.io-client';
 import { useStudentStore, useMentorStore } from '@/store';
 import CKEditor from '@ckeditor/ckeditor5-vue';
-import '../node_modules/skeleton-elements/scss/skeleton-elements.scss';
 import '../node_modules/animate.css/animate.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { baseUrlDomain } from './api/apiclient';

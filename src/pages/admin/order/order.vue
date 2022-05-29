@@ -39,11 +39,11 @@
 import { defineComponent, ref, onMounted, reactive } from 'vue';
 import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
-var moment = require('jalali-moment');
 import router from '@/router';
 import { OrderServiceApi } from '@/api/services/admin/order-service';
 const $ = require('jquery');
 const alertify = require('../../../assets/alertifyjs/alertify');
+var moment = require('jalali-moment');
 
 export default defineComponent({
   components: { grid },
@@ -137,7 +137,7 @@ export default defineComponent({
       });
     };
 
-    const deleteOrder = (order: any) => {
+    const deleteOrder = async (order: any) => {
       alertify.defaults.glossary.ok = 'خیر';
       alertify.defaults.glossary.cancel = 'بله';
       alertify.confirm('حذف', 'آیا اطمینان دارید؟', function (e: any) {

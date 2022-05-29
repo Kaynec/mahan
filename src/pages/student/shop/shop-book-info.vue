@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, reactive, ref, defineProps } from 'vue';
+import { defineComponent, reactive, ref} from 'vue';
 import ShopFooter from '@/modules/student-modules/footer/shop-footer.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
