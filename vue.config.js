@@ -3,7 +3,6 @@ const BundleAnalyzerPlugin =
 
 module.exports = {
   configureWebpack: {
-    plugins: [new BundleAnalyzerPlugin()],
     module: {
       rules: [{ sideEffects: false }]
     },
