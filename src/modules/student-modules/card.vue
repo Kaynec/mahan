@@ -71,7 +71,7 @@ export default defineComponent({
       }
     };
     const getImgUrl = (src, color) => {
-      return require('../../assets/img/Studentsetting/' + src + color + '.png');
+      return require('@/assets/img/Studentsetting/' + src + color + '.png');
     };
     return {
       touchend,

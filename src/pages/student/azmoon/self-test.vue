@@ -134,10 +134,8 @@ export default defineComponent({
     grid-gap: 0.7rem;
     padding: 0.9rem;
     overflow-y: auto;
-    padding-bottom: 3rem;
-    height: 70vh;
-    max-height: fit-content;
-    padding-bottom: 8rem;
+    height: 75%;
+    padding-bottom: 15rem;
 
     .card {
       padding: 11px 36px 16.6px 38px;
