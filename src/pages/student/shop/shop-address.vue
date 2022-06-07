@@ -15,7 +15,7 @@
           placeholder=" کد ملی"
           v-model="model.address"
           @blur="v$.address.$touch()"
-          style="appearance: none; min-height: 10rem"
+          style="appearance: none; min-height: 10rem;"
           @focus="changeTextareaPlaceHolder('آدرس')"
           @focusout="changeTextareaPlaceHolder('آدرس خود را کامل وارد کنید  ')"
         ></textarea>
@@ -26,7 +26,7 @@
         v-for="error in v$.address.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px"
+        style="font-family: IRANSans; font-size: 12px;"
       >
         {{ error.$message }}
       </p>
@@ -37,7 +37,7 @@
           placeholder=" تلفن "
           v-model="model.phone"
           @blur="v$.phone.$touch()"
-          style="appearance: none"
+          style="appearance: none;"
         />
         <span> تلفن </span>
       </label>
@@ -46,7 +46,7 @@
         v-for="error in v$.phone.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px"
+        style="font-family: IRANSans; font-size: 12px;"
       >
         {{ error.$message }}
       </p>
@@ -195,7 +195,7 @@ export default defineComponent({
   left: 0;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.782);
   display: flex;
   flex-direction: column;

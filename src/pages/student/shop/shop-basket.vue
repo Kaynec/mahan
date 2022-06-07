@@ -29,7 +29,7 @@
                 }`
               }}
             </span>
-            <span @click="removeItem(item)" style="display: block" class="red"
+            <span @click="removeItem(item)" style="display: block;" class="red"
               >حذف محصول</span
             >
           </div>
@@ -105,13 +105,16 @@
               <span class="sr-only">Loading...</span>
             </div>
             <img :src="item.img" alt="product img" v-else />
-            <div class="label" style="margin-right: 0.5rem">
+            <div class="label" style="margin-right: 0.5rem;">
               {{
                 `${item.product.title} ${
                   +item.quantity > 1 ? `تعداد (${item.quantity})` : ''
                 }`
               }}
-              <span @click="removeItem(item)" style="display: block" class="red"
+              <span
+                @click="removeItem(item)"
+                style="display: block;"
+                class="red"
                 >حذف محصول</span
               >
             </div>
@@ -534,7 +537,7 @@ export default defineComponent({
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.795);
   display: flex;
   align-items: center;

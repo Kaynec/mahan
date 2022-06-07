@@ -198,7 +198,7 @@ export default defineComponent({
 
 .pc {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   background: rgba(0, 0, 0, 0.95);
   top: 0;

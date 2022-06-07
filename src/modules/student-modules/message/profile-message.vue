@@ -39,7 +39,7 @@ export default defineComponent({
 .message {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);

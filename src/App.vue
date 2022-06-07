@@ -1,7 +1,9 @@
 <template>
-  <SplashScreen v-if="loading" />
+  <div id="app">
+    <SplashScreen v-if="loading" />
 
-  <router-view v-else />
+    <RouterView v-else />
+  </div>
 </template>
 <style lang="scss">
 @import '@/index.scss';

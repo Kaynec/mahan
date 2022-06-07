@@ -28,7 +28,7 @@
           placeholder="عنوان"
           v-model="model.eventName"
           @blur="v$.eventName.$touch()"
-          style="appearance: none"
+          style="appearance: none;"
         />
         <span> عنوان رویداد </span>
       </label>
@@ -37,12 +37,12 @@
         v-for="error in v$.eventName.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px"
+        style="font-family: IRANSans; font-size: 12px;"
       >
         {{ error.$message }}
       </p>
 
-      <button class="button-linear" style="color: #fff; padding: 0.7rem 1rem">
+      <button class="button-linear" style="color: #fff; padding: 0.7rem 1rem;">
         اضافه کردن رویداد
       </button>
     </form>
@@ -124,7 +124,7 @@ export default defineComponent({
 .calendar-add {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);

@@ -1,7 +1,7 @@
 <template>
   <div class="taraz flex-column d-flex justify-content-end align-items-center">
     <div
-      style="z-index: 5; color: #fff"
+      style="z-index: 5; color: #fff;"
       class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
     >
       <div
@@ -36,7 +36,7 @@
 
           <button
             class="button-linear"
-            style="color: white; padding: 0.85rem"
+            style="color: white; padding: 0.85rem;"
             @click="changeSendRequest"
             v-if="sendRequest == false"
           >
@@ -45,7 +45,7 @@
           <!--  -->
           <button
             class="button-linear"
-            style="color: white; padding: 0.85rem"
+            style="color: white; padding: 0.85rem;"
             @click="sendRequestAgain"
             v-else
           >
@@ -105,7 +105,7 @@ export default defineComponent({
 .taraz {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);

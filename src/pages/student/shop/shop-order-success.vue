@@ -127,7 +127,7 @@ export default defineComponent({
   left: 0;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.782);
   display: flex;
   align-items: center;

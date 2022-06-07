@@ -43,7 +43,7 @@
         >
           <div class="control" v-if="circle.state === 0">
             <h1>خواندن کتاب</h1>
-            <h2>{{ circle.title }}</h2>
+            <h2>{{ (circle.title as string).substring(0 , 25) }}</h2>
 
             <button @click="showPdf(circle, i, index)" class="green">
               شروع خواندن کتاب
@@ -64,7 +64,7 @@
 
           <div class="control" v-else-if="circle.state === 1">
             <h1>آزمون خودسنجی</h1>
-            <h2>{{ circle.title }}</h2>
+            <h2>{{ (circle.title as string).substring(0 , 25) }}</h2>
             <button
               class="green"
               @click="moveToSelfTestQuestions(i, circle._id)"
@@ -149,7 +149,9 @@
             ></div>
           </div>
         </div>
-        <div class="info">{{ circle.title }}</div>
+        <div class="info">
+          {{ (circle.title as string).substring(0 , 50)  }}...
+        </div>
       </div>
     </div>
     <Alert
@@ -165,8 +167,8 @@
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onUpdated } from 'vue';
+<script lang="ts" setup>
+import { ref, onUpdated } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import { useRoute } from 'vue-router';
@@ -175,195 +177,185 @@ import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minim
 import { baseUrl } from '@/api/apiclient';
 import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
-const alertify = require('../../../assets/alertifyjs/alertify');
 import Alert from '@/modules/student-modules/alert/alert.vue';
+const alertify = require('../../../assets/alertifyjs/alertify');
 
-export default defineComponent({
-  components: { SmallHeader, DesktopMinimalHeader, Alert },
-  setup() {
-    const isLoading = ref(true);
-    const roadmap = ref();
-    const circles = ref();
-    const currentIndex = ref(0);
-    const allSessions = ref([] as any);
-    const Route = useRoute();
-    const firstView = ref(true);
-    const showNotif = ref(false);
-    const toggleShowNotif = () => (showNotif.value = !showNotif.value);
-    const messageToShow = ref('');
-    const textToShow = ref('');
+const isLoading = ref(true);
+const roadmap = ref();
+const circles = ref();
+const currentIndex = ref(0);
+const allSessions = ref([] as any);
+const Route = useRoute();
+const firstView = ref(true);
+const showNotif = ref(false);
+const toggleShowNotif = () => (showNotif.value = !showNotif.value);
+const messageToShow = ref('');
+const textToShow = ref('');
 
-    onUpdated(() => {
-      if (firstView.value) {
-        if (roadmap.value) {
-          roadmap.value.scrollLeft = -circles.value?.clientWidth;
-        }
-        firstView.value = false;
-      }
-    });
-
-    (async () => {
-      const res = await StudentSelfTestApi.getOneCourse(Route.params.id as any);
-
-      const historyOfExamPromises = [] as any;
-      // Looping Through Sessions of the Course
-      if (res.data.data.sessions) {
-        for (let i = 0; i < res.data.data?.sessions.length; i++) {
-          const session = {
-            ...res.data.data.sessions[i]
-          };
-          if (session.image) {
-            session.img = `${baseUrl}course/download-image/${session.image}`;
-          }
-          allSessions.value[i] = session;
-
-          historyOfExamPromises.push(
-            StudentSelfTestApi.selfTestResult({
-              course: { _id: res.data.data._id },
-              session: { _id: session._id }
-            })
-          );
-        }
-      }
-
-      // Get The Results for the history of that session
-
-      const promises = await Promise.all(historyOfExamPromises);
-
-      promises.forEach((promise: any, idx) => {
-        allSessions.value[idx] = {
-          ...allSessions.value[idx],
-          ...promise.data.data,
-          // state for the img shown in control pad
-          state: 1
-        };
-      });
-
-      isLoading.value = false;
-    })();
-
-    const moveToSelfTestQuestions = (index, id) => {
-      if (index >= 1) {
-        alertify.error('شما قادر به انجام این کار نیستید');
-      } else
-        router.push({
-          name: 'SelfTestQuestions',
-          params: { id }
-        });
-    };
-
-    const moveImg = (amountToAdd: number) => {
-      const calc = currentIndex.value + amountToAdd;
-
-      document.querySelectorAll('.control-container').forEach((circle: any) => {
-        const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
-        if (circle.style.display != 'none') {
-          amountToAdd > 0
-            ? ((document.querySelector('.roadmap') as any).scrollLeft +=
-                width / 2)
-            : ((document.querySelector('.roadmap') as any).scrollLeft -=
-                width / 2);
-        }
-      });
-
-      if (calc >= 0 && calc <= allSessions.value.length - 1)
-        currentIndex.value += amountToAdd;
-    };
-    //
-    const moveToReportCard = (circle) => {
-      router.push({
-        name: 'SelfTestReportCard',
-        params: { data: JSON.stringify(circle) }
-      });
-    };
-
-    const goOnePageBack = () => {
-      router.push({ name: 'SelfTest' });
-    };
-
-    const currentUser = ref(store.getters.getCurrentStudent);
-
-    const point = ref(0);
-
-    let imageUrl =
-      'https://images.vexels.com/media/users/3/129616/isolated/preview/fb517f8913bd99cd48ef00facb4a67c0-businessman-avatar-silhouette-by-vexels.png';
-    if (currentUser.value && currentUser.value.profileImage) {
-      imageUrl = `${baseUrl}student/getProfileImage/${currentUser.value.profileImage}`;
+onUpdated(() => {
+  if (firstView.value) {
+    if (roadmap.value) {
+      roadmap.value.scrollLeft = -circles.value?.clientWidth;
     }
-
-    if (currentUser.value && currentUser.value.point) {
-      point.value = currentUser.value.point;
-    }
-
-    const isShowVideo = ref(false);
-    const currentSession = ref({});
-    const showVideo = (session) => {
-      if (session.video) {
-        isShowVideo.value = true;
-        currentSession.value = session;
-        router.push({
-          name: 'Video',
-          params: { filename: session.video }
-        });
-      } else {
-        messageToShow.value = ' خطای دریافت';
-        textToShow.value = 'ویدیو درس مورد نظر در دسترس نیست';
-
-        toggleShowNotif();
-      }
-    };
-
-    const showPdf = (pdf, index) => {
-      if (index >= 1) {
-        alertify.error('لطفا اول برنامه را خریداری کنید');
-        return;
-      }
-
-      if (pdf.book) {
-        router.push({
-          name: 'PDF',
-          params: { filename: `session/download-file/${pdf.book}` }
-        });
-      } else {
-        messageToShow.value = ' خطای دریافت';
-        textToShow.value = 'کتاب درس مورد نظر در دسترس نیست';
-
-        toggleShowNotif();
-      }
-    };
-
-    return {
-      currentIndex,
-      moveImg,
-      allSessions,
-      moveToSelfTestQuestions,
-      isLoading,
-      roadmap,
-      circles,
-      moveToReportCard,
-      imageUrl,
-      goOnePageBack,
-      toPersianNumbers,
-      currentUser,
-      showVideo,
-      isShowVideo,
-      currentSession,
-      showPdf,
-      baseUrl,
-      toggleShowNotif,
-      showNotif,
-      messageToShow,
-      textToShow
-    };
+    firstView.value = false;
   }
 });
+
+(async () => {
+  const res = await StudentSelfTestApi.getOneCourse(Route.params.id as any);
+
+  const historyOfExamPromises = [] as any;
+  // Looping Through Sessions of the Course
+  if (res.data.data.sessions) {
+    for (let i = 0; i < res.data.data?.sessions.length; i++) {
+      const session = {
+        ...res.data.data.sessions[i]
+      };
+      if (session.image) {
+        session.img = `${baseUrl}course/download-image/${session.image}`;
+      }
+      allSessions.value[i] = session;
+
+      historyOfExamPromises.push(
+        StudentSelfTestApi.selfTestResult({
+          course: { _id: res.data.data._id },
+          session: { _id: session._id }
+        })
+      );
+    }
+  }
+
+  // Get The Results for the history of that session
+
+  const promises = await Promise.all(historyOfExamPromises);
+
+  promises.forEach((promise: any, idx) => {
+    allSessions.value[idx] = {
+      ...allSessions.value[idx],
+      ...promise.data.data,
+      // state for the img shown in control pad
+      state: 1
+    };
+  });
+
+  isLoading.value = false;
+})();
+
+const moveToSelfTestQuestions = (index, id) => {
+  if (index >= 1) {
+    alertify.error('شما قادر به انجام این کار نیستید');
+  } else
+    router.push({
+      name: 'SelfTestQuestions',
+      params: { id }
+    });
+};
+
+const moveImg = (amountToAdd: number) => {
+  const calc = currentIndex.value + amountToAdd;
+
+  document.querySelectorAll('.control-container').forEach((circle: any) => {
+    const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+    if (circle.style.display != 'none') {
+      amountToAdd > 0
+        ? ((document.querySelector('.roadmap') as any).scrollLeft += width / 2)
+        : ((document.querySelector('.roadmap') as any).scrollLeft -= width / 2);
+    }
+  });
+
+  if (calc >= 0 && calc <= allSessions.value.length - 1)
+    currentIndex.value += amountToAdd;
+};
+//
+const moveToReportCard = (circle) => {
+  router.push({
+    name: 'SelfTestReportCard',
+    params: { data: JSON.stringify(circle) }
+  });
+};
+
+const goOnePageBack = () => {
+  router.push({ name: 'SelfTest' });
+};
+
+const currentUser = ref(store.getters.getCurrentStudent);
+
+const point = ref(0);
+
+let imageUrl =
+  'https://images.vexels.com/media/users/3/129616/isolated/preview/fb517f8913bd99cd48ef00facb4a67c0-businessman-avatar-silhouette-by-vexels.png';
+if (currentUser.value && currentUser.value.profileImage) {
+  imageUrl = `${baseUrl}student/getProfileImage/${currentUser.value.profileImage}`;
+}
+
+if (currentUser.value && currentUser.value.point) {
+  point.value = currentUser.value.point;
+}
+
+const isShowVideo = ref(false);
+const currentSession = ref({});
+const showVideo = (session) => {
+  if (session.video) {
+    isShowVideo.value = true;
+    currentSession.value = session;
+    router.push({
+      name: 'Video',
+      params: { filename: session.video }
+    });
+  } else {
+    messageToShow.value = ' خطای دریافت';
+    textToShow.value = 'ویدیو درس مورد نظر در دسترس نیست';
+
+    toggleShowNotif();
+  }
+};
+
+const showPdf = (pdf, index) => {
+  if (index >= 1) {
+    alertify.error('لطفا اول برنامه را خریداری کنید');
+    return;
+  }
+
+  if (pdf.book) {
+    router.push({
+      name: 'PDF',
+      params: { filename: `session/download-file/${pdf.book}` }
+    });
+  } else {
+    messageToShow.value = ' خطای دریافت';
+    textToShow.value = 'کتاب درس مورد نظر در دسترس نیست';
+
+    toggleShowNotif();
+  }
+};
 </script>
 <style lang="scss" scoped>
+/* width */
+::-webkit-scrollbar,
+::moz-sc {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+//
 .roadmap {
   font-family: IRANSans;
   position: relative;
-  overflow-y: auto;
-  padding-bottom: 3rem;
+  padding-bottom: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -390,6 +382,8 @@ export default defineComponent({
     z-index: 999;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* Lets it scroll lazy */
+    scrollbar-width: thin;
+    scrollbar-color: orange red;
 
     .circle {
       z-index: 999;
@@ -419,6 +413,7 @@ export default defineComponent({
           border-radius: 1em;
           position: relative;
           background: rgba(0, 0, 0, 0.308);
+
           .bar-child {
             position: absolute;
             left: 0;
@@ -442,7 +437,8 @@ export default defineComponent({
         display: flex;
         flex-direction: column;
         margin-left: 1.5rem;
-        transform: translateY(-4rem);
+        transform: translateY(-3rem);
+        // margin-top: 5rem;
         .img {
           display: flex;
           flex-direction: row;
@@ -566,7 +562,7 @@ export default defineComponent({
         white-space: nowrap;
         background: red;
         border-radius: 1em;
-        font-size: 16px;
+        font-size: 12px;
         color: #fff;
         margin-bottom: 1rem;
       }
@@ -634,6 +630,83 @@ export default defineComponent({
       font-family: IRANSans;
       font-size: 11px;
       font-weight: bold;
+    }
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .roadmap {
+    padding-bottom: 0;
+
+    .circles {
+      /* Lets it scroll lazy */
+
+      .circle {
+        .bar-container {
+          width: 100%;
+          max-width: 375px;
+          transform: translateY(-1.25rem);
+        }
+
+        .circle-main-img {
+          max-width: 7.5rem;
+        }
+
+        .control-container {
+          .img {
+            span {
+              width: 2rem;
+              height: 2rem;
+              padding: 0.3rem;
+            }
+          }
+
+          .control {
+            padding: 0.8rem 1.6rem;
+          }
+
+          .shape1 {
+            width: 0.8rem;
+            height: 0.8rem;
+          }
+          .shape2 {
+            width: 0.8rem;
+            height: 0.8rem;
+          }
+
+          h1 {
+            font-size: 11px;
+          }
+
+          h2 {
+            font-size: 13px;
+          }
+
+          h3 {
+            font-size: 9px;
+            color: #d21921;
+          }
+          p {
+            color: #000000;
+            font-size: 10px;
+          }
+
+          .green {
+            height: 1.6rem;
+            padding: 0 1.3rem;
+          }
+
+          .red {
+            height: 1.6rem;
+            padding: 0 1.3rem;
+          }
+        }
+
+        .info {
+          font-size: 10px;
+          margin-bottom: 0.5rem;
+        }
+      }
     }
   }
 }

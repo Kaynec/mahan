@@ -3,7 +3,7 @@
     class="comp-test-info flex-column d-flex justify-content-end align-items-center"
   >
     <div
-      style="z-index: 5; color: #fff"
+      style="z-index: 5; color: #fff;"
       class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
     >
       <div
@@ -50,7 +50,7 @@ export default defineComponent({
 .comp-test-info {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);

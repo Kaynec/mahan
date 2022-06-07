@@ -135,20 +135,40 @@ export default class Main extends Vue {
 }
 
 .st-wrapper {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  overflow: hidden;
   background: #f4f4f4;
   display: grid;
-  font-family: IRANSans;
+  overflow-x: hidden;
   transition: opacity 0.9s ease-in-out;
+  //
+  scrollbar-width: thin !important;
+  scrollbar-color: rgb(146, 141, 141) rgb(230, 224, 224);
+  padding-left: 0.5rem;
+  //
+  ::-webkit-scrollbar,
+  ::moz-sc {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  //
 }
 
 .pc {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 .slide-enter-active,
 .slide-leave-active {

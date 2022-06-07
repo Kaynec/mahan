@@ -16,7 +16,7 @@
       class="Rectangle animate__animated animate__fadeIn"
     >
       <h6
-        style="font-family: IRANSans; margin-bottom: 1rem"
+        style="font-family: IRANSans; margin-bottom: 1rem;"
         class="text-nowrap text-center"
       >
         تغییر رمز کاربری
@@ -51,7 +51,7 @@
         v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans"
+        style="font-family: IRANSans;"
       >
         {{ error.$message }}
       </p>
@@ -84,7 +84,7 @@
         v-for="(error, index) in v$.password.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans"
+        style="font-family: IRANSans;"
       >
         {{ error.$message }}
       </p>
@@ -117,7 +117,7 @@
         v-for="(error, index) in v$.repassword.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans"
+        style="font-family: IRANSans;"
       >
         {{ error.$message }}
       </p>
@@ -125,7 +125,7 @@
       <button class="button-linear">
         <span
           v-if="isSendingAMainReq"
-          style="width: 1.3rem; height: 1.3rem"
+          style="width: 1.3rem; height: 1.3rem;"
           class="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"
@@ -136,14 +136,14 @@
       <p
         @click="cancel()"
         class="text-custom text text-nowrap text-center hover-make-big"
-        style="font-family: IRANSans; font-size: 0.75rem"
+        style="font-family: IRANSans; font-size: 0.75rem;"
       >
         برگشت به صفحه ورود
       </p>
     </form>
     <!--  -->
     <img
-      style="margin-top: 2rem"
+      style="margin-top: 2rem;"
       v-show="!isMobile()"
       src="@/assets/img/mahan.png"
       alt="logo"
@@ -240,7 +240,7 @@ const sendToHome = async () => {
 }
 .Forget-the-password {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   padding: 37px 24.6px 156px 24px;
   background-color: #f6f8fa;
 

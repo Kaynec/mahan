@@ -32,78 +32,65 @@
         <span> {{ course.title }}</span>
       </div>
     </div>
-    <img
-      src="@/assets/img/class/pencil.png"
-      alt="pencil icon"
-      class="pencil"
-      style="animation: lightSpeedInLeft; animation-duration: 0.5s"
-      @click="openNote"
-    />
+    <div class="img-container">
+      <img
+        src="@/assets/img/class/pencil.png"
+        alt="pencil icon"
+        class="pencil"
+        style="animation: lightSpeedInLeft; animation-duration: 0.5s;"
+        @click="openNote"
+      />
 
-    <i
-      class="fas fa-bookmark bookmarked"
-      style="animation: lightSpeedInRight; animation-duration: 0.5s"
-      @click="openBookmarked"
-    ></i>
+      <i
+        class="fas fa-bookmark bookmarked"
+        style="animation: lightSpeedInRight; animation-duration: 0.5s;"
+        @click="openBookmarked"
+      ></i>
+    </div>
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import router from '@/router';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { baseUrl } from '@/api/apiclient';
 
-export default defineComponent({
-  components: { SmallHeader, DesktopMinimalHeader },
-  setup() {
-    // Change THis With The Current Data
-    const allCourses = ref([] as any);
+const allCourses = ref([] as any);
 
-    (async () => {
-      const res = await StudentSelfTestApi.AllCourses();
-      allCourses.value = res.data.data;
-      allCourses.value.forEach((element, idx) => {
-        if (element.image) {
-          const imageUrl = `${baseUrl}course/download-image/${element.image}`;
+(async () => {
+  const res = await StudentSelfTestApi.AllCourses();
+  allCourses.value = res.data.data;
+  allCourses.value.forEach((element, idx) => {
+    if (element.image) {
+      const imageUrl = `${baseUrl}course/download-image/${element.image}`;
 
-          allCourses.value[idx].img = imageUrl;
-        } else {
-          allCourses.value[idx].img =
-            'https://api.mahanplus.com/api/course/download-image/image-1643532340814-image2.png';
-        }
-      });
-    })();
+      allCourses.value[idx].img = imageUrl;
+    } else {
+      allCourses.value[idx].img =
+        'https://api.mahanplus.com/api/course/download-image/image-1643532340814-image2.png';
+    }
+  });
+})();
 
-    const classInfo = ref(false);
-    const toggleClassInfo = () => (classInfo.value = !classInfo.value);
+const classInfo = ref(false);
+const toggleClassInfo = () => (classInfo.value = !classInfo.value);
 
-    const openNote = () => {
-      router.push({
-        name: 'SelfTestNote'
-      });
-    };
+const openNote = () => {
+  router.push({
+    name: 'SelfTestNote'
+  });
+};
 
-    const movetoRoadmap = (id: string) => {
-      router.push({ name: 'CustomGroupPage', params: { id: id } });
-    };
+const movetoRoadmap = (id: string) => {
+  router.push({ name: 'CustomGroupPage', params: { id: id } });
+};
 
-    const openBookmarked = () => {
-      router.push({ name: 'QuestionsChoosenList' });
-    };
-
-    return {
-      classInfo,
-      toggleClassInfo,
-      openNote,
-      allCourses,
-      movetoRoadmap,
-      openBookmarked
-    };
-  }
-});
+const openBookmarked = () => {
+  router.push({ name: 'QuestionsChoosenList' });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -112,7 +99,7 @@ export default defineComponent({
   overflow-x: hidden;
   position: relative;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
   max-width: 1000px;
 
   .hero {
@@ -133,10 +120,8 @@ export default defineComponent({
     grid-auto-rows: repeat(auto-fit, minmax(180px, 1fr));
     grid-gap: 0.7rem;
     padding: 0.9rem;
-    overflow-y: auto;
-    height: 75%;
-    padding-bottom: 15rem;
-
+    height: fit-content;
+    padding-bottom: 7.25rem;
     .card {
       padding: 11px 36px 16.6px 38px;
       border-radius: 14.7px;
@@ -170,8 +155,14 @@ export default defineComponent({
       }
     }
   }
+
+  .img-container {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
   .pencil {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     max-width: 52px;
@@ -190,7 +181,7 @@ export default defineComponent({
   }
 
   .bookmarked {
-    position: absolute;
+    // position: fixed;
     bottom: 0;
     right: 0;
     margin-bottom: 1rem;
