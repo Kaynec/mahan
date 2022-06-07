@@ -58,11 +58,15 @@
                 class="fa fa-trash"
                 aria-hidden="true"
                 @click="removeEvent(item._id)"
-                style="margin-left: 0.5rem; margin-right: 1rem; cursor: pointer"
+                style="
+                  margin-left: 0.5rem;
+                  margin-right: 1rem;
+                  cursor: pointer;
+                "
               ></i>
 
               <i
-                style="cursor: pointer"
+                style="cursor: pointer;"
                 class="fas fa-pen"
                 @click="showEditEvent(item)"
               ></i>
@@ -103,7 +107,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, ref } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentEventApi } from '@/api/services/student/student-event-service';
@@ -115,282 +119,240 @@ import {
   toPersianNumbers
 } from '@/utilities/to-persian-numbers';
 import JalaliConverter, { isLeapJalaaliYear } from '@/utilities/date-converter';
+let currentDay = ref(),
+  currentMonth = ref();
+const days = ref();
+const showCalendarAddEvent = ref(false);
+const showCalendarEditEvent = ref(false);
+const currentItem = ref({});
 
-export default defineComponent({
-  components: {
-    SmallHeader,
-    CalendarAddEvent,
-    CalendarEditEvent,
-    DesktopMinimalHeader
+const showEditEvent = (item) => {
+  showCalendarEditEvent.value = true;
+  currentItem.value = item;
+};
+
+const changeCalendarEditEvent = async () => {
+  showCalendarEditEvent.value = false;
+  const res = await StudentEventApi.get({ date: newDate });
+  data.value = res.data.data;
+  updateCalendarClasses();
+};
+
+const date = new Date();
+const faDate = new Intl.DateTimeFormat('fa', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}).format(date);
+
+const dates = ref([] as any);
+let templateDate = faDate.split(' ');
+let isCurrentYearLeapYear = isLeapJalaaliYear(
+  toEnglishNumbers(`${templateDate[2]}`)
+);
+let numbersBeforeTheMonthStart = ref(0);
+
+const weekDays = [
+  { name: 'شنبه' },
+  { name: 'یکشنبه' },
+  { name: 'دوشنبه' },
+  { name: 'سه شنبه' },
+  { name: 'چهارشنبه' },
+  { name: 'پنجشنبه' },
+  { name: 'جمعه' }
+];
+
+const faDateAllDigit = new Intl.DateTimeFormat('fa', {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric'
+}).format(date);
+
+let m = new Date(
+  JalaliConverter(
+    toEnglishNumbers(faDateAllDigit.split('/')[0]),
+    toEnglishNumbers(faDateAllDigit.split('/')[1]),
+    toEnglishNumbers(faDateAllDigit.split('/')[2])
+  ) as any
+);
+
+let whatDayStartsTheDay = new Intl.DateTimeFormat('fa', {
+  weekday: 'long'
+}).format(m) as any;
+
+weekDays.forEach((el, idx) => {
+  if (el.name === whatDayStartsTheDay) numbersBeforeTheMonthStart.value = idx;
+});
+
+const monthsOfYear = [
+  {
+    name: 'فروردین',
+    days: 31,
+    monthNumber: '01',
+    currentYear: templateDate[2]
   },
-  setup() {
-    let currentDay = ref(),
-      currentMonth = ref();
-    const days = ref();
-    const showCalendarAddEvent = ref(false);
-    const showCalendarEditEvent = ref(false);
-    const currentItem = ref({});
+  {
+    name: 'اردیبهشت',
+    days: 31,
+    monthNumber: '02',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'خرداد',
+    days: 31,
+    monthNumber: '03',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'تیر',
+    days: 31,
+    monthNumber: '04',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'مرداد',
+    days: 31,
+    monthNumber: '05',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'شهریور',
+    days: 31,
+    monthNumber: '06',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'مهر',
+    days: 30,
+    monthNumber: '07',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'آبان',
+    days: 30,
+    monthNumber: '08',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'آذر',
+    days: 30,
+    monthNumber: '09',
+    currentYear: templateDate[2]
+  },
+  { name: 'دی', days: 30, monthNumber: '10', currentYear: templateDate[2] },
+  {
+    name: 'بهمن',
+    days: 30,
+    monthNumber: '11',
+    currentYear: templateDate[2]
+  },
+  {
+    name: 'اسفند',
+    days: isCurrentYearLeapYear ? 30 : 29,
+    monthNumber: '12',
+    currentYear: templateDate[2]
+  }
+];
 
-    const showEditEvent = (item) => {
-      showCalendarEditEvent.value = true;
-      currentItem.value = item;
-    };
+const currentDaysOfMonth = monthsOfYear.find(
+  (el) => el.name === templateDate[1]
+) as any;
 
-    const changeCalendarEditEvent = async () => {
-      showCalendarEditEvent.value = false;
-      const res = await StudentEventApi.get({ date: newDate });
-      data.value = res.data.data;
-      updateCalendarClasses();
-    };
+// Get Data From Database
+let data = ref([]);
 
-    const date = new Date();
-    const faDate = new Intl.DateTimeFormat('fa', {
+let dateForDataBase = `${toEnglishNumbers(
+  `${currentDaysOfMonth.currentYear}`
+)}/${currentDaysOfMonth.monthNumber}/${toEnglishNumbers(`${templateDate[0]}`)}`;
+// in case day is less than 1
+let newDate = dateForDataBase.split('/') as any;
+if (+newDate[1] < 9) newDate[1] = `0${dateForDataBase[1]}`;
+if (+newDate[2] < 9) newDate[2] = `0${newDate[2]}`;
+newDate = newDate.join('/');
+
+StudentEventApi.get({ date: newDate }).then((res) => {
+  data.value = res.data.data;
+  updateCalendarClasses();
+});
+const changeCalendarAddEvent = () => {
+  showCalendarAddEvent.value = !showCalendarAddEvent.value;
+  StudentEventApi.get({ date: newDate }).then((res) => {
+    data.value = res.data.data;
+    updateCalendarClasses();
+  });
+};
+
+// Loop Through Dates And if It's passed give it a red class else green class
+
+const numberDays = ref([...Array(currentDaysOfMonth.days + 1).keys()]) as any;
+
+// Make The Numbers Start From 1
+numberDays.value.splice(0, 1);
+
+const daysNumber = ref(null) as any;
+
+const updateCalendarClasses = () => {
+  //  Reset The Classes
+
+  dates.value = [];
+  daysNumber.value.querySelectorAll('.span').forEach((span) => {
+    span.classList.remove('red');
+    span.classList.remove('green');
+  });
+
+  data.value.forEach((el: any) => {
+    dates.value.push(+el.date.split('/')[2]);
+  });
+
+  dates.value.forEach((el) => {
+    if (+toEnglishNumbers(templateDate[0]) > el)
+      numberDays.value[el] = { class: 'red', count: el };
+    else numberDays.value[el] = { class: 'green', count: el };
+  });
+};
+
+const removeEvent = async (id) => {
+  await StudentEventApi.delete(id);
+  // Re Fill The Data
+  StudentEventApi.get({ date: newDate }).then((res) => {
+    data.value = res.data.data;
+    updateCalendarClasses();
+  });
+};
+
+const formatCardDate = (date) => {
+  // let m = moment(date, 'jYYYY/jM/jD');
+
+  let m = new Date(
+    JalaliConverter(
+      date.split('/')[0],
+      date.split('/')[1],
+      date.split('/')[2]
+    ) as any
+  ) as any;
+
+  m = new Date(m)
+    .toLocaleDateString('fa-Fa', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
-    }).format(date);
-
-    const dates = ref([] as any);
-    let templateDate = faDate.split(' ');
-    let isCurrentYearLeapYear = isLeapJalaaliYear(
-      toEnglishNumbers(`${templateDate[2]}`)
-    );
-    let numbersBeforeTheMonthStart = ref(0);
-
-    const weekDays = [
-      { name: 'شنبه' },
-      { name: 'یکشنبه' },
-      { name: 'دوشنبه' },
-      { name: 'سه شنبه' },
-      { name: 'چهارشنبه' },
-      { name: 'پنجشنبه' },
-      { name: 'جمعه' }
-    ];
-
-    const faDateAllDigit = new Intl.DateTimeFormat('fa', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric'
-    }).format(date);
-
-    let m = new Date(
-      JalaliConverter(
-        toEnglishNumbers(faDateAllDigit.split('/')[0]),
-        toEnglishNumbers(faDateAllDigit.split('/')[1]),
-        toEnglishNumbers(faDateAllDigit.split('/')[2])
-      ) as any
-    );
-
-    let whatDayStartsTheDay = new Intl.DateTimeFormat('fa', {
+      day: 'numeric',
       weekday: 'long'
-    }).format(m) as any;
+    })
+    .split(' ');
 
-    weekDays.forEach((el, idx) => {
-      if (el.name === whatDayStartsTheDay)
-        numbersBeforeTheMonthStart.value = idx;
-    });
+  let year = m[0],
+    month = m[1],
+    weekday = m[3],
+    day = m[2].split(',')[0];
 
-    const monthsOfYear = [
-      {
-        name: 'فروردین',
-        days: 31,
-        monthNumber: '01',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'اردیبهشت',
-        days: 31,
-        monthNumber: '02',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'خرداد',
-        days: 31,
-        monthNumber: '03',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'تیر',
-        days: 31,
-        monthNumber: '04',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'مرداد',
-        days: 31,
-        monthNumber: '05',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'شهریور',
-        days: 31,
-        monthNumber: '06',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'مهر',
-        days: 30,
-        monthNumber: '07',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'آبان',
-        days: 30,
-        monthNumber: '08',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'آذر',
-        days: 30,
-        monthNumber: '09',
-        currentYear: templateDate[2]
-      },
-      { name: 'دی', days: 30, monthNumber: '10', currentYear: templateDate[2] },
-      {
-        name: 'بهمن',
-        days: 30,
-        monthNumber: '11',
-        currentYear: templateDate[2]
-      },
-      {
-        name: 'اسفند',
-        days: isCurrentYearLeapYear ? 30 : 29,
-        monthNumber: '12',
-        currentYear: templateDate[2]
-      }
-    ];
-
-    const currentDaysOfMonth = monthsOfYear.find(
-      (el) => el.name === templateDate[1]
-    ) as any;
-
-    // Get Data From Database
-    let data = ref([]);
-
-    let dateForDataBase = `${toEnglishNumbers(
-      `${currentDaysOfMonth.currentYear}`
-    )}/${currentDaysOfMonth.monthNumber}/${toEnglishNumbers(
-      `${templateDate[0]}`
-    )}`;
-    // in case day is less than 1
-    let newDate = dateForDataBase.split('/') as any;
-    if (+newDate[1] < 9) newDate[1] = `0${dateForDataBase[1]}`;
-    if (+newDate[2] < 9) newDate[2] = `0${newDate[2]}`;
-    newDate = newDate.join('/');
-
-    StudentEventApi.get({ date: newDate }).then((res) => {
-      data.value = res.data.data;
-      updateCalendarClasses();
-    });
-    const changeCalendarAddEvent = () => {
-      showCalendarAddEvent.value = !showCalendarAddEvent.value;
-      StudentEventApi.get({ date: newDate }).then((res) => {
-        data.value = res.data.data;
-        updateCalendarClasses();
-      });
-    };
-
-    // Loop Through Dates And if It's passed give it a red class else green class
-
-    const numberDays = ref([
-      ...Array(currentDaysOfMonth.days + 1).keys()
-    ]) as any;
-
-    // Make The Numbers Start From 1
-    numberDays.value.splice(0, 1);
-
-    const daysNumber = ref(null) as any;
-
-    const updateCalendarClasses = () => {
-      //  Reset The Classes
-
-      dates.value = [];
-      daysNumber.value.querySelectorAll('.span').forEach((span) => {
-        span.classList.remove('red');
-        span.classList.remove('green');
-      });
-
-      data.value.forEach((el: any) => {
-        dates.value.push(+el.date.split('/')[2]);
-      });
-
-      dates.value.forEach((el) => {
-        if (+toEnglishNumbers(templateDate[0]) > el)
-          numberDays.value[el] = { class: 'red', count: el };
-        else numberDays.value[el] = { class: 'green', count: el };
-      });
-    };
-
-    const removeEvent = async (id) => {
-      await StudentEventApi.delete(id);
-      // Re Fill The Data
-      StudentEventApi.get({ date: newDate }).then((res) => {
-        data.value = res.data.data;
-        updateCalendarClasses();
-      });
-    };
-
-    const formatCardDate = (date) => {
-      // let m = moment(date, 'jYYYY/jM/jD');
-
-      let m = new Date(
-        JalaliConverter(
-          date.split('/')[0],
-          date.split('/')[1],
-          date.split('/')[2]
-        ) as any
-      ) as any;
-
-      m = new Date(m)
-        .toLocaleDateString('fa-Fa', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          weekday: 'long'
-        })
-        .split(' ');
-
-      let year = m[0],
-        month = m[1],
-        weekday = m[3],
-        day = m[2].split(',')[0];
-
-      return [year, month, weekday, day];
-    };
-
-    return {
-      toPersianNumbers,
-      toEnglishNumbers,
-      days,
-      showCalendarAddEvent,
-      changeCalendarAddEvent,
-      faDate,
-      templateDate,
-      currentDay,
-      currentMonth,
-      monthsOfYear,
-      currentDaysOfMonth,
-      data,
-      formatCardDate,
-      dates,
-      numberDays,
-      numbersBeforeTheMonthStart,
-      removeEvent,
-      showEditEvent,
-      changeCalendarEditEvent,
-      showCalendarEditEvent,
-      currentItem,
-      daysNumber
-    };
-  }
-});
+  return [year, month, weekday, day];
+};
 </script>
 <style lang="scss" scoped>
 @import '@/css-variable//Global.scss';
 .calendar-page {
   max-width: 100vw;
   height: 100%;
-  overflow-x: hidden;
   background-color: #f4f4f4;
   font-family: IRANSans;
   position: relative;
