@@ -5,7 +5,7 @@
   </div>
   <!--  -->
   <div class="start" v-else>
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="آزمون" onePageBack="compTest" />
     <!--  -->
     <div class="label animate__animated animate__fadeIn">

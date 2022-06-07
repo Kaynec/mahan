@@ -1,5 +1,5 @@
 <template>
-  <SmallHeader onePageBack="SelfTest" v-show="isMobile()" />
+  <SmallHeader onePageBack="SelfTest" v-show="isMobile.value" />
   <!-- Spinner -->
   <div class="loader-parent" v-show="isLoading">
     <div class="loading1"></div>
@@ -25,7 +25,7 @@
       v-if="allSessions.length"
     />
 
-    <DesktopMinimalHeader v-show="!isMobile()" />
+    <DesktopMinimalHeader v-show="!isMobile.value" />
 
     <h1 class="center" v-if="!allSessions.length">
       محتوایی برای نمایش وجود ندارد

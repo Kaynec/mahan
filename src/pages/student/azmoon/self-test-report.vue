@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <main class="report-card">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader OnePageBack="Selftest" title="کارنامه آزمون خودسنجی" />
     <!--  -->
     <section class="label">

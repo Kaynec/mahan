@@ -1,5 +1,5 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile()" />
+  <MentorDesktopHeader v-if="!isMobile.value" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
@@ -8,16 +8,16 @@
   <div
     class="chat animate__animated animate__fadeIn"
     v-else-if="!isFetching"
-    :style="`padding-top : ${!isMobile() ? '4rem' : ''} ; max-height : ${
-      !isMobile() ? `${maxHeight + 110}px` : ''
+    :style="`padding-top : ${!isMobile.value ? '4rem' : ''} ; max-height : ${
+      !isMobile.value ? `${maxHeight + 110}px` : ''
     }`"
   >
     <MinimalHeader
       title="پیام دریافتی"
-      v-if="isMobile()"
+      v-if="isMobile.value"
       onePageBack="MentorProfile"
     />
-    <nav class="navbar" v-if="!isMobile()">
+    <nav class="navbar" v-if="!isMobile.value">
       <div class="right">
         <img :src="imageUrl" class="animate__animated animate__fadeIn" />
         <div class="txt" v-if="mentor">
@@ -60,7 +60,7 @@
       <!--  -->
     </main>
     <!-- Keyboard -->
-    <section :class="`${isMobile() ? 'toolbar' : 'pc-toolbar'}`">
+    <section :class="`${isMobile.value ? 'toolbar' : 'pc-toolbar'}`">
       <div class="textarea">
         <textarea
           v-model="message"

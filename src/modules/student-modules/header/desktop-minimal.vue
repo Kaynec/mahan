@@ -376,12 +376,10 @@ nav {
   transition: 0.4s ease all;
   z-index: 99999999;
   overflow-y: auto;
-  padding-bottom: 3rem;
-  // padding-bottom: 5rem;
 
   li {
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.4s ease all;

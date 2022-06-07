@@ -4,7 +4,7 @@
   </div>
 
   <main class="answers" v-bind="$attrs" v-else>
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="سوالات برگزیده" onePageBack="SelfTest" />
     <section class="Cards">
       <div

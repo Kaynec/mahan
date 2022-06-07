@@ -1,19 +1,19 @@
 <template>
   <div
     class="shop-message"
-    :style="`padding-top :${isMobile() ? '6.5vh' : ' 9rem'}`"
+    :style="`padding-top :${isMobile.value ? '6.5vh' : ' 9rem'}`"
   >
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader
       title="تازه های کنکور"
       goOnePageBack="MyProfile"
-      v-if="isMobile()"
+      v-if="isMobile.value"
     />
     <MinimalHeader
       title="تازه های کنکور"
       goOnePageBack="MyProfile"
       :colors="true"
-      v-else-if="!isMobile()"
+      v-else-if="!isMobile.value"
     />
     <iframe
       src="https://www.mahan.ac.ir/home#!f-1"

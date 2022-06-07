@@ -1,6 +1,6 @@
 <template>
   <div class="st-wrapper" :style="getMainStyle()">
-    <desktopRightSide v-if="!isMobile() && store.getters.getMentorToken" />
+    <desktopRightSide v-if="!isMobile.value && store.getters.getMentorToken" />
     <router-view></router-view>
     <alert
       messages
@@ -18,7 +18,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import desktopRightSide from '@/modules/mentor-main/desktop-rightside.vue';
-import detectMobile from '@/mixins/detectMobile';
+import { isMobile } from '@/mixins/detectMobile';
 import { store, useChatStore, useMentorStore } from '@/store';
 import { connection } from '@/main';
 import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
@@ -31,8 +31,8 @@ export default class Main extends Vue {
   public windowHeight = window.innerHeight;
   public windowWidth = window.innerWidth;
   public store = useChatStore();
-  public ismobile = detectMobile.methods.isMobile();
   public text = '';
+  public isMobile = isMobile.value;
 
   async mounted() {
     if (!useMentorStore().getters.getMentorToken) return;
@@ -97,9 +97,9 @@ export default class Main extends Vue {
   getMainStyle() {
     let fraction = '';
 
-    if (this.ismobile) {
+    if (this.isMobile) {
       fraction = '1fr';
-    } else if (!this.ismobile && !store.getters.getMentorToken) {
+    } else if (!this.isMobile && !store.getters.getMentorToken) {
       fraction = '1fr';
     } else {
       fraction = '40% 60%';

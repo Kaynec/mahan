@@ -19,7 +19,6 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import methods from '@/mixins/detectMobile';
 import router from '@/router/index';
 export default defineComponent({
   props: {
@@ -31,7 +30,6 @@ export default defineComponent({
   setup(props) {
     let Dialog = ref();
     let active = ref(null);
-    const isMobile = methods.methods.isMobile();
 
     const touchstart = () => {
       active.value = true;
@@ -55,7 +53,7 @@ export default defineComponent({
     };
 
     const click = () => {
-      if (!isMobile) {
+      if (!isMobile.value) {
         if (props.componentName != 'empty') {
           const tmp = {
             name: props.componentName

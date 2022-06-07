@@ -1,6 +1,9 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile()" />
-  <div class="my-profile" :style="`padding-top : ${!isMobile() ? '3rem' : ''}`">
+  <MentorDesktopHeader v-if="!isMobile.value" />
+  <div
+    class="my-profile"
+    :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`"
+  >
     <MinimalHeader title="پروفایل من" onePageBack="MentorProfile" />
     <!-- Red Div -->
     <div class="info animate__animated animate__fadeIn">
@@ -43,7 +46,7 @@
       </div>
     </div>
     <!--  -->
-    <!-- <Footer v-if="isMobile()" /> -->
+    <!-- <Footer v-if="isMobile.value" /> -->
   </div>
 </template>
 <script lang="ts">

@@ -1,6 +1,6 @@
 <template>
   <div class="history">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader goOnePageBack="MyProfile" title="سوابق خرید " />
     <!--  -->
     <div class="container">

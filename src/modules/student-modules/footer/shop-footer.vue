@@ -1,5 +1,5 @@
 <template>
-  <div class="footer" v-if="isMobile()">
+  <div class="footer" v-if="isMobile.value">
     <div>
       <!-- Fix THis Later With The Real Count of The User -->
       <img

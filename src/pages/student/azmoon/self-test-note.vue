@@ -1,7 +1,7 @@
 <template>
   <!-- Header -->
   <div class="class-note">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="یادداشت ها " onePageBack="SelfTest" />
     <p
       v-if="store.getters.getCurrentStudent.note"

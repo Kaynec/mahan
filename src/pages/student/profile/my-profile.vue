@@ -1,6 +1,6 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
-  <DesktopMinimalHeader v-if="!isMobile()" />
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <DesktopMinimalHeader v-if="!isMobile.value" />
   <div class="my-profile">
     <MinimalHeader title="پروفایل من" onePageBack="Home" />
     <!-- Red Div -->

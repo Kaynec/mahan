@@ -1,7 +1,7 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile()" />
-  <div :class="`${isMobile() ? 'user-home' : 'user-home pc'}`">
-    <Header v-if="isMobile()" />
+  <DesktopMinimalHeader v-if="!isMobile.value" />
+  <div :class="`${isMobile.value ? 'user-home' : 'user-home pc'}`">
+    <Header v-if="isMobile.value" />
     <!-- Header -->
 
     <div class="hero-container animate__animated animate__fadeIn">
@@ -26,7 +26,7 @@
     <!-- Main Container -->
     <div
       class="Cart-container animate__animatd animate__fadeIn"
-      :style="`${isMobile() ? 'center' : ''}`"
+      :style="`${isMobile.value ? 'center' : ''}`"
     >
       <div class="long">
         <img
@@ -44,31 +44,31 @@
         />
       </div>
 
-      <!-- <div class="Cart" v-show="isMobile()" @click="moveToBookList">
+      <!-- <div class="Cart" v-show="isMobile.value" @click="moveToBookList">
         <img src="@/assets/img/home-icons/book@2x.png" alt="booklist" />
       </div> -->
 
-      <div class="Cart" v-show="isMobile()" @click="MoveToProfile">
+      <div class="Cart" v-show="isMobile.value" @click="MoveToProfile">
         <img src="@/assets/img/home-icons/profile.png" alt="profile" />
       </div>
 
-      <div class="Cart" v-show="isMobile()" @click="MoveToCLassRoom">
+      <div class="Cart" v-show="isMobile.value" @click="MoveToCLassRoom">
         <img src="@/assets/img/home-icons/class@2x.png" alt="class" />
       </div>
 
-      <div class="Cart" v-show="isMobile()" @click="moveToSupport">
+      <div class="Cart" v-show="isMobile.value" @click="moveToSupport">
         <img src="@/assets/img/home-icons/support@2x.png" alt="support" />
       </div>
 
-      <div class="Cart" v-show="isMobile()" @click="moveToComptest">
+      <div class="Cart" v-show="isMobile.value" @click="moveToComptest">
         <img src="@/assets/img/home-icons/azmoon@2x.png" alt="azmoon" />
       </div>
 
-      <div class="Cart" v-show="isMobile()" @click="moveToSelfTest">
+      <div class="Cart" v-show="isMobile.value" @click="moveToSelfTest">
         <img src="@/assets/img/home-icons/lessons@2x.png" alt="lessons" />
       </div>
 
-      <div class="Cart" v-show="isMobile()" @click="MoveToCalendar">
+      <div class="Cart" v-show="isMobile.value" @click="MoveToCalendar">
         <img src="@/assets/img/home-icons/calendar@2x.png" alt="calendar" />
       </div>
     </div>

@@ -5,7 +5,7 @@
   </div>
 
   <div class="report-card" v-else>
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="کارنامه" onePageBack="Duel" />
 
     <div v-if="!model" class="center">
@@ -30,8 +30,8 @@
       <main
         class="wrapper"
         :style="`grid-template-columns: ${
-          isMobile() ? '' : 'repeat(2, 1fr)'
-        } ; overflow :${isMobile() ? 'scroll' : 'auto'} ;`"
+          isMobile.value ? '' : 'repeat(2, 1fr)'
+        } ; overflow :${isMobile.value ? 'scroll' : 'auto'} ;`"
       >
         <section class="rightSide">
           <div class="chart-container">

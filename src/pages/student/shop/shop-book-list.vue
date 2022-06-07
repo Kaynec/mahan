@@ -5,7 +5,7 @@
   </div>
   <!--  -->
   <div class="shop-book-list" v-else>
-    <DesktopMinimalHeader v-if="!isMobile()" component="shop" />
+    <DesktopMinimalHeader v-if="!isMobile.value" component="shop" />
     <MinimalHeader
       :title="`لیست محصولات ${title}  ( ${toPersianNumbers(
         title ? data.data.length : ''
@@ -13,7 +13,7 @@
     />
     <main
       class="card-container animate__animated animate__fadeIn"
-      v-if="isMobile()"
+      v-if="isMobile.value"
     >
       <section
         class="card animate__animated animate__fadeIn"
@@ -69,7 +69,7 @@
           class="animate__animated animate__fadeIn"
           v-if="product.img"
           :src="product.img"
-          style="margin: 0.4rem"
+          style="margin: 0.4rem;"
           alt="product img"
         />
         <div class="txts" @click="openSingleBookPage(JSON.stringify(product))">

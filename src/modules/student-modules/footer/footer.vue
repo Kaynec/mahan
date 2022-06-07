@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer" v-if="isMobile()">
+  <footer class="footer" v-if="isMobile.value">
     <router-link
       :to="`home`"
       class="nav-link"

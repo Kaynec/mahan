@@ -1,5 +1,5 @@
 <template>
-  <main v-if="!isMobile()" class="contact-us-pc">
+  <main v-if="!isMobile.value" class="contact-us-pc">
     <!--  -->
     <div class="contact-us-card animate__animated animate__fadeIn">
       <img

@@ -1,12 +1,15 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
-  <div class="calendar-page" :style="`padding-top :${isMobile() ? '' : '8vh'}`">
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <SmallHeader v-if="isMobile()" goOnePageBack="Home" />
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <div
+    class="calendar-page"
+    :style="`padding-top :${isMobile.value ? '' : '8vh'}`"
+  >
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <SmallHeader v-if="isMobile.value" goOnePageBack="Home" />
     <!--  -->
     <div
       :class="`${
-        isMobile()
+        isMobile.value
           ? 'animate__animated animate__fadeIn'
           : 'wrapper animate__animated animate__fadeIn'
       }`"

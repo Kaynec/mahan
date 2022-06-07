@@ -1,7 +1,10 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
-  <MentorDesktopHeader v-if="!isMobile()" />
-  <div class="comp-test" :style="`padding-top : ${!isMobile() ? '3rem' : ''}`">
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <MentorDesktopHeader v-if="!isMobile.value" />
+  <div
+    class="comp-test"
+    :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`"
+  >
     <MinimanHeader title="آزمون های کاربر" />
     <!-- <img src="../../../assets/img/comptest.png" class="hero" /> -->
     <div class="btns animate__animated animate__fadeIn">

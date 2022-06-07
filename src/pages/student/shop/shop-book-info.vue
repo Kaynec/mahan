@@ -9,7 +9,7 @@
 
   <!--  -->
   <div class="shop-book-list" v-else>
-    <DesktopMinimalHeader v-if="!isMobile()" component="shop" />
+    <DesktopMinimalHeader v-if="!isMobile.value" component="shop" />
     <MinimalHeader :title="`${model.title}`" onePageBack="studentShop" />
 
     <div class="card animate__animated animate__fadeIn">
@@ -37,7 +37,7 @@
         <!-- Add This Item To List Of Sale -->
 
         <div class="imgs">
-          <template v-if="isMobile()">
+          <template v-if="isMobile.value">
             <div class="spinner-border" v-if="isSendingRequest" role="status">
               <span class="sr-only">Loading...</span>
             </div>
@@ -48,7 +48,7 @@
                 v-if="objectToAddToBasket.item.quantity > 0"
               >
                 <span @click="addToBasket(1)">➕ </span>
-                <strong style="color: #fff">
+                <strong style="color: #fff;">
                   {{ toPersianNumbers(`${objectToAddToBasket.item.quantity}`) }}
                 </strong>
                 <span @touchstart="addToBasket(-1)"> ➖ </span>
@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, reactive, ref} from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import ShopFooter from '@/modules/student-modules/footer/shop-footer.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';

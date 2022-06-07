@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile()"></div>
+  <div class="desktop" v-if="!isMobile.value"></div>
   <div class="shop-message animate__animated animate__fadeIn" v-else>
     <nav class="nav">
       <svg

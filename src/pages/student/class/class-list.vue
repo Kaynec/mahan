@@ -1,8 +1,8 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
-  <main :class="`${isMobile() ? 'class ' : 'class pc '}`">
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <SmallHeader goOnePageBack="Home" v-if="isMobile()" />
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <main :class="`${isMobile.value ? 'class ' : 'class pc '}`">
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <SmallHeader goOnePageBack="Home" v-if="isMobile.value" />
 
     <img src="@/assets/img/class/hero@3x.png" alt="hero img" class="hero" />
     <section class="grid animate__animated animate__fadeInUp">

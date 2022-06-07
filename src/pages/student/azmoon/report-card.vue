@@ -5,7 +5,7 @@
   </div>
 
   <div class="report-card" v-else v-bind="$attrs">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="کارنامه" onePageBack="compTest" />
 
     <section class="center" v-if="arrayIsEmpty">
@@ -27,7 +27,9 @@
 
       <main
         class="wrapper"
-        :style="`grid-template-columns: ${isMobile() ? '' : 'repeat(2, 1fr)'}`"
+        :style="`grid-template-columns: ${
+          isMobile.value ? '' : 'repeat(2, 1fr)'
+        }`"
       >
         <section class="rightSide">
           <div class="chart-container">
@@ -67,7 +69,7 @@
             </div>
           </div>
           <!-- Btns -->
-          <div class="btns" v-if="!isMobile()">
+          <div class="btns" v-if="!isMobile.value">
             <button @click="goToHamnavard">همنورد</button>
             <button @click="changeShowTaraz">تخمین رتبه کنکور</button>
           </div>
@@ -113,7 +115,10 @@
             </div>
           </div>
 
-          <div class="btns animate__animated animate__fadeIn" v-if="isMobile()">
+          <div
+            class="btns animate__animated animate__fadeIn"
+            v-if="isMobile.value"
+          >
             <button @click="goToHamnavard">همنورد</button>
             <button @click="changeShowTaraz">تخمین رتبه کنکور</button>
           </div>

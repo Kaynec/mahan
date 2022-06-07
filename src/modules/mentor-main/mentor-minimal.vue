@@ -1,5 +1,5 @@
 <template>
-  <nav :class="`${isMobile() ? 'nav' : 'nav pc'}`">
+  <nav :class="`${isMobile.value ? 'nav' : 'nav pc'}`">
     <span> {{ title }} </span>
     <i class="fas fa-arrow-left" @click="goOnePageBack()"></i>
   </nav>

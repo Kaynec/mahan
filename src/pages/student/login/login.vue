@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile()">
+  <div class="desktop" v-if="!isMobile.value">
     <img src="@/assets/img/logo-mahan.png" alt="logo" />
     <div class="Login animate__animated animate__fadeIn">
       <div>
@@ -16,7 +16,7 @@
           v-for="error in v$.username.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px"
+          style="font-family: IRANSans; font-size: 12px;"
         >
           {{ error.$message }}
         </p>
@@ -48,7 +48,7 @@
           v-for="error in v$.password.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px"
+          style="font-family: IRANSans; font-size: 12px;"
         >
           {{ error.$message }}
         </p>
@@ -56,7 +56,7 @@
         <button @click="login" class="button-linear">
           <template v-if="isRequesting">
             <span
-              style="width: 1.3rem; height: 1.3rem"
+              style="width: 1.3rem; height: 1.3rem;"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -117,7 +117,7 @@
           v-for="error in v$.username.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px"
+          style="font-family: IRANSans; font-size: 12px;"
         >
           {{ error.$message }}
         </p>
@@ -149,7 +149,7 @@
           v-for="error in v$.password.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px"
+          style="font-family: IRANSans; font-size: 12px;"
         >
           {{ error.$message }}
         </p>
@@ -157,7 +157,7 @@
         <button @click="login" class="button-linear">
           <template v-if="isRequesting">
             <span
-              style="width: 1.3rem; height: 1.3rem"
+              style="width: 1.3rem; height: 1.3rem;"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -324,15 +324,15 @@ export default defineComponent({
     margin-top: 39px;
   }
   .inputs {
-    width: 269px;
-    height: 51px;
+    // width: 269px;
+    // height: 51px;
     border-radius: 15px;
     background: #f6f8fa;
     border: 2px solid #ddd;
   }
   .login-btn {
-    width: 269px;
-    height: 51px;
+    // width: 269px;
+    // height: 51px;
     border-radius: 15px;
     background: rgb(241, 24, 24);
     border: none;
@@ -355,15 +355,14 @@ export default defineComponent({
 
   .Login {
     width: 100%;
-    max-width: 350px;
+    max-width: 400px;
     display: inline-block;
     text-align: center;
     margin: 1.5rem auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-    max-height: 400px;
+    height: fit-content;
     background: white;
     border-radius: 10px;
     cursor: pointer;

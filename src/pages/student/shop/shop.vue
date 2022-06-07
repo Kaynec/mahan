@@ -1,6 +1,6 @@
 <template>
   <!-- DESKTOP  -->
-  <main class="desktop" v-if="!isMobile()">
+  <main class="desktop" v-if="!isMobile.value">
     <DesktopMinimalHeader component="shop" />
     <img
       src="@/assets/img/shop/shop-pc@3x.png"

@@ -1,7 +1,7 @@
 <template>
   <MinimalHeader
     title="گفتگو کنید "
-    v-if="isMobile()"
+    v-if="isMobile.value"
     onePageBack="ContactBackup"
   />
   <!-- Spinner -->
@@ -12,13 +12,13 @@
   <div
     class="chat"
     v-else-if="!isFetching"
-    :style="`padding-top: ${isMobile() ? '' : '5rem'}; max-height : ${
-      !isMobile() ? `${maxHeight + 60}px` : ''
+    :style="`padding-top: ${isMobile.value ? '' : '5rem'}; max-height : ${
+      !isMobile.value ? `${maxHeight + 60}px` : ''
     }`"
     v-bind="$attrs"
   >
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <nav class="navbar" v-if="!isMobile()">
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <nav class="navbar" v-if="!isMobile.value">
       <div class="right">
         <img :src="imageUrl" alt="avatar" />
         <div class="txt" v-if="mentor">
@@ -54,7 +54,7 @@
       </div>
     </main>
     <!-- Keyboard -->
-    <form :class="`${isMobile() ? 'toolbar' : 'pc-toolbar'}`">
+    <form :class="`${isMobile.value ? 'toolbar' : 'pc-toolbar'}`">
       <div class="textarea">
         <textarea
           v-model="message"
@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent,
   onUpdated,
@@ -93,99 +93,80 @@ import { connection } from '@/main';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
 import { useRoute } from 'vue-router';
 import { baseUrl } from '@/api/apiclient';
-import methods from '@/mixins/detectMobile';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
 
-export default defineComponent({
-  components: { DesktopMinimalHeader, MinimalHeader },
-  setup() {
-    const mentor = ref();
-    const route = useRoute();
-    const imageUrl = ref('');
-    const isFetching = ref(true);
-    const maxHeight = ref(0);
-    const chatSection = ref();
-    let instance = getCurrentInstance();
+const mentor = ref();
+const route = useRoute();
+const imageUrl = ref('');
+const isFetching = ref(true);
+const maxHeight = ref(0);
+const chatSection = ref();
+let instance = getCurrentInstance();
 
-    const firstView = true;
+const firstView = true;
 
-    onUpdated(() => {
-      if (firstView && chatSection.value) {
-        chatSection.value.scrollTop = chatSection.value.scrollHeight;
-      }
-    });
-
-    StudentSupportApi.getByIdForStudent(route.params.id).then((res) => {
-      mentor.value = res.data.data;
-      if (mentor.value) {
-        imageUrl.value = `${baseUrl}mentor/getProfileImage/${mentor.value.profileImage}`;
-      } else {
-        imageUrl.value = require('@/assets/img/contact/avatar.png');
-      }
-      isFetching.value = false;
-    });
-    // StudentChatApi.getStudentAllChatByMentorId(route.params.id).then(
-    //   (result) => {
-    //     store.commit(ChatMutationTypes.EMPTY_MESSAGES, mentor.value._id);
-    //     result.data.data.forEach((message) => {
-    //       store.commit(ChatMutationTypes.SOCKET_NEW_Message, message);
-    //     });
-    //     isFetching.value = false;
-    //   }
-    // );
-    let currentUser = reactive(store.getters.getCurrentStudent);
-
-    let messages = computed(() => store.getters.getMessages);
-
-    const goOnePageBack = () =>
-      router.push({
-        name: 'ContactBackup'
-      });
-
-    onUpdated(() => {
-      if (!methods.methods.isMobile()) {
-        maxHeight.value = document
-          .querySelector('aside')!
-          .getClientRects()[0].height;
-      }
-    });
-
-    const message = ref('');
-
-    const sendMessage = async () => {
-      if (message.value.length < 1 || message.value.trim().length === 0) {
-        return;
-      }
-      // $socket is socket.io-client instance
-      let payload = {
-        message: message.value,
-        mentor: { _id: mentor.value._id },
-        student: { _id: currentUser._id },
-        sender: 'student',
-        type: 'text'
-      };
-      connection.emit('send-message', payload);
-      await store.commit(ChatMutationTypes.ADD_MESSAGE, payload);
-      await nextTick();
-      instance?.proxy?.$forceUpdate();
-      message.value = '';
-    };
-    return {
-      messages,
-      goOnePageBack,
-      sendMessage,
-      message,
-      mentor,
-      imageUrl,
-      router,
-      isFetching,
-      maxHeight,
-      chatSection,
-      store
-    };
+onUpdated(() => {
+  if (firstView && chatSection.value) {
+    chatSection.value.scrollTop = chatSection.value.scrollHeight;
   }
 });
+
+StudentSupportApi.getByIdForStudent(route.params.id).then((res) => {
+  mentor.value = res.data.data;
+  if (mentor.value) {
+    imageUrl.value = `${baseUrl}mentor/getProfileImage/${mentor.value.profileImage}`;
+  } else {
+    imageUrl.value = require('@/assets/img/contact/avatar.png');
+  }
+  isFetching.value = false;
+});
+// StudentChatApi.getStudentAllChatByMentorId(route.params.id).then(
+//   (result) => {
+//     store.commit(ChatMutationTypes.EMPTY_MESSAGES, mentor.value._id);
+//     result.data.data.forEach((message) => {
+//       store.commit(ChatMutationTypes.SOCKET_NEW_Message, message);
+//     });
+//     isFetching.value = false;
+//   }
+// );
+let currentUser = reactive(store.getters.getCurrentStudent);
+
+let messages = computed(() => store.getters.getMessages);
+
+const goOnePageBack = () =>
+  router.push({
+    name: 'ContactBackup'
+  });
+
+onUpdated(() => {
+  if (!isMobile.value) {
+    maxHeight.value = document
+      .querySelector('aside')!
+      .getClientRects()[0].height;
+  }
+});
+
+const message = ref('');
+
+const sendMessage = async () => {
+  if (message.value.length < 1 || message.value.trim().length === 0) {
+    return;
+  }
+  // $socket is socket.io-client instance
+  let payload = {
+    message: message.value,
+    mentor: { _id: mentor.value._id },
+    student: { _id: currentUser._id },
+    sender: 'student',
+    type: 'text'
+  };
+  connection.emit('send-message', payload);
+  await store.commit(ChatMutationTypes.ADD_MESSAGE, payload);
+  await nextTick();
+  instance?.proxy?.$forceUpdate();
+  message.value = '';
+};
 </script>
 
 <style lang="scss" scoped>

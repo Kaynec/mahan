@@ -1,6 +1,6 @@
 <template>
   <div class="comp-test-answer">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader onePageBack="Duel" title="پاسخنامه تشریحی دوئل" />
 
     <div class="quiz-card shadow animate__animated animate__fadeIn">
@@ -11,7 +11,7 @@
           v-if="question.question.images.length"
           @click="setCurrentImages(question.question.images)"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 2.5rem; margin-right: 0.5rem"
+          style="max-width: 2.5rem; margin-right: 0.5rem;"
           alt="image of question"
         />
       </p>

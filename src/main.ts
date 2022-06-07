@@ -3,7 +3,6 @@ import App from './App.vue';
 import router from './router';
 import { store } from './store';
 import VueSocketIO from 'vue-3-socket.io';
-import detectMobile from './mixins/detectMobile';
 import SocketIO from 'socket.io-client';
 import { useStudentStore, useMentorStore } from '@/store';
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -42,7 +41,6 @@ app
   )
   .use(CKEditor)
   .use(store)
-  .use(router)
-  .mixin(detectMobile);
+  .use(router);
 
 app.mount('#app');

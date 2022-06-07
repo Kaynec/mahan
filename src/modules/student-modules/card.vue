@@ -23,7 +23,7 @@
       class="d-flex flex-column mt-1 p-0 m-0"
       @touchstart="touchstart()"
       @touchend="touchend()"
-      @click="isMobile() ? '' : touchend()"
+      @click="isMobile.value ? '' : touchend()"
     >
       <span class="label text-dark text-right mb-2"> {{ label }} </span>
       <span class="text-detail text-dark text-right">

@@ -1,6 +1,6 @@
 <template>
   <div class="self-test-questions">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader onePageBack="SelfTest" title="سوالات برگزیده " />
     <!-- Progress Bar And Count -->
 
@@ -16,7 +16,7 @@
         <!-- Change This And Width Of The Progress Bar Dynamically -->
         <span> {{ toPersianNumbers(allCount) }} </span>
       </div>
-      <div class="progress" style="height: 5px">
+      <div class="progress" style="height: 5px;">
         <div
           class="progress-bar bg-success"
           role="progressbar"

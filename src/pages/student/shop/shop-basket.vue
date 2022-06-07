@@ -1,6 +1,6 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
-  <div class="shop-basket" v-if="isMobile()">
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <div class="shop-basket" v-if="isMobile.value">
     <MinimalHeader title="سبد خرید شما" />
 
     <div class="error" v-if="basketItems.length < 0">
@@ -80,8 +80,8 @@
   </div>
 
   <!--  -->
-  <div class="shop-basket pc" v-if="!isMobile()">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+  <div class="shop-basket pc" v-if="!isMobile.value">
+    <DesktopMinimalHeader v-if="!isMobile.value" />
 
     <div class="error" v-if="basketItems.length < 0">
       <img src="@/assets/img/error.png" alt="error img" />

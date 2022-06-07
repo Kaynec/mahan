@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <div class="self-test-questions">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="سوالات برگزیده" onePageBack="QuestionsChoosenList" />
     <!-- Progress Bar And Count -->
 
@@ -10,7 +10,7 @@
         <span> </span>
         <span> </span>
       </div>
-      <div class="progress" style="height: 5px"></div>
+      <div class="progress" style="height: 5px;"></div>
     </div>
 
     <div
@@ -23,7 +23,7 @@
           v-if="allData[currentChunk][idx].question.images.length"
           @click="setCurrentImages(item.images)"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 3rem; margin-right: 0.5rem"
+          style="max-width: 3rem; margin-right: 0.5rem;"
           alt="azmoon icon"
         />
       </p>

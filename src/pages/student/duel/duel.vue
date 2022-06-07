@@ -1,16 +1,16 @@
 <template>
-  <div class="comp-test" :style="`padding-top:${!isMobile() ? '6vh' : ''}`">
-    <SmallHeader onePageBack="Home" v-if="isMobile()" />
-    <DesktopMinimalHeader v-if="!isMobile()" />
+  <div class="comp-test" :style="`padding-top:${!isMobile.value ? '6vh' : ''}`">
+    <SmallHeader onePageBack="Home" v-if="isMobile.value" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader
-      :style="`${!isMobile() ? 'margin-top:2rem' : ''}`"
+      :style="`${!isMobile.value ? 'margin-top:2rem' : ''}`"
       onePageBack="Home"
-      v-if="!isMobile()"
+      v-if="!isMobile.value"
       title="دوئل حرفه‌ای‌ها"
     />
-    <main :class="`${isMobile() ? 'wrapper' : 'wrapper-pc'}`">
+    <main :class="`${isMobile.value ? 'wrapper' : 'wrapper-pc'}`">
       <section class="first">
-        <div :class="`${isMobile ? 'hero' : 'hero-pc'}`">
+        <div :class="`${isMobile.value ? 'hero' : 'hero-pc'}`">
           <h1 class="right">
             <span> {{ toPersianNumbers(lastDuelRate) }} </span><br />
             آخرین رتبه دوئلی شما
@@ -24,7 +24,7 @@
             </p>
           </div>
         </div>
-        <div :class="`${isMobile ? 'points' : 'points-pc'}`">
+        <div :class="`${isMobile.value ? 'points' : 'points-pc'}`">
           <div>
             <span> دوئل های انجام شده </span>
             <p>{{ toPersianNumbers(countOfDuelsParticipated) }}</p>
@@ -106,7 +106,7 @@
       class="comptest flex-column d-flex justify-content-end align-items-center"
     >
       <div
-        style="z-index: 5; color: #fff"
+        style="z-index: 5; color: #fff;"
         class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
       >
         <div

@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile()">
+  <div class="desktop" v-if="!isMobile.value">
     <img alt="logo" src="@/assets/img/logo-mahan.png" />
     <!-- Main Part -->
     <form
@@ -38,7 +38,7 @@
         v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans"
+        style="font-family: IRANSans;"
       >
         {{ error.$message }}
       </span>
@@ -46,7 +46,7 @@
       <button class="button-linear">
         <span
           v-if="isSendingAMainReq"
-          style="width: 1.3rem; height: 1.3rem"
+          style="width: 1.3rem; height: 1.3rem;"
           class="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"
@@ -101,7 +101,7 @@
         v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans"
+        style="font-family: IRANSans;"
       >
         {{ error.$message }}
       </span>
@@ -109,7 +109,7 @@
       <button class="button-linear">
         <span
           v-if="isSendingAMainReq"
-          style="width: 1.3rem; height: 1.3rem"
+          style="width: 1.3rem; height: 1.3rem;"
           class="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"

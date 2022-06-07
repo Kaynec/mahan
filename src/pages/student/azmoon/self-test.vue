@@ -1,13 +1,13 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile()"></div> -->
-  <main class="class" :style="`padding-top: ${isMobile() ? '' : '6vh'}`">
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <SmallHeader v-if="isMobile()" onePageBack="Home" />
+  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <main class="class" :style="`padding-top: ${isMobile.value ? '' : '6vh'}`">
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <SmallHeader v-if="isMobile.value" onePageBack="Home" />
 
-    <div class="hero" :style="`margin-top: ${isMobile() ? '' : '50px'}`">
+    <div class="hero" :style="`margin-top: ${isMobile.value ? '' : '50px'}`">
       <img
         :src="`${
-          isMobile()
+          isMobile.value
             ? require('@/assets/img/selftest.png')
             : require('@/assets/img/selftest-pc@3x.png')
         }`"

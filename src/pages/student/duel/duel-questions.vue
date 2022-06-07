@@ -1,5 +1,5 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile()" />
+  <DesktopMinimalHeader v-if="!isMobile.value" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
@@ -11,7 +11,7 @@
     class="self-test-questions animate__animated animate__fadeIn"
   >
     <MinimalHeader
-      v-if="isMobile()"
+      v-if="isMobile.value"
       :title="`
     امتیازات کسب شده :
           ${toPersianNumbers(store.getters?.getCurrentStudent?.point)} 
@@ -19,7 +19,7 @@
       onePageBack="Home"
     />
     <MinimalHeader
-      v-else-if="!isMobile()"
+      v-else-if="!isMobile.value"
       :title="` دوثل  رشته ${data?.field?.title}`"
       onePageBack="Home"
     />
@@ -195,7 +195,7 @@
       <!--  -->
     </div>
     <div class="else" v-else>
-      <h1 style="color: #000">سوالی برای نمایش وجود ندارد</h1>
+      <h1 style="color: #000;">سوالی برای نمایش وجود ندارد</h1>
     </div>
   </div>
 </template>

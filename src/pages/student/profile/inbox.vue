@@ -1,5 +1,5 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile()" />
+  <DesktopMinimalHeader v-if="!isMobile.value" />
   <div class="inbox">
     <MinimalHeader goOnePageBack="MyProfile" title="پیام های دریافتی " />
     <!-- Container -->

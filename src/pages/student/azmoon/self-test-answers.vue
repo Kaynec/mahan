@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile()"></div>
+  <div class="desktop" v-if="!isMobile.value"></div>
   <div v-else class="self-test-answers">
     <MinimalHeader
       :title="`پاسخنامه تشریحی  ${title}`"

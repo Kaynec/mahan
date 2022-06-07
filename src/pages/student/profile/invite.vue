@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile()">
+  <div class="desktop" v-if="!isMobile.value">
     <DesktopMinimalHeader />
     <!--  -->
     <div class="container animate__animated animate__fadeIn">
@@ -27,7 +27,7 @@
     <!--  -->
   </div>
   <MinimalHeader title="پروفایل من" goOnePageBack="MyProfile" />
-  <div class="invite" v-if="isMobile()">
+  <div class="invite" v-if="isMobile.value">
     <!--  -->
     <div class="container animate__animated animate__fadeIn">
       <img

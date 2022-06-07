@@ -15,7 +15,7 @@
       </div>
       <i class="fas fa-arrow-left" @click="goOnePageBack()"></i>
     </nav>
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
 
     <section class="circles" ref="circles" v-if="allExams && allExams.length">
       <div
@@ -105,8 +105,8 @@
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onUpdated } from 'vue';
+<script lang="ts" setup>
+import { ref, onUpdated } from 'vue';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import router from '@/router';
@@ -114,149 +114,132 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
 import { baseUrl } from '@/api/apiclient';
 
-export default defineComponent({
-  components: { DesktopMinimalHeader },
-  setup() {
-    const isLoading = ref(true);
-    const roadmap = ref();
-    const circles = ref();
-    const currentIndex = ref(0);
-    const course = ref({} as any);
-    const allExams = ref([] as any);
-    const firstView = ref(true);
-    const currentUser = ref(store.getters.getCurrentStudent);
+const isLoading = ref(true);
+const roadmap = ref();
+const circles = ref();
+const currentIndex = ref(0);
+const course = ref({} as any);
+const allExams = ref([] as any);
+const firstView = ref(true);
+const currentUser = ref(store.getters.getCurrentStudent);
 
-    const imageUrl = ref('');
+const imageUrl = ref('');
 
-    imageUrl.value =
-      'https://images.vexels.com/media/users/3/129616/isolated/preview/fb517f8913bd99cd48ef00facb4a67c0-businessman-avatar-silhouette-by-vexels.png';
-    if (currentUser.value && currentUser.value.profileImage) {
-      imageUrl.value = `${baseUrl}student/getProfileImage/${currentUser.value.profileImage}`;
-    }
+imageUrl.value =
+  'https://images.vexels.com/media/users/3/129616/isolated/preview/fb517f8913bd99cd48ef00facb4a67c0-businessman-avatar-silhouette-by-vexels.png';
+if (currentUser.value && currentUser.value.profileImage) {
+  imageUrl.value = `${baseUrl}student/getProfileImage/${currentUser.value.profileImage}`;
+}
 
-    const goOnePageBack = () => {
-      router.push({
-        name: 'Home'
-      });
-    };
+const goOnePageBack = () =>
+  router.push({
+    name: 'Home'
+  });
 
-    onUpdated(() => {
-      if (firstView.value) {
-        roadmap.value.scrollLeft = -circles.value?.clientWidth;
-        firstView.value = false;
-      }
-    });
-
-    (async () => {
-      const res = await StudentExamApi.getAll();
-      console.log(res.data);
-      course.value = res?.data?.data;
-      const historyOfExamPromises = [] as any;
-      // Looping Through Sessions of the Course
-      for (let i = 0; i < course.value.length; i++) {
-        const exam = course.value[i];
-        allExams.value[i] = exam;
-        historyOfExamPromises.push(StudentExamApi.getResult(exam._id));
-      }
-
-      const promises = await Promise.all(historyOfExamPromises);
-
-      promises.forEach((promise: any, idx) => {
-        allExams.value[idx] = {
-          ...allExams.value[idx],
-          totalAnswer: promise.data?.data?.totalAnswer,
-          totalQuestion: promise.data?.data?.totalQuestion,
-          totalCorrectAnswer: promise.data?.data?.totalCorrectAnswer,
-          // state for the img shown in control pad
-          state: 1
-        };
-      });
-
-      isLoading.value = false;
-    })();
-
-    const moveToSelfTestQuestions = (id) => {
-      router.push({
-        name: 'SelfTestQuestions',
-        params: { id }
-      });
-    };
-
-    const moveImg = (amountToAdd: number) => {
-      const calc = currentIndex.value + amountToAdd;
-
-      document.querySelectorAll('.control-container').forEach((circle: any) => {
-        const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
-        if (circle.style.display != 'none') {
-          amountToAdd > 0
-            ? ((document.querySelector('.roadmap') as any).scrollLeft +=
-                width / 2)
-            : ((document.querySelector('.roadmap') as any).scrollLeft -=
-                width / 2);
-        }
-      });
-
-      if (calc >= 0 && calc <= allExams.value.length - 1)
-        currentIndex.value += amountToAdd;
-    };
-    //
-    const moveToReportCard = (circle) => {
-      router.push({
-        name: 'SelfTestReportCard',
-        params: { data: JSON.stringify(circle) }
-      });
-    };
-
-    return {
-      currentIndex,
-      moveImg,
-      allExams,
-      moveToSelfTestQuestions,
-      isLoading,
-      roadmap,
-      circles,
-      moveToReportCard,
-      goOnePageBack,
-      currentUser,
-      toPersianNumbers,
-      imageUrl
-    };
-  }
+onUpdated(() => {
+  if (!firstView.value) return;
+  roadmap.value.scrollLeft = -circles.value?.clientWidth;
+  firstView.value = false;
 });
+
+(async () => {
+  const res = await StudentExamApi.getAll();
+  course.value = res?.data?.data;
+  const historyOfExamPromises = [] as any;
+  // Looping Through Sessions of the Course
+  for (let i = 0; i < course.value.length; i++) {
+    const exam = course.value[i];
+    allExams.value[i] = exam;
+    historyOfExamPromises.push(StudentExamApi.getResult(exam._id));
+  }
+
+  const promises = await Promise.all(historyOfExamPromises);
+
+  promises.forEach((promise: any, idx) => {
+    allExams.value[idx] = {
+      ...allExams.value[idx],
+      totalAnswer: promise.data?.data?.totalAnswer,
+      totalQuestion: promise.data?.data?.totalQuestion,
+      totalCorrectAnswer: promise.data?.data?.totalCorrectAnswer,
+      // state for the img shown in control pad
+      state: 1
+    };
+  });
+
+  isLoading.value = false;
+})();
+
+const moveToSelfTestQuestions = (id) =>
+  router.push({
+    name: 'SelfTestQuestions',
+    params: { id }
+  });
+
+const moveImg = (amountToAdd: number) => {
+  const calc = currentIndex.value + amountToAdd;
+
+  document.querySelectorAll('.control-container').forEach((circle: any) => {
+    const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+    if (circle.style.display != 'none') {
+      amountToAdd > 0
+        ? ((document.querySelector('.roadmap') as any).scrollLeft += width / 2)
+        : ((document.querySelector('.roadmap') as any).scrollLeft -= width / 2);
+    }
+  });
+
+  if (calc >= 0 && calc <= allExams.value.length - 1)
+    currentIndex.value += amountToAdd;
+};
+//
+const moveToReportCard = (circle) =>
+  router.push({
+    name: 'SelfTestReportCard',
+    params: { data: JSON.stringify(circle) }
+  });
 </script>
 <style lang="scss" scoped>
-.roadmap {
-  font-family: IRANSans;
-  position: relative;
-  overflow-y: auto;
-  padding-bottom: 3rem;
-  width: 100%;
-  height: 100%;
-  display: flex;
+/* width */
+::-webkit-scrollbar,
+::moz-sc {
+  width: 10px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.roadmap {
   .circles {
     display: flex;
     flex-direction: row-reverse;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-end;
-    height: 100%;
     width: 100vw;
+    scrollbar-width: thin;
+    scrollbar-color: orange red;
 
     background: url('../../../assets/img/roadmap/3-d-space-scene@3x.png');
+
     background-position: center;
     background-size: cover;
     background-repeat: repeat;
 
-    // overflow-x: visible;
-    // overflow-x: auto;
-
-    // overflow-: touch;
     overflow-x: auto;
 
     -webkit-overflow-scrolling: touch; /* Lets it scroll lazy */
 
-    // -webkit-overflow-scrolling: scroll; /* Stops scrolling immediately */
+    height: 100%;
 
     .circle {
       z-index: 9999;
@@ -300,7 +283,7 @@ export default defineComponent({
       }
 
       .circle-main-img {
-        max-width: 18rem;
+        max-width: 13.5rem;
         object-fit: contain;
         animation: bounce 1s infinite alternate;
         -webkit-animation: bounce 1s infinite alternate;

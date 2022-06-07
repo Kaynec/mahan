@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, reactive, ref } from 'vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
@@ -59,86 +59,72 @@ import JalaliConverter from '@/utilities/date-converter';
 import { useStudentStore } from '@/store';
 const alertify = require('../../../assets/alertifyjs/alertify');
 
-export default defineComponent({
-  components: { CompTestDetail },
-  setup() {
-    const isLoading = ref(false);
-    const azmoonData = reactive([] as any);
+const isLoading = ref(false);
+const azmoonData = reactive([] as any);
 
-    StudentExamApi.getAll().then((res) => {
-      console.log(res);
-      res.data.data.forEach((date: any) => {
-        const splitted = date.date.split('/');
-        const jalalidateConvertedToMiladi = new Date(
-          JalaliConverter(splitted[0], splitted[1], splitted[2]) as any
-        );
+StudentExamApi.getAll().then((res) => {
+  console.log(res);
+  res.data.data.forEach((date: any) => {
+    const splitted = date.date.split('/');
+    const jalalidateConvertedToMiladi = new Date(
+      JalaliConverter(splitted[0], splitted[1], splitted[2]) as any
+    );
 
-        jalalidateConvertedToMiladi.setHours(
-          +date.time.split(':')[0],
-          +date.time.split(':')[1]
-        );
+    jalalidateConvertedToMiladi.setHours(
+      +date.time.split(':')[0],
+      +date.time.split(':')[1]
+    );
 
-        if (compareAsc(jalalidateConvertedToMiladi, new Date()) <= 0)
-          azmoonData.push(date);
-      });
+    if (compareAsc(jalalidateConvertedToMiladi, new Date()) <= 0)
+      azmoonData.push(date);
+  });
 
-      azmoonData.forEach((child: any) => {
-        let mDate = new Date(
-          JalaliConverter(
-            child.date.split('/')[0],
-            child.date.split('/')[1],
-            child.date.split('/')[2]
-          ) as any
-        );
-        let currentDate = mDate.toLocaleDateString('fa-FA', {
-          weekday: 'long',
-          month: 'long',
-          day: 'numeric'
-        }) as any;
-        currentDate = currentDate.split(',');
+  azmoonData.forEach((child: any) => {
+    let mDate = new Date(
+      JalaliConverter(
+        child.date.split('/')[0],
+        child.date.split('/')[1],
+        child.date.split('/')[2]
+      ) as any
+    );
+    let currentDate = mDate.toLocaleDateString('fa-FA', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric'
+    }) as any;
+    currentDate = currentDate.split(',');
 
-        let month = currentDate[0].split(' ')[0];
-        let day = currentDate[0].split(' ')[1];
-        let weekDay = currentDate[1];
+    let month = currentDate[0].split(' ')[0];
+    let day = currentDate[0].split(' ')[1];
+    let weekDay = currentDate[1];
 
-        child.date = {
-          ...child.date,
-          weekDay,
-          day,
-          month
-        };
-      });
-
-      isLoading.value = true;
-    });
-
-    const currentItem = ref({});
-    const showCompDetail = ref(false);
-    const changeShowDetail = () => {
-      const isPurchased = (useStudentStore().getters.getCurrentStudent as any)
-        ?.purchased;
-
-      alertify.error('لطفا نسخه برنامه را خریداری کنید');
-
-      showCompDetail.value = !showCompDetail.value;
+    child.date = {
+      ...child.date,
+      weekDay,
+      day,
+      month
     };
+  });
 
-    const moveToReportCardOrExam = (item) => {
-      currentItem.value = item;
-      showCompDetail.value = true;
-    };
-
-    return {
-      azmoonData,
-      changeShowDetail,
-      showCompDetail,
-      toPersianNumbers,
-      isLoading,
-      moveToReportCardOrExam,
-      currentItem
-    };
-  }
+  isLoading.value = true;
 });
+
+const currentItem = ref({});
+const showCompDetail = ref(false);
+const changeShowDetail = () => {
+  showCompDetail.value = !showCompDetail.value;
+};
+
+const moveToReportCardOrExam = (item) => {
+  const isPurchased = (useStudentStore().getters.getCurrentStudent as any)
+    ?.purchased;
+  if (!isPurchased) {
+    alertify.error('لطفا نسخه برنامه را خریداری کنید');
+    return;
+  }
+  currentItem.value = item;
+  showCompDetail.value = true;
+};
 </script>
 
 <style lang="scss" scoped>

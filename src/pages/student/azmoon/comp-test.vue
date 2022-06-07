@@ -1,15 +1,15 @@
 <template>
-  <div class="comp-test" :style="`padding-top :${isMobile() ? '' : '8vh'}`">
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <SmallHeader onePageBack="Home" v-if="isMobile()" />
+  <div class="comp-test" :style="`padding-top :${isMobile.value ? '' : '8vh'}`">
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <SmallHeader onePageBack="Home" v-if="isMobile.value" />
     <div class="hero animate__animated animate__fadeIn">
       <img
         :src="`${
-          isMobile()
+          isMobile.value
             ? require('@/assets/img/comptest.png')
             : require('@/assets/img/comptest-pc@3x.png')
         }`"
-        :style="`margin-top  : ${isMobile() ? '0' : '2rem'}`"
+        :style="`margin-top  : ${isMobile.value ? '0' : '2rem'}`"
         class="hero"
         alt="header of comp test"
       />

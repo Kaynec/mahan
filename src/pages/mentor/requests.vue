@@ -1,6 +1,6 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile()" />
-  <div class="inbox" :style="`padding-top : ${!isMobile() ? '3rem' : ''}`">
+  <MentorDesktopHeader v-if="!isMobile.value" />
+  <div class="inbox" :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`">
     <MinimalHeader title="مشاهده درخواست ها" onePageBack="MentorProfile" />
     <!-- Container -->
     <div class="container">
@@ -39,11 +39,11 @@
       v-if="showMessage"
     >
       <div
-        style="color: #fff; max-width: 600px"
+        style="color: #fff; max-width: 600px;"
         class="d-inline-flex flex-column justify-content-between align-items-center flex-child"
       >
         <div
-          style="color: #fff; max-width: 600px"
+          style="color: #fff; max-width: 600px;"
           class="d-inline-flex flex-column justify-content-center align-items-center"
         >
           <AcceptRequest :data="currentItem" @convertBoolean="denyOrAccept" />

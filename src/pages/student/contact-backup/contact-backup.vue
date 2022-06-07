@@ -8,15 +8,17 @@
   <div
     class="contact-backup"
     v-else
-    :style="`padding-top :${isMobile() ? '' : '8vh'}`"
+    :style="`padding-top :${isMobile.value ? '' : '8vh'}`"
   >
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <SmallHeader v-if="isMobile()" onePageBack="Home" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <SmallHeader v-if="isMobile.value" onePageBack="Home" />
     <h6>پشتیبان‌های فعال</h6>
     <!-- Change THis With Real Data Coming From Some Server-->
     <div
       class="flex animate__animated animate__fadeIn"
-      :style="`grid-template-columns : ${!isMobile() ? 'repeat(2 , 1fr)' : ''}`"
+      :style="`grid-template-columns : ${
+        !isMobile.value ? 'repeat(2 , 1fr)' : ''
+      }`"
     >
       <div class="card" v-for="item in data" :key="item._id">
         <div v-if="!item.img" class="spinner-border" role="status">
@@ -77,7 +79,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, ref, onUpdated } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
@@ -87,78 +89,58 @@ import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 const alertify = require('../../../assets/alertifyjs/alertify');
 
-export default defineComponent({
-  components: {
-    SmallHeader,
-    DesktopMinimalHeader
-  },
-  setup() {
-    let data = ref();
-    StudentSupportApi.getAll().then((res) => {
-      console.log(res);
-      data.value = res.data.data || 'empty';
-    });
+let data = ref();
+StudentSupportApi.getAll().then((res) => {
+  data.value = res.data.data || 'empty';
+});
 
-    const MoveToBackUpInfo = (supportPerson) => {
-      router.push({
-        name: 'ContactBackupInfo',
-        params: { data: JSON.stringify(supportPerson) }
-      });
-    };
+const MoveToBackUpInfo = (supportPerson) => {
+  router.push({
+    name: 'ContactBackupInfo',
+    params: { data: JSON.stringify(supportPerson) }
+  });
+};
 
-    // Images For The Categories
-    let imageRefs = [] as any;
-    const setImageRef = (el) => {
-      if (el) imageRefs.push(el);
-    };
+// Images For The Categories
+let imageRefs = [] as any;
+const setImageRef = (el) => {
+  if (el) imageRefs.push(el);
+};
 
-    onUpdated(() => {
-      data.value.forEach((mentor, idx) => {
-        const imageUrl = `${baseUrl}mentor/getProfileImage/${mentor.profileImage}`;
-        data.value[idx].img = imageUrl;
-      });
-    });
+onUpdated(() => {
+  data.value.forEach((mentor, idx) => {
+    const imageUrl = `${baseUrl}mentor/getProfileImage/${mentor.profileImage}`;
+    data.value[idx].img = imageUrl;
+  });
+});
 
-    const goToChatPage = (item) => {
-      router.push({ name: 'ContactBackupChat', params: { id: item._id } });
-    };
+const goToChatPage = (item) => {
+  router.push({ name: 'ContactBackupChat', params: { id: item._id } });
+};
 
-    const sendRequest = (item) => {
-      StudentSupportApi.SendSupportRequest({
-        mentorId: item._id
-      }).then((res) => {
-        if (res.data || res.data.status == 0) {
-          alertify
-            .alert('درخواست ارتباط شما ارسال شد')
-            .set('basic', true)
-            .set('onok', () => {
-              console.log('');
-            });
-        }
-      });
-    };
-
-    const alarm = (item) => {
+const sendRequest = (item) => {
+  StudentSupportApi.SendSupportRequest({
+    mentorId: item._id
+  }).then((res) => {
+    if (res.data || res.data.status == 0) {
       alertify
-        .alert('درخواست ارتباط شما هنوز مورد تایید قرار نگرفته است')
+        .alert('درخواست ارتباط شما ارسال شد')
         .set('basic', true)
         .set('onok', () => {
           console.log('');
         });
-    };
+    }
+  });
+};
 
-    return {
-      MoveToBackUpInfo,
-      goToChatPage,
-      data,
-      setImageRef,
-      imageRefs,
-      returnProtectedImage,
-      sendRequest,
-      alarm
-    };
-  }
-});
+const alarm = (item) => {
+  alertify
+    .alert('درخواست ارتباط شما هنوز مورد تایید قرار نگرفته است')
+    .set('basic', true)
+    .set('onok', () => {
+      console.log('');
+    });
+};
 </script>
 
 <style lang="scss" scoped>

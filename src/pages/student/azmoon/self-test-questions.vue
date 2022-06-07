@@ -1,5 +1,5 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile()" />
+  <DesktopMinimalHeader v-if="!isMobile.value" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
@@ -28,7 +28,7 @@
           }}
         </span>
       </div>
-      <div class="progress" style="height: 5px">
+      <div class="progress" style="height: 5px;">
         <div
           class="progress-bar bg-success"
           role="progressbar"

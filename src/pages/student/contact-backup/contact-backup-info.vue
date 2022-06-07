@@ -1,6 +1,6 @@
 <template>
   <div class="contact-backup-info">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="اطلاعات بیشتر" onePageBack="ContactBackup" />
 
     <div class="hero-container animate__animated animate__fadeIn">

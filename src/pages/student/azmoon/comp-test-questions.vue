@@ -10,9 +10,9 @@
     v-else-if="!isFetching"
     class="self-test-questions animate__animated animate__fadeIn"
   >
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader
-      v-if="isMobile()"
+      v-if="isMobile.value"
       :title="`
     امتیازات کسب شده :
           ${toPersianNumbers(store.getters.getCurrentStudent.point)} 
@@ -20,7 +20,7 @@
       onePageBack="Home"
     />
     <MinimalHeader
-      v-else-if="!isMobile()"
+      v-else-if="!isMobile.value"
       :title="` ازمون جامع رشته ${data.field.title}`"
       goOnePageBack="Home"
     />

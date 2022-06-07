@@ -1,6 +1,6 @@
 <template>
   <div class="comp-test-answer">
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader
       onePageBack="compTest"
       :title="`پاسخنامه تشریحی ${questions?.exam?.title}`"
@@ -14,7 +14,7 @@
           v-if="question.question.images.length"
           @click="setCurrentImages(question.question.images)"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 2.5rem; margin-right: 0.5rem"
+          style="max-width: 2.5rem; margin-right: 0.5rem;"
         />
       </p>
 

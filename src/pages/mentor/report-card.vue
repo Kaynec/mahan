@@ -1,5 +1,5 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile()" />
+  <MentorDesktopHeader v-if="!isMobile.value" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
@@ -8,7 +8,7 @@
   <template v-else>
     <div
       class="report-card"
-      :style="`padding-top : ${!isMobile() ? '3rem' : ''}`"
+      :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`"
     >
       <MinimalHeader
         :title="`کارنامه ${
@@ -41,7 +41,9 @@
       <main
         class="wrapper animate__animated animate__fadeIn"
         :style="`${
-          !isMobile() ? 'display:grid; grid-template-columns :1fr 1fr   ' : ''
+          !isMobile.value
+            ? 'display:grid; grid-template-columns :1fr 1fr   '
+            : ''
         }`"
       >
         <div class="chart-container animate__animated animate__fadeIn">

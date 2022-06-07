@@ -23,7 +23,6 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import methods from '@/mixins/detectMobile';
 import router from '@/router/index';
 export default defineComponent({
   props: {
@@ -67,9 +66,7 @@ export default defineComponent({
       }
     };
     const click = () => {
-      console.log(props);
-      const isMobile = methods.methods.isMobile();
-      if (!isMobile) {
+      if (!isMobile.value) {
         if (props.componentName != 'empty') {
           const tmp = {
             name: props.componentName

@@ -1,12 +1,12 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile()" />
+  <MentorDesktopHeader v-if="!isMobile.value" />
   <div
-    :class="`${isMobile() ? 'edit' : 'edit-pc'}`"
-    :style="`padding-top : ${!isMobile() ? '3rem' : ''}`"
+    :class="`${isMobile.value ? 'edit' : 'edit-pc'}`"
+    :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`"
   >
     <MinimalHeader onePageBack="MentorProfile" title="رزومه" />
     <div class="wrapper animate__animated animate__fadeIn">
-      <img :src="imageUrl" class="hero" v-if="isMobile()" />
+      <img :src="imageUrl" class="hero" v-if="isMobile.value" />
 
       <div v-else class="img-btn">
         <img :src="imageUrl" />
@@ -24,11 +24,11 @@
       <p
         v-for="error in v$.resume.$errors"
         :key="error.id"
-        style="margin: 1rem 0"
+        style="margin: 1rem 0;"
       >
         {{ error.$message }}
       </p>
-      <button v-if="isMobile()" @click="submitCV()">ویرایش رزومه</button>
+      <button v-if="isMobile.value" @click="submitCV()">ویرایش رزومه</button>
       <!-- </div> -->
     </div>
   </div>

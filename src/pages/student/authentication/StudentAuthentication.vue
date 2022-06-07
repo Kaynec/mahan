@@ -1,9 +1,12 @@
 <template>
-  <div class="Forget-the-password" :class="`${isMobile() ? '' : 'desktop'}`">
+  <div
+    class="Forget-the-password"
+    :class="`${isMobile.value ? '' : 'desktop'}`"
+  >
     <!-- This Img is White  -->
     <img
       src="@/assets/img/logo-mahan@2x.png"
-      v-if="isMobile()"
+      v-if="isMobile.value"
       alt="logo"
       class="logo-mahan"
     />
@@ -92,7 +95,7 @@
     <!--  -->
     <img
       style="margin-top: 2rem;"
-      v-show="!isMobile()"
+      v-show="!isMobile.value"
       src="@/assets/img/mahan.png"
       alt="logo"
     />
@@ -257,17 +260,8 @@ export default defineComponent({
   background: url('../../../assets/img/desktop-bg@2x.png') center center
     no-repeat;
   background-size: cover;
-  font-family: IRANSans;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 .Forget-the-password {
-  width: 100vw;
-  height: 100%;
-  padding: 37px 24.6px 156px 24px;
-  background-color: #f6f8fa;
   display: flex;
   justify-content: center;
   align-items: center;

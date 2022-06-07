@@ -4,7 +4,7 @@
   </div>
 
   <main class="answers" v-bind="$attrs" v-else>
-    <DesktopMinimalHeader v-if="!isMobile()" />
+    <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader onePageBack="Duel" title="پاسخنامه" />
 
     <section class="label" v-if="examData && examData.title">

@@ -1,7 +1,11 @@
 <template>
-  <div :class="`${isMobile() ? 'hamnavard' : 'hamnavard pc'}`">
-    <DesktopMinimalHeader v-if="!isMobile()" />
-    <MinimalHeader title="همنورد" v-if="isMobile()" OnePageBack="compTest" />
+  <div :class="`${isMobile.value ? 'hamnavard' : 'hamnavard pc'}`">
+    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <MinimalHeader
+      title="همنورد"
+      v-if="isMobile.value"
+      OnePageBack="compTest"
+    />
     <!-- Spinner -->
     <div class="loader-parent" v-if="videoLoading">
       <div class="loading1"></div>
@@ -46,8 +50,8 @@
             class="progressbar"
             @touchend="onTouch"
             @touchmove="touchMove"
-            @mousedown="isMobile() ? '' : mousedown()"
-            @mouseup="isMobile() ? '' : mouseup()"
+            @mousedown="isMobile.value ? '' : mousedown()"
+            @mouseup="isMobile.value ? '' : mouseup()"
           >
             <div
               :style="`width : ${
