@@ -20,7 +20,9 @@
             componentName="ReportCard"
             :params="data._id"
           />
+         
         </template>
+         
 
         <template v-else-if="!data.isExpired">
           <Dialog

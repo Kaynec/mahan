@@ -36,7 +36,7 @@
         ref="Dialog"
         class="dialog animate__animated animate__fadeIn"
         v-for="item in data"
-        :key="item"
+        :key="item.label"
         @touchstart="touchstart"
         @touchend="touchend"
         @click="clicked(item.component)"
@@ -49,7 +49,7 @@
     <!-- <Footer v-if="isMobile.value" /> -->
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent, reactive } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import router from '@/router';
@@ -59,9 +59,6 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { MentorActionTypes } from '@/store/modules/mentor/action-types';
 import MentorDesktopHeader from '@/modules/mentor-main/mentor-header.vue';
 
-export default defineComponent({
-  components: { MinimalHeader, MentorDesktopHeader },
-  setup() {
     let currentMentor = reactive(store.getters.getCurrentMentor);
     let imageUrl =
       'https://images.vexels.com/media/users/3/129616/isolated/preview/fb517f8913bd99cd48ef00facb4a67c0-businessman-avatar-silhouette-by-vexels.png';
@@ -110,21 +107,6 @@ export default defineComponent({
         if (res) router.push({ name: 'MentorLogin' });
       });
     };
-
-    return {
-      data,
-      touchstart,
-      touchend,
-      goOnePageBack,
-      currentMentor,
-      logout,
-      toPersianNumbers,
-      store,
-      imageUrl,
-      clicked
-    };
-  }
-});
 </script>
 
 <style lang="scss" scoped>

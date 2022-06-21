@@ -243,7 +243,8 @@ onUpdated(() => {
 
 const moveToSelfTestQuestions = (index, id) => {
   if (index >= 1) {
-    alertify.error('شما قادر به انجام این کار نیستید');
+    alertify.error('لطفا اول برنامه را خریداری کنید');
+
   } else
     router.push({
       name: 'SelfTestQuestions',

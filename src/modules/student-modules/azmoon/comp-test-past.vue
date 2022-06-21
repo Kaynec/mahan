@@ -42,7 +42,9 @@
       :data="currentItem"
       @convertBoolean="changeShowDetail"
     />
+    
   </div>
+  
   <!--  -->
   <div class="loader-parent" v-else>
     <div class="loading1"></div>
@@ -50,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, reactive, ref } from 'vue';
+import {  reactive, ref } from 'vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import compareAsc from 'date-fns/compareAsc';
@@ -62,8 +64,9 @@ const alertify = require('../../../assets/alertifyjs/alertify');
 const isLoading = ref(false);
 const azmoonData = reactive([] as any);
 
+
+
 StudentExamApi.getAll().then((res) => {
-  console.log(res);
   res.data.data.forEach((date: any) => {
     const splitted = date.date.split('/');
     const jalalidateConvertedToMiladi = new Date(
@@ -118,10 +121,10 @@ const changeShowDetail = () => {
 const moveToReportCardOrExam = (item) => {
   const isPurchased = (useStudentStore().getters.getCurrentStudent as any)
     ?.purchased;
-  if (!isPurchased) {
-    alertify.error('لطفا نسخه برنامه را خریداری کنید');
-    return;
-  }
+  // if (!isPurchased) {
+  //   alertify.error('لطفا نسخه برنامه را خریداری کنید');
+  //   return;
+  // }
   currentItem.value = item;
   showCompDetail.value = true;
 };
