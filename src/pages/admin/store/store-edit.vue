@@ -52,6 +52,17 @@
             {{ error.$message }}
           </span>
         </div>
+        <div class="form-group col-md-5 col-sm-12 mt-4">
+          <label for="newProduct">نمایش در جدیدترین ها :</label>
+          <input
+            type="checkbox"
+            class="mr-2"
+            id="newProduct"
+            v-model="model.newProduct"
+            @blur="v$.newProduct.$touch()"
+          />
+          <br />
+        </div>
         <!--  -->
       </div>
 
@@ -59,11 +70,11 @@
 
       <div class="form-row">
         <div class="form-group col-md-5 col-sm-12">
-          <label for="title">قیمت :</label>
+          <label for="price">قیمت :</label>
           <input
             type="number"
             class="form-control"
-            id="title"
+            id="price"
             v-model="model.price"
             @blur="v$.price.$touch()"
           />
@@ -80,11 +91,11 @@
         </div>
 
         <div class="form-group col-md-5 col-sm-12">
-          <label for="title">قیمت ویژه:</label>
+          <label for="specialPrice">قیمت ویژه:</label>
           <input
             type="number"
             class="form-control"
-            id="title"
+            id="specialPrice"
             v-model="model.specialPrice"
             @blur="v$.specialPrice.$touch()"
           />
@@ -247,6 +258,7 @@ export default defineComponent({
 
         // temp.append('category', { _id: model.category._id });
         temp.append('description', model.value.description);
+        temp.append('newProduct', model.value.newProduct);
 
         for (let key in model.value) {
           if (
@@ -267,8 +279,10 @@ export default defineComponent({
           const tmp = {
             title: model.value.title,
             price: model.value.price,
+            description: model.value.description,
             specialPrice: model.value.specialPrice,
-            category: { _id: model.value.category.id }
+            category: { _id: model.value.category._id },
+            newProduct: model.value.newProduct,
           } as any;
           // model.coverImageFile && (tmp.coverImageFile = model.coverImageFile);
           // console.log(model);
