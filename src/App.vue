@@ -10,7 +10,7 @@
 </style>
 <script lang="ts" setup>
 import SplashScreen from '@/modules/splash.vue';
-import { ref, onMounted } from 'vue-demi';
+import { ref, onMounted } from 'vue';
 
 const loading = ref(true);
 

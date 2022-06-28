@@ -5,11 +5,6 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
-    "dev:build": "vue-cli-service build",
-    "dev:lint": "vue-cli-service",
-    "dev:serve": "vue-cli-service serve",
     "start": "node server.ts"
   },
   "dependencies": {

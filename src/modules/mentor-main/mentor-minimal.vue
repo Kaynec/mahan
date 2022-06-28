@@ -7,6 +7,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import router from '@/router';
+import { RouteRecordName } from 'vue-router';
 
 export default defineComponent({
   props: {
@@ -17,7 +18,7 @@ export default defineComponent({
     const goOnePageBack = () => {
       if (props.onePageBack) {
         router.push({
-          name: props.onePageBack
+          name: props.onePageBack as unknown as RouteRecordName
         });
       } else {
         router.go(-1);

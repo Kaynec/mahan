@@ -157,7 +157,7 @@
 <script setup>
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
 import { useStudentStore } from '@/store';
-import { computed, reactive } from 'vue-demi';
+import { computed, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 

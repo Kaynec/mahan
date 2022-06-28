@@ -25,6 +25,7 @@ import router from '@/router';
 import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { baseUrl } from '@/api/apiclient';
+import { RouteRecordName } from 'vue-router';
 
 export default defineComponent({
   props: {
@@ -34,7 +35,7 @@ export default defineComponent({
     const goOnePageBack = () => {
       if (props.onePageBack) {
         router.push({
-          name: props.onePageBack
+          name: props.onePageBack as unknown as RouteRecordName
         });
       } else {
         router.go(-1);
