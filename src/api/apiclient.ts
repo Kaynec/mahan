@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAdminStore } from '@/store';
-const alertify = require('../assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export const baseUrlDomain = process.env.VUE_APP_BASE_URL;
 

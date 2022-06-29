@@ -56,7 +56,7 @@ export const parseTime = (s) => {
 export const secondsToTimeString = (seconds) => {
   let minutes = 0;
   if (seconds / 60 > 0) {
-    minutes = parseInt(seconds / 60, 10);
+    minutes = +seconds / 60, 10
     seconds = seconds % 60;
   }
   if (minutes / 60 > 0) {

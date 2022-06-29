@@ -1,3 +1,28 @@
-<template src="./footer.html"></template>
-<script src="./footer.ts" lang="ts"></script>
-<style src="./footer.scss" lang="scss"></style>
+<template>
+  <footer class="main-footer">
+    <strong>
+      <span>Copyright &copy; 2021 </span>
+      <a
+        href="https://pishgamvira.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Pishgamvira.com</a
+      >
+      <span>.</span>
+    </strong>
+    <span> All rights reserved.</span>
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version </b>
+      <span>{{ version }}</span>
+    </div>
+  </footer>
+</template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import { version } from '../../../../package.json';
+
+@Options({})
+export default class Footer extends Vue {
+  public version: string = version;
+}
+</script>

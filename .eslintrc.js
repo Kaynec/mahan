@@ -1,10 +1,10 @@
 module.exports = {
+  sourceType: 'module',
   root: true,
   env: {
     node: true
   },
-  extends: [
-  ],
+  extends: [],
   parserOptions: {
     ecmaVersion: 2020
   },
