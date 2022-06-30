@@ -1,11 +1,12 @@
 module.exports = {
   pwa: {
-
     name: 'Mahan Application',
     themeColor: '#4A4ADF',
-    backgroundColor:"#fff",
+    backgroundColor: '#fff',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
+    manifestOption: {},
+
     workboxOptions: {
       navigateFallback: '/index.html',
       runtimeCaching: [
@@ -16,20 +17,13 @@ module.exports = {
             networkTimeoutSeconds: 20,
             cacheName: 'api-cache',
             cacheableResponse: {
-              statuses: [
-                0,
-                200,
-                300
-              ]
+              statuses: [0, 200, 300]
             }
           }
         }
       ]
     },
-    workboxPluginMode: 'InjectManifest'
-  },
-  devServer: {
-    // https: true,
+    workboxPluginMode: 'GenerateSW'
   },
   configureWebpack: {
     plugins: [
@@ -37,9 +31,6 @@ module.exports = {
         dirs: ['src/mixins'],
         vueTemplate: true
       })
-    ],
-    performance: {
-      hints: false
-    }
+    ]
   }
 };

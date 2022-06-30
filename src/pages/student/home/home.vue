@@ -309,7 +309,8 @@ export default class Login extends Vue {
     }
 
     img {
-      max-width: 80%;
+      width: 8rem;
+      max-width: 12rem;
       transition: 0.3s all;
 
       &:hover {
