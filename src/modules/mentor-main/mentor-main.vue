@@ -30,9 +30,9 @@ import router from '@/router';
 export default class Main extends Vue {
   public windowHeight = window.innerHeight;
   public windowWidth = window.innerWidth;
-  public store = useChatStore();
+  public store = store
   public text = '';
-  public isMobile = isMobile.value;
+  public isMobile = isMobile;
 
   async mounted() {
     if (!useMentorStore().getters.getMentorToken) return;
@@ -106,8 +106,6 @@ export default class Main extends Vue {
     }
 
     return {
-      height: `${(this as any).windowHeight - 1}px`,
-      width: `${(this as any).windowWidth} `,
       'grid-template-columns': fraction
     };
   }

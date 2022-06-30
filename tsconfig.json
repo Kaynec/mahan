@@ -15,9 +15,10 @@
     "downlevelIteration": true,
     "sourceMap": false,
     "baseUrl": ".",
-    "types": ["webpack-env", "webworker"],
+    "types": ["webpack-env", "webworker", "node"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "tslib": ["node_modules/tslib"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "resolveJsonModule": true
@@ -25,7 +26,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.vue", "src/assets/alertifyjs/alertify.js",
+    "src/**/*.vue",
+    "src/assets/alertifyjs/alertify.js"
   ],
-  "exclude": ["node_modules", "src/assets"],
+  "exclude": ["node_modules", "src/assets"]
 }
