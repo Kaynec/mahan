@@ -92,10 +92,6 @@ export default class Main extends Vue {
   //   return useChatStore().getters.getShowModal
   // }
 
-  onResize(): void {
-    (this as any).windowHeight = window.innerHeight;
-  }
-
   redirectToChat(): void {
     this.toggleShowNotification();
     router.push({ name: 'ContactBackup' });
@@ -117,7 +113,6 @@ export default class Main extends Vue {
     }
 
     return {
-      height: `${(this as any).windowHeight - 1}px`,
       'grid-template-columns': fraction
     };
   }
@@ -137,7 +132,8 @@ export default class Main extends Vue {
   display: grid;
   overflow-x: hidden;
   transition: opacity 0.9s ease-in-out;
-  //
+  width: 100%;
+  height: 100%;
   scrollbar-width: thin !important;
   scrollbar-color: rgb(146, 141, 141) rgb(230, 224, 224);
   ::-webkit-scrollbar,

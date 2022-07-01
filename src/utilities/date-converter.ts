@@ -4,15 +4,15 @@ const JalaliDate = {
 };
 
 export default function (j_y, j_m, j_d) {
-  j_y = parseInt(j_y);
-  j_m = parseInt(j_m);
-  j_d = parseInt(j_d);
+  j_y = +(j_y);
+  j_m = +(j_m);
+  j_d = +(j_d);
   let jy = j_y - 979;
   let jm = j_m - 1;
   let jd = j_d - 1;
 
   let j_day_no =
-    365 * jy + parseInt(jy / 33) * 8 + parseInt(((jy % 33) + 3) / 4);
+    365 * jy + +(jy / 33) * 8 + +(((jy % 33) + 3) / 4);
   for (let i = 0; i < jm; ++i) j_day_no += JalaliDate.j_days_in_month[i];
 
   j_day_no += jd;
@@ -22,7 +22,7 @@ export default function (j_y, j_m, j_d) {
   let gy =
     1600 +
     400 *
-      parseInt(
+      +(
         g_day_no / 146097
       ); /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
   g_day_no = g_day_no % 146097;
@@ -32,32 +32,32 @@ export default function (j_y, j_m, j_d) {
     /* 36525 = 365*100 + 100/4 */
     g_day_no--;
     gy +=
-      100 * parseInt(g_day_no / 36524); /* 36524 = 365*100 + 100/4 - 100/100 */
+      100 * +(g_day_no / 36524); /* 36524 = 365*100 + 100/4 - 100/100 */
     g_day_no = g_day_no % 36524;
 
     if (g_day_no >= 365) g_day_no++;
     else leap = false;
   }
 
-  gy += 4 * parseInt(g_day_no / 1461); /* 1461 = 365*4 + 4/4 */
+  gy += 4 * +(g_day_no / 1461); /* 1461 = 365*4 + 4/4 */
   g_day_no %= 1461;
 
   if (g_day_no >= 366) {
     leap = false;
 
     g_day_no--;
-    gy += parseInt(g_day_no / 365);
+    gy += +(g_day_no / 365);
     g_day_no = g_day_no % 365;
   }
 
   for (
     var i = 0;
-    g_day_no >= JalaliDate.g_days_in_month[i] + (i == 1 && leap);
+    g_day_no >= JalaliDate.g_days_in_month[i] + (i == 1 && leap as any );
     i++
   )
-    g_day_no -= JalaliDate.g_days_in_month[i] + (i == 1 && leap);
-  let gm = i + 1;
-  let gd = g_day_no + 1;
+    g_day_no -= JalaliDate.g_days_in_month[i] + (i == 1 && leap as any);
+  let gm : any= i + 1;
+  let gd : any = g_day_no + 1;
 
   gm = gm < 10 ? '0' + gm : gm;
   gd = gd < 10 ? '0' + gd : gd;

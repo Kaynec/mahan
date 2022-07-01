@@ -1,6 +1,29 @@
 module.exports = {
-  devServer: {
-    https: true,
+  pwa: {
+    name: 'Mahan Application',
+    themeColor: '#4A4ADF',
+    backgroundColor: '#fff',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+    manifestOption: {},
+
+    workboxOptions: {
+      navigateFallback: '/index.html',
+      runtimeCaching: [
+        {
+          urlPattern: /https:\/\/api.mahanplus.com\/api\//,
+          handler: 'NetworkFirst',
+          options: {
+            networkTimeoutSeconds: 20,
+            cacheName: 'api-cache',
+            cacheableResponse: {
+              statuses: [0, 200, 300]
+            }
+          }
+        }
+      ]
+    },
+    workboxPluginMode: 'GenerateSW'
   },
   configureWebpack: {
     plugins: [
@@ -8,9 +31,6 @@ module.exports = {
         dirs: ['src/mixins'],
         vueTemplate: true
       })
-    ],
-    performance: {
-      hints: false
-    },
+    ]
   }
 };

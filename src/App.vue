@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <SplashScreen v-if="loading" />
+  <SplashScreen v-if="loading" />
 
-    <RouterView v-else />
-  </div>
+  <RouterView v-else />
 </template>
 <style lang="scss">
 @import '@/index.scss';
@@ -15,11 +13,16 @@ import { ref, onMounted } from 'vue';
 const loading = ref(true);
 
 onMounted(() => {
+  document.body.style.height = window.innerHeight + 'px';
+
   document.addEventListener('readystatechange', (e) => {
     if (document.readyState == 'complete') {
       // run code here
       loading.value = false;
     }
+  });
+  window.addEventListener('resize', (e) => {
+    document.body.style.height = window.innerHeight + 'px';
   });
 });
 </script>

@@ -18,7 +18,7 @@ app.component(
   require('@/modules/student-modules/alert/alert.vue').default
 );
 
-export const connection = SocketIO(baseUrlDomain, {
+export const connection = SocketIO(baseUrlDomain! , {
   query: {
     token: useStudentStore().getters.getStudentToken
       ? useStudentStore().getters.getStudentToken

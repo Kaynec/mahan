@@ -1,5 +1,5 @@
 import { createStore, createLogger } from 'vuex';
-import createPersistedState from 'vuex-persistedstate';
+import VuexPersistence from 'vuex-persist';
 import {
   store as users,
   DocumentsStore,
@@ -38,11 +38,12 @@ export type MentorStore = MentorsStore<Pick<RootState, 'mentors'>>;
 const debug = process.env.NODE_ENV !== 'production';
 const plugins = debug ? [createLogger({})] : [];
 
-// Plug in session storage based persistence
-plugins.push(createPersistedState({ storage: window.sessionStorage }));
+const vuexLocal = new VuexPersistence<RootState>({
+  storage: window.localStorage
+});
 
 export const store = createStore({
-  plugins,
+  plugins: [vuexLocal.plugin],
   modules: {
     users,
     students,

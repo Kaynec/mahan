@@ -35,6 +35,16 @@
   font-display: swap;
 }
 
+body {
+  position: relative;
+  width: 100%;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
 .main-header .navbar-nav .nav-item .nav-link {
   background: transparent;
   border: none;

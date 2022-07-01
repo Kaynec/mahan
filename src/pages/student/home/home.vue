@@ -3,7 +3,6 @@
   <div :class="`${isMobile.value ? 'user-home' : 'user-home pc'}`">
     <Header v-if="isMobile.value" />
     <!-- Header -->
-
     <div class="hero-container animate__animated animate__fadeIn">
       <img
         class="animate__animatd animate__fadeIn hero"
@@ -86,7 +85,7 @@ import router from '@/router';
 import Footer from '@/modules/student-modules/footer/footer.vue';
 import Header from '@/modules/student-modules/header/header.vue';
 import Azmoon from '@/modules/student-modules/azmoon/azmoon.vue';
-import { store, useStudentStore } from '@/store';
+import { useStudentStore } from '@/store';
 
 @Options({
   components: {
@@ -310,7 +309,8 @@ export default class Login extends Vue {
     }
 
     img {
-      max-width: 80%;
+      width: 8rem;
+      max-width: 12rem;
       transition: 0.3s all;
 
       &:hover {
