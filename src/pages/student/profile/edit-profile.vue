@@ -236,7 +236,7 @@ import { StudentGradeApi } from '@/api/services/student/student-grade-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { baseUrl } from '@/api/apiclient';
 import { resizeImage } from '@/utilities/get-image-from-url';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader },

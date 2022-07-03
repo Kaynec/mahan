@@ -42,7 +42,7 @@ import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { NotificationServiceApi } from '@/api/services/admin/notification-service';
 const $ = require('jquery');
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 // import { string } from 'yup/lib/locale';
 

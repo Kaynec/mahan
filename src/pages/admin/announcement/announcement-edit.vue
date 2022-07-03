@@ -54,7 +54,7 @@ import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import { helpers, minLength, required } from '@vuelidate/validators';
 import { AnnouncementServiceApi } from '@/api/services/admin/announcement-service';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   props: {

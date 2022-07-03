@@ -173,7 +173,7 @@ import { useRoute } from 'vue-router';
 import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import ShowImages from '@/modules/student-modules/show-images.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   components: { MinimalHeader, ShowImages, DesktopMinimalHeader },

@@ -440,7 +440,7 @@ import { required, minLength, helpers } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
 import { jsonToFormData } from '@/api/helper';
 import { baseUrl } from '@/api/apiclient';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   props: {

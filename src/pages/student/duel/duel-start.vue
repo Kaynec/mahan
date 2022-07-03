@@ -81,7 +81,7 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import alertify from '@/assets/alertifyjs/alertify';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
-import JalaliConverter from '@/utilities/date-converter';
+import {shamsi_be_miladi} from '@/utilities/date-converter';
 
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader },
@@ -111,7 +111,7 @@ export default defineComponent({
       // let endDate = moment(timeInformation.value.endDate, 'jYYYY/jM/jD');
 
       let mDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           timeInformation.value.startDate.split('/')[0],
           timeInformation.value.startDate.split('/')[1],
           timeInformation.value.startDate.split('/')[2]
@@ -119,7 +119,7 @@ export default defineComponent({
       ) as any;
 
       let endDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           timeInformation.value.endDate.split('/')[0],
           timeInformation.value.endDate.split('/')[1],
           timeInformation.value.endDate.split('/')[2]
@@ -178,7 +178,7 @@ export default defineComponent({
       // let endDate = moment(apiData.value.endDate, 'jYYYY/jM/jD');
 
       let startDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           apiData.value.startDate.split('/')[0],
           apiData.value.startDate.split('/')[1],
           apiData.value.startDate.split('/')[2]
@@ -191,7 +191,7 @@ export default defineComponent({
       );
 
       let endDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           apiData.value.endDate.split('/')[0],
           apiData.value.endDate.split('/')[1],
           apiData.value.endDate.split('/')[2]

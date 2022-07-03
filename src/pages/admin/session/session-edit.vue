@@ -166,7 +166,7 @@ import { useRoute } from 'vue-router';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import { baseUrl } from '@/api/apiclient';
 import { jsonToFormData } from '@/api/helper';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   setup() {

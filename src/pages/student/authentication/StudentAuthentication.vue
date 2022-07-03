@@ -113,7 +113,7 @@ import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { StudentActionTypes } from '@/store/modules/student/action-types';
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
 import { baseUrl } from '@/api/apiclient';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export default defineComponent({
   props: {

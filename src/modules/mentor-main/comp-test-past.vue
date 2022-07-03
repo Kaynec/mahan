@@ -49,7 +49,7 @@ import { compareAsc } from 'date-fns';
 import router from '@/router/';
 import { MentorAuthServiceApi } from '@/api/services/mentor/mentor-auth-service';
 import alertify from '@/assets/alertifyjs/alertify';
-import JalaliConverter from '@/utilities/date-converter';
+import {shamsi_be_miladi} from '@/utilities/date-converter';
 
 export default defineComponent({
   props: {
@@ -63,7 +63,7 @@ export default defineComponent({
     MentorAuthServiceApi.getStudentExams(props.id).then((res) => {
       res.data.data.forEach((date: any) => {
         let mDate = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             date.date.split('/')[0],
             date.date.split('/')[1],
             date.date.split('/')[2]
@@ -79,7 +79,7 @@ export default defineComponent({
 
     azmoonData.forEach((child: any) => {
       let mDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           child.date.split('/')[0],
           child.date.split('/')[1],
           child.date.split('/')[2]

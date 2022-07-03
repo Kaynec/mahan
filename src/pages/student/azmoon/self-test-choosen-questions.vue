@@ -100,7 +100,7 @@ import { StudentSelfTestApi } from '@/api/services/student/student-selftest-serv
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import ShowImages from '@/modules/student-modules/show-images.vue';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader, ShowImages },
   setup() {

@@ -140,7 +140,7 @@ import * as yup from 'yup';
 import locale from '../../../../lang/locale.json';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 import { menus } from '@/api/const';
 
 export default defineComponent({

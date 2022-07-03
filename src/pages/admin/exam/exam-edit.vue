@@ -308,7 +308,7 @@ import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.css';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.js';
 import { ExamServiceApi } from '@/api/services/admin/exam-service';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 export default defineComponent({
   props: {
     exam: {

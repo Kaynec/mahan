@@ -161,7 +161,7 @@
 import { computed, defineComponent, ref, watch } from 'vue';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import router from '@/router';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 import useVuelidate from '@vuelidate/core';
 import { required, minLength, helpers } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';

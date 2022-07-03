@@ -42,7 +42,7 @@ import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 const $ = require('jquery');
 import { StoreServiceApi } from '@/api/services/admin/store-service';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 // import { string } from 'yup/lib/locale';
 

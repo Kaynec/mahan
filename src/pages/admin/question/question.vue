@@ -45,7 +45,7 @@ import { QuestionServiceApi } from '@/api/services/admin/question-service';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 const $ = require('jquery');
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export default defineComponent({
   components: { grid },

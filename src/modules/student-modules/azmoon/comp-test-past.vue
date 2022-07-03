@@ -57,9 +57,9 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import compareAsc from 'date-fns/compareAsc';
 import CompTestDetail from '@/modules/student-modules/azmoon/comp-test-detail.vue';
-import JalaliConverter from '@/utilities/date-converter';
+import {shamsi_be_miladi} from '@/utilities/date-converter';
 import { useStudentStore } from '@/store';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 const isLoading = ref(false);
 const azmoonData = reactive([] as any);
@@ -70,7 +70,7 @@ StudentExamApi.getAll().then((res) => {
   res.data.data.forEach((date: any) => {
     const splitted = date.date.split('/');
     const jalalidateConvertedToMiladi = new Date(
-      JalaliConverter(splitted[0], splitted[1], splitted[2]) as any
+      shamsi_be_miladi(splitted[0], splitted[1], splitted[2]) as any
     );
 
     jalalidateConvertedToMiladi.setHours(
@@ -84,7 +84,7 @@ StudentExamApi.getAll().then((res) => {
 
   azmoonData.forEach((child: any) => {
     let mDate = new Date(
-      JalaliConverter(
+      shamsi_be_miladi(
         child.date.split('/')[0],
         child.date.split('/')[1],
         child.date.split('/')[2]

@@ -63,7 +63,7 @@ import useVuelidate from '@vuelidate/core';
 import { StudentEventApi } from '@/api/services/student/student-event-service';
 import { helpers, required } from '@vuelidate/validators';
 import { toEnglishNumbers } from '@/utilities/to-persian-numbers';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export default defineComponent({
   props: {

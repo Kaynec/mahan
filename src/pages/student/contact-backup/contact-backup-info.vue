@@ -61,7 +61,7 @@ import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
 
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader },

@@ -106,7 +106,7 @@ import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 const $ = require('jquery');
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 import { CourseServiceApi } from '@/api/services/admin/course-service';
 import { SessionServiceApi } from '@/api/services/admin/session-service';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';

@@ -178,7 +178,7 @@ import { baseUrl } from '@/api/apiclient';
 import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import Alert from '@/modules/student-modules/alert/alert.vue';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 const isLoading = ref(true);
 const roadmap = ref();

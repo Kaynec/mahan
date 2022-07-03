@@ -211,8 +211,8 @@ import ShowImages from '@/modules/student-modules/show-images.vue';
 import { useRoute } from 'vue-router';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
-import JalaliConverter from '@/utilities/date-converter';
-const alertify = require('@/assets/alertifyjs/alertify');
+import {shamsi_be_miladi} from '@/utilities/date-converter';
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   components: { MinimalHeader, ShowImages, DesktopMinimalHeader },
@@ -241,7 +241,7 @@ export default defineComponent({
       data.value = res.data.data;
 
       let endDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           res.data?.data?.endDate.split('/')[0],
           res.data?.data?.endDate.split('/')[1],
           res.data?.data?.endDate.split('/')[2]

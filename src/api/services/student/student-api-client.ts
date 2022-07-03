@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useStudentStore } from '@/store';
 import { baseUrl } from '@/api/apiclient';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export const studentInstance = axios.create({
   baseURL: baseUrl,

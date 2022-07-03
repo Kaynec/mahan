@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMentorStore } from '@/store';
 import { baseUrl } from '@/api/apiclient';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export const MentorInstance = axios.create({
   baseURL: baseUrl,

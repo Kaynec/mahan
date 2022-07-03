@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentEventApi } from '@/api/services/student/student-event-service';
 import CalendarAddEvent from '@/modules/student-modules/calendar/calendar-add-event.vue';
@@ -121,7 +121,10 @@ import {
   toEnglishNumbers,
   toPersianNumbers
 } from '@/utilities/to-persian-numbers';
-import JalaliConverter, { isLeapJalaaliYear } from '@/utilities/date-converter';
+import shamsi_be_miladi, {
+  isLeapJalaaliYear,
+  shamsi_be_miladi
+} from '@/utilities/date-converter';
 let currentDay = ref(),
   currentMonth = ref();
 const days = ref();
@@ -172,10 +175,10 @@ const faDateAllDigit = new Intl.DateTimeFormat('fa', {
 }).format(date);
 
 let m = new Date(
-  JalaliConverter(
-    toEnglishNumbers(faDateAllDigit.split('/')[0]),
-    toEnglishNumbers(faDateAllDigit.split('/')[1]),
-    toEnglishNumbers(faDateAllDigit.split('/')[2])
+  shamsi_be_miladi(
+    +toEnglishNumbers(faDateAllDigit.split('/')[0]),
+    +toEnglishNumbers(faDateAllDigit.split('/')[1]),
+    +toEnglishNumbers(faDateAllDigit.split('/')[2])
   ) as any
 );
 
@@ -277,12 +280,11 @@ StudentEventApi.get({ date: newDate }).then((res) => {
   data.value = res.data.data;
   updateCalendarClasses();
 });
-const changeCalendarAddEvent = () => {
+const changeCalendarAddEvent = async () => {
   showCalendarAddEvent.value = !showCalendarAddEvent.value;
-  StudentEventApi.get({ date: newDate }).then((res) => {
-    data.value = res.data.data;
-    updateCalendarClasses();
-  });
+  const res = await StudentEventApi.get({ date: newDate });
+  data.value = res.data.data;
+  updateCalendarClasses();
 };
 
 // Loop Through Dates And if It's passed give it a red class else green class
@@ -327,7 +329,7 @@ const formatCardDate = (date) => {
   // let m = moment(date, 'jYYYY/jM/jD');
 
   let m = new Date(
-    JalaliConverter(
+    shamsi_be_miladi(
       date.split('/')[0],
       date.split('/')[1],
       date.split('/')[2]

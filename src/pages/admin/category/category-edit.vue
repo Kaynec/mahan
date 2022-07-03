@@ -88,7 +88,7 @@ import {
 } from '@vuelidate/validators';
 import { baseUrl } from '@/api/apiclient';
 import { returnAProtectedUrlAdmin } from '@/utilities/get-image-from-url';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 export default defineComponent({
   props: {
     item: {

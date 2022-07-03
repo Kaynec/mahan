@@ -224,7 +224,7 @@ import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.css';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.js';
 import MentorDesktopHeader from '@/modules/mentor-main/mentor-header.vue';
 import { resizeImage } from '@/utilities/get-image-from-url';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 
 export default defineComponent({
   components: {

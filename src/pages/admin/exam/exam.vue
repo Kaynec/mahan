@@ -42,7 +42,7 @@ import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { ExamServiceApi } from '@/api/services/admin/exam-service';
 const $ = require('jquery');
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export default defineComponent({
   components: { grid },

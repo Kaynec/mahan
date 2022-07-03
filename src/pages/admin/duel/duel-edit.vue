@@ -361,7 +361,7 @@ import { SessionServiceApi } from '@/api/services/admin/session-service';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.css';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.js';
 import { DuelServiceApi } from '@/api/services/admin/duel-service';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 export default defineComponent({
   props: {
     duel: {

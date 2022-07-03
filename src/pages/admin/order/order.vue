@@ -42,7 +42,7 @@ import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { OrderServiceApi } from '@/api/services/admin/order-service';
 const $ = require('jquery');
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 var moment = require('jalali-moment');
 
 export default defineComponent({

@@ -193,7 +193,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import locale from '../../../../lang/locale.json';
 import router from '@/router';
-const alertify = require('../../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify'
 
 export default defineComponent({
   components: {

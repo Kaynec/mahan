@@ -83,7 +83,7 @@ import {
 } from '@/utilities/to-persian-numbers';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import compareAsc from 'date-fns/compareAsc';
-import JalaliConverter from '@/utilities/date-converter';
+import {shamsi_be_miladi} from '@/utilities/date-converter';
 
 export default defineComponent({
   setup() {
@@ -112,7 +112,7 @@ export default defineComponent({
     StudentExamApi.getAll().then((res) => {
       res.data.data.forEach((date: any) => {
         let mDate = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             date.date.split('/')[0],
             date.date.split('/')[1],
             date.date.split('/')[2]
@@ -125,7 +125,7 @@ export default defineComponent({
 
       azmoonData.forEach((child: any) => {
         let mDate = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             child.date.split('/')[0],
             child.date.split('/')[1],
             child.date.split('/')[2]

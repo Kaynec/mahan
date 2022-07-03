@@ -183,7 +183,7 @@ import {
   requiredIf
 } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 export default defineComponent({
   setup() {
     const route = useRoute();
@@ -191,7 +191,7 @@ export default defineComponent({
 
     // getting data from the database
     if (route.params.productId) {
-      StoreServiceApi.get(route.params.productId as string).then((result) => {
+     const result = StoreServiceApi.get(route.params.productId as string).then((result) => {
         let data = result.data.data;
         model.value = data;
       });

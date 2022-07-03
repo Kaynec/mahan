@@ -136,7 +136,7 @@ import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
-const alertify = require('@/assets/alertifyjs/alertify');
+import alertify from "@/assets/alertifyjs/alertify"
 export default defineComponent({
   components: {
     vSelect

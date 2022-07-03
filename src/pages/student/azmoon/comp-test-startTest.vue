@@ -79,7 +79,7 @@ import { compareAsc } from 'date-fns';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import alertify from '@/assets/alertifyjs/alertify';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import JalaliConverter from '@/utilities/date-converter';
+import {shamsi_be_miladi} from '@/utilities/date-converter';
 
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader },
@@ -105,7 +105,7 @@ export default defineComponent({
       timeInformation.value = res.data.data;
 
       let mDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           timeInformation.value.date.split('/')[0],
           timeInformation.value.date.split('/')[1],
           timeInformation.value.date.split('/')[2]
@@ -158,7 +158,7 @@ export default defineComponent({
 
     const goToquestions = () => {
       let mDate = new Date(
-        JalaliConverter(
+        shamsi_be_miladi(
           apiData.value.date.split('/')[0],
           apiData.value.date.split('/')[1],
           apiData.value.date.split('/')[2]

@@ -149,7 +149,7 @@ import Dialog from '@/modules/student-modules/dialog.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import router from '@/router';
-import JalaliConverter from '@/utilities/date-converter';
+import {shamsi_be_miladi} from '@/utilities/date-converter';
 import max from 'date-fns/max';
 import { compareAsc } from 'date-fns';
 
@@ -176,7 +176,7 @@ export default defineComponent({
     const filteredDuels = computed(() => {
       return azmoonData.filter((duel) => {
         let mDate = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             duel.startDate.split('/')[0],
             duel.startDate.split('/')[1],
             duel.startDate.split('/')[2]
@@ -206,7 +206,7 @@ export default defineComponent({
 
       azmoonData.forEach((child: any) => {
         let mDate = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             child.startDate.split('/')[0],
             child.startDate.split('/')[1],
             child.startDate.split('/')[2]
@@ -235,7 +235,7 @@ export default defineComponent({
 
       const sortedArray = azmoonData.sort((a, b) => {
         let dateA = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             a.startDate.split('/')[0],
             a.startDate.split('/')[1],
             a.startDate.split('/')[2]
@@ -245,7 +245,7 @@ export default defineComponent({
         dateA.setHours(a.startTime.split(':')[0], a.startTime.split(':')[1]);
 
         let dateB = new Date(
-          JalaliConverter(
+          shamsi_be_miladi(
             b.startDate.split('/')[0],
             b.startDate.split('/')[1],
             b.startDate.split('/')[2]
