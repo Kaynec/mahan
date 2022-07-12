@@ -43,13 +43,13 @@
               @change="onFileChange($event, 'question', index)"
             />
             <img
-              style="max-width: 100%; max-height: 100px; margin-top: 3px"
+              style="max-width: 100%; max-height: 100px; margin-top: 3px;"
               :src="getQuestionImageUrl(image)"
             />
           </div>
           <i
             class="fas fa-plus-square"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             title="افزودن تصویر"
             @click="addImage(model.images)"
           ></i>
@@ -194,13 +194,13 @@
               @change="onFileChange($event, 0, index)"
             />
             <img
-              style="max-width: 100%; max-height: 70px; margin-top: 3px"
+              style="max-width: 100%; max-height: 70px; margin-top: 3px;"
               :src="getQuestionImageUrl(image)"
             />
           </div>
           <i
             class="fas fa-plus-square"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             title="افزودن تصویر"
             @click="addImage(model.options[0].images)"
           ></i>
@@ -244,13 +244,13 @@
               @change="onFileChange($event, 1, index)"
             />
             <img
-              style="max-width: 100%; max-height: 70px; margin-top: 3px"
+              style="max-width: 100%; max-height: 70px; margin-top: 3px;"
               :src="getQuestionImageUrl(image)"
             />
           </div>
           <i
             class="fas fa-plus-square"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             title="افزودن تصویر"
             @click="addImage(model.options[1].images)"
           ></i>
@@ -295,13 +295,13 @@
               @change="onFileChange($event, 2, index)"
             />
             <img
-              style="max-width: 100%; max-height: 70px; margin-top: 3px"
+              style="max-width: 100%; max-height: 70px; margin-top: 3px;"
               :src="getQuestionImageUrl(image)"
             />
           </div>
           <i
             class="fas fa-plus-square"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             title="افزودن تصویر"
             @click="addImage(model.options[2].images)"
           ></i>
@@ -348,13 +348,13 @@
               @change="onFileChange($event, 3, index)"
             />
             <img
-              style="max-width: 100%; max-height: 70px; margin-top: 3px"
+              style="max-width: 100%; max-height: 70px; margin-top: 3px;"
               :src="getQuestionImageUrl(image)"
             />
           </div>
           <i
             class="fas fa-plus-square"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             title="افزودن تصویر"
             @click="addImage(model.options[3].images)"
           ></i>
@@ -407,13 +407,13 @@
               @change="onFileChange($event, 'descriptiveAnswer', index)"
             />
             <img
-              style="max-width: 100%; max-height: 100px; margin-top: 3px"
+              style="max-width: 100%; max-height: 100px; margin-top: 3px;"
               :src="getQuestionImageUrl(image)"
             />
           </div>
           <i
             class="fas fa-plus-square"
-            style="cursor: pointer"
+            style="cursor: pointer;"
             title="افزودن تصویر"
             @click="addImage(model.descriptiveAnswer.images)"
           ></i>
@@ -429,8 +429,8 @@
     </form>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { computed, ref, watch } from 'vue';
 import { CourseServiceApi } from '@/api/services/admin/course-service';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import { QuestionServiceApi } from '@/api/services/admin/question-service';
@@ -440,325 +440,279 @@ import { required, minLength, helpers } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
 import { jsonToFormData } from '@/api/helper';
 import { baseUrl } from '@/api/apiclient';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 
-export default defineComponent({
-  props: {
-    questionId: {
-      type: String,
-      default: ''
-    }
-  },
-
-  setup(props) {
-    const route = useRoute();
-    // INCASE OF UPDATE SHOW THE ASSOCIATED SESSION AND COURSE
-    let currentGrade = ref(route.params.gradeId);
-    let currentGroup = ref(route.params.groupId);
-    let currentField = ref(route.params.fieldId);
-    let currentCourse = ref({} as any);
-    let currentSession = ref({} as any);
-    if (route.params.fieldId) {
-      CourseServiceApi.getAllByField(currentField.value).then((res) => {
-        courses.value = res.data.data;
-        if (route.params.courseId) {
-          currentCourse.value = courses.value.find(
-            (p) => p._id == route.params.courseId
-          );
-        }
-
-        if (route.params.sessionId && currentCourse.value) {
-          currentSession.value = currentCourse.value.sessions.find(
-            (p) => p._id == route.params.sessionId
-          );
-        }
-      });
-    }
-    let model = ref({
-      text: '',
-      images: [],
-      session: '',
-      course: '',
-      options: [
-        {
-          text: '',
-          images: [],
-          isAnswer: true
-        },
-        {
-          text: '',
-          images: [],
-          isAnswer: false
-        },
-        {
-          text: '',
-          images: [],
-          isAnswer: false
-        },
-        {
-          text: '',
-          images: [],
-          isAnswer: false
-        }
-      ],
-      descriptiveAnswer: {
-        text: '',
-        images: []
-      }
-    } as any);
-    const rules = computed(() => ({
-      text: {},
-      course: { required },
-      session: { required },
-      options: {
-        required: helpers.withMessage('لطفا تمام موارد را کامل کنید', required),
-        minLength: helpers.withMessage(
-          'لطفا تمام موارد را کامل کنید',
-          minLength(4)
-        ),
-        $each: {
-          text: { required },
-          isAnswer: {}
-        }
-      }
-    }));
-    let v$ = useVuelidate(rules, model.value);
-    if (route.params.question) {
-      QuestionServiceApi.get(route.params.question as string).then((result) => {
-        let data = result.data.data;
-        currentSession.value = data.session;
-        currentCourse.value = data.course;
-        model.value._id = data._id;
-        model.value.text = data.text;
-        model.value.options = data.options;
-        model.value.images = data.images ? data.images : [];
-        model.value.course = data.course._id;
-        model.value.session = data.session._id;
-        if (data.descriptiveAnswer) {
-          model.value.descriptiveAnswer.text = data.descriptiveAnswer.text;
-          model.value.descriptiveAnswer.images = data.descriptiveAnswer.images;
-        }
-      });
-    }
-
-    // onMounted(() => {
-    //   ClassicEditor.create(document.querySelector('#ckeditor')).catch(
-    //     (error) => {
-    //       console.error(error);
-    //     }
-    //   );
-    // });
-    // // // // // // // // // // // // // // // // // // // //
-
-    //
-    // const imageRule = helpers.regex('image', /\.(jpe?g|png)$/);
-    let filteredGroups = computed(() => {
-      if (currentGrade.value) {
-        let result = grades.value.find(
-          (p) => `${p._id}` == `${currentGrade.value}`
-        );
-        if (result) return result.groups;
-        else return [];
-      } else {
-        return [];
-      }
-    });
-
-    let filteredFields = computed(() => {
-      if (currentGroup.value) {
-        let result = filteredGroups.value.find(
-          (p) => `${p._id}` == `${currentGroup.value}`
-        );
-        if (result) return result.fields;
-        else return [];
-      } else {
-        return [];
-      }
-    });
-    // All The Questions And Courses
-    let grades = ref([] as any);
-    let courses = ref([] as any);
-
-    /////////////
-    GradeServiceApi.getAll().then((res) => {
-      res.data.data.forEach((data: any) => {
-        grades.value.push(data);
-      });
-    });
-    //
-    const filteredSessions = computed(() => {
-      if (currentCourse.value) {
-        let result = courses.value.find(
-          (p) => `${p._id}` == `${currentCourse.value._id}`
-        );
-        if (result) return result.sessions;
-        else return [];
-      } else {
-        return [];
-      }
-    });
-
-    /// Handle The Image
-    const onFileChange = (e: any, idx: number | string = 'question', index) => {
-      const files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      if (idx === 'question') {
-        model.value.images[index].file = files[0];
-        getBase64(files[0]).then((str) => {
-          model.value.images[index].base64 = str;
-        });
-      } else if (idx === 'descriptiveAnswer') {
-        model.value.descriptiveAnswer.images[index].file = files[0];
-        getBase64(files[0]).then((str) => {
-          model.value.descriptiveAnswer.images[index].base64 = str;
-        });
-      } else {
-        model.value.options[idx].images[index].file = files[0];
-        getBase64(files[0]).then((str) => {
-          model.value.options[idx].images[index].base64 = str;
-        });
-      }
-    };
-
-    const getBase64 = (file: any) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
-    };
-
-    const getQuestionImageUrl = (image) => {
-      if (image._id) return `${baseUrl}question/image/${image.file}`;
-      else return image.base64;
-    };
-
-    watch(currentField, (cur, prev) => {
-      CourseServiceApi.getAllByField(currentField.value).then((res) => {
-        courses.value = res.data.data;
-      });
-    });
-    //
-    const save = () => {
-      model.value.course = currentCourse.value._id;
-      model.value.session = currentSession.value._id;
-      // if user has an id update it with the current model otherwise create one
-      // model.value.options = model.value.options.map((el: any) => {
-      //   if (!el.image) return { text: el.text, isAnswer: el.isAnswer };
-      //   return { text: el.text, image: el.image, isAnswer: el.isAnswer };
-      // });
-      v$.value.$touch();
-      if (!v$.value.$invalid) {
-        let tmp: any = {
-          images: [],
-          options: [],
-          course: {
-            _id: model.value.course
-          },
-          session: {
-            _id: model.value.session
-          },
-          descriptiveAnswer: {
-            text: model.value.descriptiveAnswer.text,
-            images: []
-          }
-        };
-        // model.value.images && (tmp.images = model.value.images);
-        for (const option of model.value.options) {
-          tmp.options.push({ ...option, images: [] });
-        }
-        model.value.text && (tmp.text = model.value.text);
-        let formData = jsonToFormData(tmp);
-        if (model.value.images) {
-          for (const questionImage of model.value.images) {
-            if (!questionImage._id)
-              formData.append(
-                'questionImg',
-                questionImage.file,
-                questionImage.file.name
-              );
-          }
-        }
-        for (const image of model.value.descriptiveAnswer.images) {
-          if (!image._id)
-            formData.append(
-              'descriptiveAnswerImg',
-              image.file,
-              image.file.name
-            );
-        }
-
-        for (let index = 0; index < model.value.options.length; index++) {
-          let option = model.value.options[index];
-          for (const image of option.images) {
-            if (!image._id)
-              formData.append(
-                `option${index + 1}`,
-                image.file,
-                image.file.name
-              );
-          }
-        }
-        if (model.value._id) {
-          QuestionServiceApi.update(model.value._id, formData).then(
-            (result) => {
-              alertify.success(result.data.message);
-              router.push({
-                name: 'question',
-                params: route.params
-              });
-            }
-          );
-        } else {
-          QuestionServiceApi.create(formData).then((result) => {
-            alertify.success(result.data.message);
-            router.push({
-              name: 'question',
-              params: route.params
-            });
-          });
-        }
-      }
-    };
-    // cancel //
-    const cancel = () => {
-      router.push({ name: 'question', params: route.params });
-    };
-
-    const addImage = (images) => {
-      images.push({
-        file: '',
-        title: '',
-        base64: ''
-      });
-    };
-
-    let showSession = ref<boolean>(false);
-    let showCourse = ref<boolean>(false);
-    return {
-      model,
-      save,
-      cancel,
-      showSession,
-      showCourse,
-      courses,
-      onFileChange,
-      v$,
-      filteredSessions,
-      currentGrade,
-      currentGroup,
-      currentField,
-      currentCourse,
-      currentSession,
-      filteredGroups,
-      filteredFields,
-      grades,
-      addImage,
-      getQuestionImageUrl
-    };
+const props = defineProps({
+  questionId: {
+    type: String,
+    default: ''
   }
 });
+
+const route = useRoute();
+// INCASE OF UPDATE SHOW THE ASSOCIATED SESSION AND COURSE
+let currentGrade = ref(route.params.gradeId);
+let currentGroup = ref(route.params.groupId);
+let currentField = ref(route.params.fieldId);
+let currentCourse = ref({} as any);
+let currentSession = ref({} as any);
+if (route.params.fieldId) {
+  CourseServiceApi.getAllByField(currentField.value).then((res) => {
+    courses.value = res.data.data;
+    if (route.params.courseId) {
+      currentCourse.value = courses.value.find(
+        (p) => p._id == route.params.courseId
+      );
+    }
+
+    if (route.params.sessionId && currentCourse.value) {
+      currentSession.value = currentCourse.value.sessions.find(
+        (p) => p._id == route.params.sessionId
+      );
+    }
+  });
+}
+let model = ref({
+  text: '',
+  images: [],
+  session: '',
+  course: '',
+  options: [
+    {
+      text: '',
+      images: [],
+      isAnswer: true
+    },
+    {
+      text: '',
+      images: [],
+      isAnswer: false
+    },
+    {
+      text: '',
+      images: [],
+      isAnswer: false
+    },
+    {
+      text: '',
+      images: [],
+      isAnswer: false
+    }
+  ],
+  descriptiveAnswer: {
+    text: '',
+    images: []
+  }
+} as any);
+const rules = computed(() => ({
+  text: {},
+  course: { required },
+  session: { required },
+  options: {
+    required: helpers.withMessage('لطفا تمام موارد را کامل کنید', required),
+    minLength: helpers.withMessage(
+      'لطفا تمام موارد را کامل کنید',
+      minLength(4)
+    ),
+    $each: {
+      text: { required },
+      isAnswer: {}
+    }
+  }
+}));
+let v$ = useVuelidate(rules, model.value);
+if (route.params.question) {
+  QuestionServiceApi.get(route.params.question as string).then((result) => {
+    let data = result.data.data;
+    currentSession.value = data.session;
+    currentCourse.value = data.course;
+    model.value._id = data._id;
+    model.value.text = data.text;
+    model.value.options = data.options;
+    model.value.images = data.images ? data.images : [];
+    model.value.course = data.course._id;
+    model.value.session = data.session._id;
+    if (data.descriptiveAnswer) {
+      model.value.descriptiveAnswer.text = data.descriptiveAnswer.text;
+      model.value.descriptiveAnswer.images = data.descriptiveAnswer.images;
+    }
+  });
+}
+
+let filteredGroups = computed(() => {
+  if (currentGrade.value) {
+    let result = grades.value.find(
+      (p) => `${p._id}` == `${currentGrade.value}`
+    );
+    if (result) return result.groups;
+    else return [];
+  } else {
+    return [];
+  }
+});
+
+let filteredFields = computed(() => {
+  if (currentGroup.value) {
+    let result = filteredGroups.value.find(
+      (p) => `${p._id}` == `${currentGroup.value}`
+    );
+    if (result) return result.fields;
+    else return [];
+  } else {
+    return [];
+  }
+});
+// All The Questions And Courses
+let grades = ref([] as any);
+let courses = ref([] as any);
+
+/////////////
+GradeServiceApi.getAll().then((res) => {
+  res.data.data.forEach((data: any) => {
+    grades.value.push(data);
+  });
+});
+//
+const filteredSessions = computed(() => {
+  if (currentCourse.value) {
+    let result = courses.value.find(
+      (p) => `${p._id}` == `${currentCourse.value._id}`
+    );
+    if (result) return result.sessions;
+    else return [];
+  } else {
+    return [];
+  }
+});
+
+/// Handle The Image
+const onFileChange = (e: any, idx: number | string = 'question', index) => {
+  const files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return;
+  if (idx === 'question') {
+    model.value.images[index].file = files[0];
+    getBase64(files[0]).then((str) => {
+      model.value.images[index].base64 = str;
+    });
+  } else if (idx === 'descriptiveAnswer') {
+    model.value.descriptiveAnswer.images[index].file = files[0];
+    getBase64(files[0]).then((str) => {
+      model.value.descriptiveAnswer.images[index].base64 = str;
+    });
+  } else {
+    model.value.options[idx].images[index].file = files[0];
+    getBase64(files[0]).then((str) => {
+      model.value.options[idx].images[index].base64 = str;
+    });
+  }
+};
+
+const getBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+const getQuestionImageUrl = (image) => {
+  if (image._id) return `${baseUrl}question/image/${image.file}`;
+  else return image.base64;
+};
+
+watch(currentField, (cur, prev) => {
+  CourseServiceApi.getAllByField(currentField.value).then((res) => {
+    courses.value = res.data.data;
+  });
+});
+//
+const save = () => {
+  model.value.course = currentCourse.value._id;
+  model.value.session = currentSession.value._id;
+  // if user has an id update it with the current model otherwise create one
+  // model.value.options = model.value.options.map((el: any) => {
+  //   if (!el.image) return { text: el.text, isAnswer: el.isAnswer };
+  //   return { text: el.text, image: el.image, isAnswer: el.isAnswer };
+  // });
+  v$.value.$touch();
+  if (!v$.value.$invalid) {
+    let tmp: any = {
+      images: [],
+      options: [],
+      course: {
+        _id: model.value.course
+      },
+      session: {
+        _id: model.value.session
+      },
+      descriptiveAnswer: {
+        text: model.value.descriptiveAnswer.text,
+        images: []
+      }
+    };
+    // model.value.images && (tmp.images = model.value.images);
+    for (const option of model.value.options) {
+      tmp.options.push({ ...option, images: [] });
+    }
+    model.value.text && (tmp.text = model.value.text);
+    let formData = jsonToFormData(tmp);
+    if (model.value.images) {
+      for (const questionImage of model.value.images) {
+        if (!questionImage._id)
+          formData.append(
+            'questionImg',
+            questionImage.file,
+            questionImage.file.name
+          );
+      }
+    }
+    for (const image of model.value.descriptiveAnswer.images) {
+      if (!image._id)
+        formData.append('descriptiveAnswerImg', image.file, image.file.name);
+    }
+
+    for (let index = 0; index < model.value.options.length; index++) {
+      let option = model.value.options[index];
+      for (const image of option.images) {
+        if (!image._id)
+          formData.append(`option${index + 1}`, image.file, image.file.name);
+      }
+    }
+    if (model.value._id) {
+      QuestionServiceApi.update(model.value._id, formData).then((result) => {
+        alertify.success(result.data.message);
+        router.push({
+          name: 'question',
+          params: route.params
+        });
+      });
+    } else {
+      QuestionServiceApi.create(formData).then((result) => {
+        alertify.success(result.data.message);
+        router.push({
+          name: 'question',
+          params: route.params
+        });
+      });
+    }
+  }
+};
+// cancel //
+const cancel = () => {
+  router.push({ name: 'question', params: route.params });
+};
+
+const addImage = (images) => {
+  images.push({
+    file: '',
+    title: '',
+    base64: ''
+  });
+};
+
+let showSession = ref<boolean>(false);
+let showCourse = ref<boolean>(false);
 </script>
 <style lang="scss" scoped>
 .ck-editor__editable_inline {

@@ -1,9 +1,4 @@
-const JalaliDate = {
-  g_days_in_month: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-  j_days_in_month: [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29]
-};
-
-export function shamsi_be_miladi(jy, jm, jd) {
+export default function shamsi_be_miladi(jy, jm, jd) {
   var sal_a, gy, gm, gd, days;
   jy += 1595;
   days =
@@ -44,64 +39,6 @@ export function shamsi_be_miladi(jy, jm, jd) {
   ];
   for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
   return [gy + '/' + gm + '/' + gd];
-}
-
-export default function (j_y, j_m, j_d) {
-  j_y = +j_y;
-  j_m = +j_m;
-  j_d = +j_d;
-  let jy = j_y - 979;
-  let jm = j_m - 1;
-  let jd = j_d - 1;
-
-  let j_day_no = 365 * jy + +(jy / 33) * 8 + +(((jy % 33) + 3) / 4);
-  for (let i = 0; i < jm; ++i) j_day_no += JalaliDate.j_days_in_month[i];
-
-  j_day_no += jd;
-
-  let g_day_no = j_day_no + 79;
-
-  let gy =
-    1600 +
-    400 *
-      +(g_day_no / 146097); /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
-  g_day_no = g_day_no % 146097;
-
-  let leap = true;
-  if (g_day_no >= 36525) {
-    /* 36525 = 365*100 + 100/4 */
-    g_day_no--;
-    gy += 100 * +(g_day_no / 36524); /* 36524 = 365*100 + 100/4 - 100/100 */
-    g_day_no = g_day_no % 36524;
-
-    if (g_day_no >= 365) g_day_no++;
-    else leap = false;
-  }
-
-  gy += 4 * +(g_day_no / 1461); /* 1461 = 365*4 + 4/4 */
-  g_day_no %= 1461;
-
-  if (g_day_no >= 366) {
-    leap = false;
-
-    g_day_no--;
-    gy += +(g_day_no / 365);
-    g_day_no = g_day_no % 365;
-  }
-
-  for (
-    var i = 0;
-    g_day_no >= JalaliDate.g_days_in_month[i] + (i == 1 && (leap as any));
-    i++
-  )
-    g_day_no -= JalaliDate.g_days_in_month[i] + (i == 1 && (leap as any));
-  let gm: any = i + 1;
-  let gd: any = g_day_no + 1;
-
-  gm = gm < 10 ? '0' + gm : gm;
-  gd = gd < 10 ? '0' + gd : gd;
-
-  return [gy, gm, gd];
 }
 
 function div(a, b) {
@@ -182,6 +119,4 @@ function jalCal(jy) {
   return { leap: leap, gy: gy, march: march };
 }
 
-export const isLeapJalaaliYear = (jy) => {
-  return jalCal(jy).leap === 0;
-};
+export const isLeapJalaaliYear = (jy) => jalCal(jy).leap === 0;

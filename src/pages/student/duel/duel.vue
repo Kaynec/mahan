@@ -10,7 +10,7 @@
     />
     <main :class="`${isMobile.value ? 'wrapper' : 'wrapper-pc'}`">
       <section class="first">
-        <div :class="`${isMobile.value ? 'hero' : 'hero-pc'}`">
+        <div :class="`${isMobile.value ? 'hero' : 'hero hero-pc'}`">
           <h1 class="right">
             <span> {{ toPersianNumbers(lastDuelRate) }} </span><br />
             آخرین رتبه دوئلی شما
@@ -24,7 +24,7 @@
             </p>
           </div>
         </div>
-        <div :class="`${isMobile.value ? 'points' : 'points-pc'}`">
+        <div :class="`${isMobile.value ? 'points' : 'points points-pc'}`">
           <div>
             <span> دوئل های انجام شده </span>
             <p>{{ toPersianNumbers(countOfDuelsParticipated) }}</p>
@@ -140,8 +140,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, reactive, ref } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
@@ -149,158 +149,129 @@ import Dialog from '@/modules/student-modules/dialog.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import router from '@/router';
-import {shamsi_be_miladi} from '@/utilities/date-converter';
+import shamsi_be_miladi from '@/utilities/date-converter';
 import max from 'date-fns/max';
 import { compareAsc } from 'date-fns';
 
-export default defineComponent({
-  components: {
-    SmallHeader,
-    DesktopMinimalHeader,
-    MinimalHeader,
-    Dialog
-  },
-  setup() {
-    const azmoonData = reactive([] as any);
-    const currentItem = ref({});
-    const showDetail = ref(false);
-    const currentTypeOfDuel = ref('all');
-    const countOfDuelsParticipated = ref(0);
-    const lastDuelRate = ref(0);
-    const point = ref(0);
+const azmoonData = reactive([] as any);
+const currentItem = ref({});
+const showDetail = ref(false);
+const currentTypeOfDuel = ref('all');
+const countOfDuelsParticipated = ref(0);
+const lastDuelRate = ref(0);
+const point = ref(0);
 
-    const allDuels = computed(() => {
-      return azmoonData;
-    });
-
-    const filteredDuels = computed(() => {
-      return azmoonData.filter((duel) => {
-        let mDate = new Date(
-          shamsi_be_miladi(
-            duel.startDate.split('/')[0],
-            duel.startDate.split('/')[1],
-            duel.startDate.split('/')[2]
-          ) as any
-        ) as any;
-
-        mDate.setHours(
-          duel.startTime.split(':')[0],
-          duel.startTime.split(':')[1]
-        );
-
-        return compareAsc(mDate, new Date()) <= 0;
-      });
-    });
-
-    (async () => {
-      const res = await StudentDuelApi.getAll();
-      res.data.data.forEach((date: any) => {
-        if (date) {
-          azmoonData.push(date);
-          if (date.results && date.results.length) {
-            countOfDuelsParticipated.value++;
-            point.value += 20;
-          }
-        }
-      });
-
-      azmoonData.forEach((child: any) => {
-        let mDate = new Date(
-          shamsi_be_miladi(
-            child.startDate.split('/')[0],
-            child.startDate.split('/')[1],
-            child.startDate.split('/')[2]
-          ) as any
-        );
-
-        let currentDate = mDate.toLocaleDateString('fa-FA', {
-          weekday: 'long',
-          month: 'long',
-          day: 'numeric'
-        }) as any;
-
-        currentDate = currentDate.split(' ');
-
-        let month = currentDate[2];
-        let day = currentDate[1];
-        let weekDay = currentDate[0];
-
-        child.date = {
-          ...child.date,
-          weekDay,
-          day,
-          month
-        };
-      });
-
-      const sortedArray = azmoonData.sort((a, b) => {
-        let dateA = new Date(
-          shamsi_be_miladi(
-            a.startDate.split('/')[0],
-            a.startDate.split('/')[1],
-            a.startDate.split('/')[2]
-          ) as any
-        ) as any;
-
-        dateA.setHours(a.startTime.split(':')[0], a.startTime.split(':')[1]);
-
-        let dateB = new Date(
-          shamsi_be_miladi(
-            b.startDate.split('/')[0],
-            b.startDate.split('/')[1],
-            b.startDate.split('/')[2]
-          ) as any
-        ) as any;
-
-        dateB.setHours(a.startTime.split(':')[0], a.startTime.split(':')[1]);
-        return max([dateA, dateA]);
-      });
-
-      for (let i = 0; i < sortedArray.length; i++) {
-        let temp = sortedArray[i];
-        if (temp.results && temp.results.length) {
-          lastDuelRate.value = temp.results[0].rate;
-          return;
-        }
-      }
-    })();
-
-    const moveToDuelStart = (item) => {
-      currentItem.value = item;
-      showDetail.value = true;
-    };
-
-    const moveToDuelAll = () => {
-      router.push({
-        name: 'DuelAll'
-      });
-    };
-
-    const toggleShowDuels = () => {
-      if (currentTypeOfDuel.value === 'all') {
-        currentTypeOfDuel.value = 'past';
-      } else {
-        currentTypeOfDuel.value = 'all';
-      }
-    };
-
-    return {
-      azmoonData,
-      toPersianNumbers,
-      moveToDuelStart,
-      currentItem,
-      showDetail,
-      moveToDuelAll,
-      toggleShowDuels,
-      currentTypeOfDuel,
-      filteredDuels,
-      countOfDuelsParticipated,
-      lastDuelRate,
-      point,
-      allDuels
-    };
-  }
+const allDuels = computed(() => {
+  return azmoonData;
 });
+
+const filteredDuels = computed(() => {
+  return azmoonData.filter((duel) => {
+    let mDate = new Date(
+      shamsi_be_miladi(
+        +duel.startDate.split('/')[0],
+        +duel.startDate.split('/')[1],
+        +duel.startDate.split('/')[2]
+      ) as any
+    ) as any;
+
+    mDate.setHours(duel.startTime.split(':')[0], duel.startTime.split(':')[1]);
+
+    return compareAsc(mDate, new Date()) <= 0;
+  });
+});
+
+(async () => {
+  const res = await StudentDuelApi.getAll();
+  res.data.data.forEach((date: any) => {
+    if (date) {
+      azmoonData.push(date);
+      if (date.results && date.results.length) {
+        countOfDuelsParticipated.value++;
+        point.value += 20;
+      }
+    }
+  });
+
+  azmoonData.forEach((child: any) => {
+    let mDate = new Date(
+      shamsi_be_miladi(
+        +child.startDate.split('/')[0],
+        +child.startDate.split('/')[1],
+        +child.startDate.split('/')[2]
+      ) as any
+    );
+
+    let currentDate = mDate.toLocaleDateString('fa-FA', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric'
+    }) as any;
+
+    currentDate = currentDate.split(' ');
+
+    let month = currentDate[2];
+    let day = currentDate[1];
+    let weekDay = currentDate[0];
+
+    child.date = {
+      ...child.date,
+      weekDay,
+      day,
+      month
+    };
+  });
+
+  const sortedArray = azmoonData.sort((a, b) => {
+    let dateA = new Date(
+      shamsi_be_miladi(
+        +a.startDate.split('/')[0],
+        +a.startDate.split('/')[1],
+        +a.startDate.split('/')[2]
+      ) as any
+    ) as any;
+
+    dateA.setHours(a.startTime.split(':')[0], a.startTime.split(':')[1]);
+
+    let dateB = new Date(
+      shamsi_be_miladi(
+        +b.startDate.split('/')[0],
+        +b.startDate.split('/')[1],
+        +b.startDate.split('/')[2]
+      ) as any
+    ) as any;
+
+    dateB.setHours(a.startTime.split(':')[0], a.startTime.split(':')[1]);
+    return max([dateA, dateA]);
+  });
+
+  for (let i = 0; i < sortedArray.length; i++) {
+    let temp = sortedArray[i];
+    if (temp.results && temp.results.length) {
+      lastDuelRate.value = temp.results[0].rate;
+      return;
+    }
+  }
+})();
+
+const moveToDuelStart = (item) => {
+  currentItem.value = item;
+  showDetail.value = true;
+};
+
+const moveToDuelAll = () => {
+  router.push({
+    name: 'DuelAll'
+  });
+};
+
+const toggleShowDuels = () => {
+  if (currentTypeOfDuel.value === 'all') {
+    currentTypeOfDuel.value = 'past';
+  } else {
+    currentTypeOfDuel.value = 'all';
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -345,38 +316,6 @@ export default defineComponent({
   max-width: 1000px;
 
   overflow: hidden;
-
-  .wrapper-pc {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0.5rem;
-
-    .first {
-      .hero {
-        width: 100%;
-        padding: 2.5rem 1rem;
-        border-radius: 15px;
-      }
-
-      .points {
-        width: 100%;
-        margin: 1rem auto;
-        border-radius: 20px;
-        padding: 25px 0;
-        transform: translateY(0);
-        font-size: 10px;
-        text-align: center;
-        justify-content: space-evenly;
-        align-items: center;
-      }
-    }
-    .card-container {
-      overflow-y: auto;
-      padding-bottom: 3rem;
-      margin-top: 2rem;
-    }
-  }
 
   .hero {
     background: $redish-background;
@@ -522,6 +461,38 @@ export default defineComponent({
         }
       }
     }
+  }
+}
+
+.wrapper-pc {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  .first {
+    width: 100%;
+    .hero-pc {
+      width: 100%;
+      padding: 2.5rem 1rem;
+      border-radius: 15px;
+    }
+
+    .points-pc {
+      width: 100%;
+      margin: 1rem auto;
+      border-radius: 20px;
+      padding: 25px 0;
+      transform: translateY(0);
+      font-size: 10px;
+      text-align: center;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+  }
+  .card-container {
+    overflow-y: auto;
+    padding-bottom: 3rem;
+    margin-top: 2rem;
   }
 }
 </style>

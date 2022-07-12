@@ -200,7 +200,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, computed, ref } from 'vue';
 import router from '@/router';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
@@ -211,209 +211,181 @@ import ShowImages from '@/modules/student-modules/show-images.vue';
 import { useRoute } from 'vue-router';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
-import {shamsi_be_miladi} from '@/utilities/date-converter';
-import alertify from "@/assets/alertifyjs/alertify"
+import  shamsi_be_miladi  from '@/utilities/date-converter';import alertify from '@/assets/alertifyjs/alertify';
 
-export default defineComponent({
-  components: { MinimalHeader, ShowImages, DesktopMinimalHeader },
-  setup() {
-    const showImages = ref(false);
-    const isFetching = ref(true);
-    const route = useRoute();
-    const container = ref();
-    const time = ref(7200);
-    const currentQuestionIndex = ref(0);
-    const currentLessonIndex = ref(0);
-    const allQuestions = ref([] as any);
-    const currentImages = ref([] as any);
-    const data = ref({});
-    const arrayIsEmpty = ref(false);
-    let examId = '';
+const showImages = ref(false);
+const isFetching = ref(true);
+const route = useRoute();
+const container = ref();
+const time = ref(7200);
+const currentQuestionIndex = ref(0);
+const currentLessonIndex = ref(0);
+const allQuestions = ref([] as any);
+const currentImages = ref([] as any);
+const data = ref({});
+const arrayIsEmpty = ref(false);
+let examId = '';
 
-    const setCurrentImages = (images) => {
-      showImages.value = true;
-      currentImages.value = [...images];
-    };
+const setCurrentImages = (images) => {
+  showImages.value = true;
+  currentImages.value = [...images];
+};
 
-    (async () => {
-      const res = await StudentDuelApi.get(route.params.id as any);
+(async () => {
+  const res = await StudentDuelApi.get(route.params.id as any);
 
-      data.value = res.data.data;
+  data.value = res.data.data;
 
-      let endDate = new Date(
-        shamsi_be_miladi(
-          res.data?.data?.endDate.split('/')[0],
-          res.data?.data?.endDate.split('/')[1],
-          res.data?.data?.endDate.split('/')[2]
-        ) as any
-      );
-      endDate.setHours(
-        res.data?.data.time.split(':')[0],
-        res.data?.data.time.split(':')[1]
-      );
+  let endDate = new Date(
+    shamsi_be_miladi(
+      +res.data?.data?.endDate.split('/')[0],
+      +res.data?.data?.endDate.split('/')[1],
+      +res.data?.data?.endDate.split('/')[2]
+    ) as any
+  );
+  endDate.setHours(
+    res.data?.data.time.split(':')[0],
+    res.data?.data.time.split(':')[1]
+  );
 
-      // if for example end time of duel is 18 and currentTime is 17 and the duration left is 1 hour no matter the actual duel duration
+  // if for example end time of duel is 18 and currentTime is 17 and the duration left is 1 hour no matter the actual duel duration
 
-      const date1 = endDate;
+  const date1 = endDate;
 
-      const date2 = new Date();
+  const date2 = new Date();
 
-      const diff = date1.valueOf() - date2.valueOf();
-      const diffInHours = diff / 1000 / 60 / 60;
+  const diff = date1.valueOf() - date2.valueOf();
+  const diffInHours = diff / 1000 / 60 / 60;
 
-      if (Math.abs(diffInHours) < res.data.data.duration) {
-        time.value = diffInHours * 60 * 60;
-      } else {
-        // Duration is in minutes we convert to seconds
-        time.value = res.data.data.duration * 60;
-      }
+  if (Math.abs(diffInHours) < res.data.data.duration) {
+    time.value = diffInHours * 60 * 60;
+  } else {
+    // Duration is in minutes we convert to seconds
+    time.value = res.data.data.duration * 60;
+  }
 
-      examId = res.data.data._id;
+  examId = res.data.data._id;
 
-      res.data.data.budgeting.forEach((budget, idx) => {
-        allQuestions.value[idx] = [...budget.questions];
-      });
+  res.data.data.budgeting.forEach((budget, idx) => {
+    allQuestions.value[idx] = [...budget.questions];
+  });
 
-      if (!allQuestions.value.length) {
-        arrayIsEmpty.value = true;
-        isFetching.value = false;
-        return;
-      }
+  if (!allQuestions.value.length) {
+    arrayIsEmpty.value = true;
+    isFetching.value = false;
+    return;
+  }
 
-      allQuestions.value.forEach((chunk) => {
-        chunk.forEach((quest, idx) => {
-          chunk[idx] = StudentExamApi.getOneQuestion(quest);
-        });
-      });
-
-      await allQuestions.value.forEach(async (chunk) => {
-        await Promise.all(chunk)
-          .then((questions) => {
-            questions.forEach((quest: any, idx) => {
-              chunk[idx] = { ...quest.data.data, answer: null };
-            });
-          })
-          .then(() => {
-            isFetching.value = false;
-          });
-      });
-
-      // Every Second Minus One From The Duration
-      setInterval(() => {
-        if (time.value >= 0) time.value = time.value - 1;
-        else {
-          alertify.danger('مدت زمان امتحان شما تمام شده است');
-          endAzmoon();
-        }
-      }, 1000);
-    })();
-
-    const goOnePageBack = () => {
-      router.push({
-        name: 'Duel'
-      });
-    };
-
-    const timeForTemplate = computed(() => {
-      return new Date(time.value * 1000).toISOString().substr(11, 8);
+  allQuestions.value.forEach((chunk) => {
+    chunk.forEach((quest, idx) => {
+      chunk[idx] = StudentExamApi.getOneQuestion(quest);
     });
+  });
 
-    const showPreviousQuestion = () => {
-      if (currentQuestionIndex.value - 1 >= 0) {
-        currentQuestionIndex.value -= 1;
-      }
-    };
-
-    const showNextQuestion = () => {
-      if (
-        currentQuestionIndex.value + 1 <=
-        allQuestions.value[currentLessonIndex.value].length
-      ) {
-        currentQuestionIndex.value += 1;
-      }
-    };
-
-    const showPreviousLesson = () => {
-      if (currentLessonIndex.value - 1 >= 0) currentLessonIndex.value -= 1;
-    };
-
-    const showNextLesson = () => {
-      if (currentLessonIndex.value + 1 <= allQuestions.value.length - 1)
-        currentLessonIndex.value += 1;
-    };
-
-    const endAzmoon = () => {
-      if (isFetching.value) {
-        alertify.error('لطفا بعد از بارگیری سوال ها دوباره تلاش کنید');
-      } else {
-        const objectToSend = {
-          exam: { _id: examId },
-          answers: []
-        };
-        const answers = [] as any;
-        allQuestions.value.forEach((chunk) => {
-          chunk.forEach((question) => {
-            let correct = '';
-            question.options.forEach((option, idx) => {
-              if (option.isAnswer) {
-                correct = idx;
-              }
-            });
-            answers.push({
-              session: {
-                _id: question.session._id
-              },
-              course: {
-                _id: question.course._id
-              },
-              question: {
-                _id: question._id
-              },
-              answer: question.answer,
-              correct: +correct + 1
-            });
-          });
+  await allQuestions.value.forEach(async (chunk) => {
+    await Promise.all(chunk)
+      .then((questions) => {
+        questions.forEach((quest: any, idx) => {
+          chunk[idx] = { ...quest.data.data, answer: null };
         });
+      })
+      .then(() => {
+        isFetching.value = false;
+      });
+  });
 
-        objectToSend.answers = answers;
+  // Every Second Minus One From The Duration
+  setInterval(() => {
+    if (time.value >= 0) time.value = time.value - 1;
+    else {
+      alertify.danger('مدت زمان امتحان شما تمام شده است');
+      endAzmoon();
+    }
+  }, 1000);
+})();
 
-        StudentDuelApi.registerDuel(objectToSend).then((res) => {
-          if (res.data) {
-            alertify.success('امتحان شما با موفقیت ثبت گردید');
-            router.push({
-              name: 'ReportCard',
-              params: { id: res.data.data._id }
-            });
-          } else {
-            alertify.error('مشکلی رخ داده است! لطفا دوباره امتحان کنید');
+const goOnePageBack = () => {
+  router.push({
+    name: 'Duel'
+  });
+};
+
+const timeForTemplate = computed(() => {
+  return new Date(time.value * 1000).toISOString().substr(11, 8);
+});
+
+const showPreviousQuestion = () => {
+  if (currentQuestionIndex.value - 1 >= 0) {
+    currentQuestionIndex.value -= 1;
+  }
+};
+
+const showNextQuestion = () => {
+  if (
+    currentQuestionIndex.value + 1 <=
+    allQuestions.value[currentLessonIndex.value].length
+  ) {
+    currentQuestionIndex.value += 1;
+  }
+};
+
+const showPreviousLesson = () => {
+  if (currentLessonIndex.value - 1 >= 0) currentLessonIndex.value -= 1;
+};
+
+const showNextLesson = () => {
+  if (currentLessonIndex.value + 1 <= allQuestions.value.length - 1)
+    currentLessonIndex.value += 1;
+};
+
+const endAzmoon = () => {
+  if (isFetching.value) {
+    alertify.error('لطفا بعد از بارگیری سوال ها دوباره تلاش کنید');
+  } else {
+    const objectToSend = {
+      exam: { _id: examId },
+      answers: []
+    };
+    const answers = [] as any;
+    allQuestions.value.forEach((chunk) => {
+      chunk.forEach((question) => {
+        let correct = '';
+        question.options.forEach((option, idx) => {
+          if (option.isAnswer) {
+            correct = idx;
           }
         });
-      }
-    };
+        answers.push({
+          session: {
+            _id: question.session._id
+          },
+          course: {
+            _id: question.course._id
+          },
+          question: {
+            _id: question._id
+          },
+          answer: question.answer,
+          correct: +correct + 1
+        });
+      });
+    });
 
-    return {
-      goOnePageBack,
-      timeForTemplate,
-      toPersianNumbers,
-      store,
-      currentQuestionIndex,
-      currentLessonIndex,
-      allQuestions,
-      container,
-      showPreviousQuestion,
-      showNextQuestion,
-      endAzmoon,
-      isFetching,
-      showImages,
-      currentImages,
-      setCurrentImages,
-      showNextLesson,
-      showPreviousLesson,
-      data,
-      arrayIsEmpty
-    };
+    objectToSend.answers = answers;
+
+    StudentDuelApi.registerDuel(objectToSend).then((res) => {
+      if (res.data) {
+        alertify.success('امتحان شما با موفقیت ثبت گردید');
+        router.push({
+          name: 'ReportCard',
+          params: { id: res.data.data._id }
+        });
+      } else {
+        alertify.error('مشکلی رخ داده است! لطفا دوباره امتحان کنید');
+      }
+    });
   }
-});
+};
 </script>
 
 <style lang="scss" scoped>

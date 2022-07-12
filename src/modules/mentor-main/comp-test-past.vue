@@ -42,88 +42,80 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
-import { toPersianNumbers } from '@/utilities/to-persian-numbers';
+<script lang="ts" setup>
 import { compareAsc } from 'date-fns';
 import router from '@/router/';
 import { MentorAuthServiceApi } from '@/api/services/mentor/mentor-auth-service';
 import alertify from '@/assets/alertifyjs/alertify';
-import {shamsi_be_miladi} from '@/utilities/date-converter';
+import shamsi_be_miladi from '@/utilities/date-converter';
+import { onBeforeMount, reactive, ref } from 'vue';
 
-export default defineComponent({
-  props: {
-    id: { type: String, required: true }
-  },
-
-  setup(props) {
-    const isLoading = ref(false);
-    const azmoonData = reactive([] as any);
-
-    MentorAuthServiceApi.getStudentExams(props.id).then((res) => {
-      res.data.data.forEach((date: any) => {
-        let mDate = new Date(
-          shamsi_be_miladi(
-            date.date.split('/')[0],
-            date.date.split('/')[1],
-            date.date.split('/')[2]
-          ) as any
-        );
-        mDate.setHours(date.time.split(':')[0], date.time.split(':')[0]);
-
-        // let mDate = moment(date.date, 'jYYYY/jM/jD');
-        if (compareAsc(mDate, new Date()) <= 0) azmoonData.push(date);
-      });
-      isLoading.value = true;
-    });
-
-    azmoonData.forEach((child: any) => {
-      let mDate = new Date(
-        shamsi_be_miladi(
-          child.date.split('/')[0],
-          child.date.split('/')[1],
-          child.date.split('/')[2]
-        ) as any
-      );
-
-      let currentDate = mDate.toLocaleDateString('fa-FA', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric'
-      }) as any;
-      currentDate = currentDate.split(',');
-
-      let month = currentDate[0].split(' ')[0];
-      let day = currentDate[0].split(' ')[1];
-      let weekDay = currentDate[1];
-
-      child.date = {
-        ...child.date,
-        weekDay,
-        day,
-        month
-      };
-    });
-
-    const moveToReportCardOrExam = (item) => {
-      if (item.results && item.results.length) {
-        router.push({
-          name: 'MentorReportCard',
-          params: { id: item._id, studentId: props.id }
-        });
-      } else {
-        alertify.error('کارنامه این امتحان هنوز در دسترس نیست');
-      }
-    };
-
-    return {
-      azmoonData,
-      toPersianNumbers,
-      isLoading,
-      moveToReportCardOrExam
-    };
-  }
+const { id } = defineProps({
+  id: { type: String, required: true }
 });
+
+const isLoading = ref(false);
+const azmoonData = reactive([] as any);
+
+onBeforeMount(async () => {
+  const res = await MentorAuthServiceApi.getStudentExams(id);
+
+  res.data.data.forEach((date: any) => {
+    let mDate = new Date(
+      shamsi_be_miladi(
+        +date.date.split('/')[0],
+        +date.date.split('/')[1],
+        +date.date.split('/')[2]
+      ) as any
+    );
+
+    console.log(mDate)
+    mDate.setHours(date.time.split(':')[0], date.time.split(':')[0]);
+
+    // let mDate = moment(date.date, 'jYYYY/jM/jD');
+    if (compareAsc(mDate, new Date()) <= 0) azmoonData.push(date);
+  });
+  isLoading.value = true;
+});
+
+azmoonData.forEach((child: any) => {
+  let mDate = new Date(
+    shamsi_be_miladi(
+      +child.date.split('/')[0],
+      +child.date.split('/')[1],
+      +child.date.split('/')[2]
+    ) as any
+  );
+
+  let currentDate = mDate.toLocaleDateString('fa-FA', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  }) as any;
+  currentDate = currentDate.split(',');
+
+  let month = currentDate[0].split(' ')[0];
+  let day = currentDate[0].split(' ')[1];
+  let weekDay = currentDate[1];
+
+  child.date = {
+    ...child.date,
+    weekDay,
+    day,
+    month
+  };
+});
+
+const moveToReportCardOrExam = (item) => {
+  if (item.results && item.results.length) {
+    router.push({
+      name: 'MentorReportCard',
+      params: { id: item._id, studentId: id }
+    });
+  } else {
+    alertify.error('کارنامه این امتحان هنوز در دسترس نیست');
+  }
+};
 </script>
 
 <style lang="scss" scoped>

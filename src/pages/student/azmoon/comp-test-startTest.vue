@@ -69,8 +69,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import router from '@/router';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
@@ -79,121 +79,100 @@ import { compareAsc } from 'date-fns';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import alertify from '@/assets/alertifyjs/alertify';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import {shamsi_be_miladi} from '@/utilities/date-converter';
+import shamsi_be_miladi from '@/utilities/date-converter';
+const orientationTitleInformation = reactive([] as any);
+const apiData = ref({}) as any;
+const route = useRoute();
+const isFetching = ref(true);
+const timeInformation = ref({}) as any;
 
-export default defineComponent({
-  components: { MinimalHeader, DesktopMinimalHeader },
-  setup() {
-    const orientationTitleInformation = reactive([] as any);
-    const apiData = ref({}) as any;
-    const route = useRoute();
-    const isFetching = ref(true);
-    const timeInformation = ref({}) as any;
-
-    const addMinutes = (time, minsToAdd) => {
-      function D(J) {
-        return (J < 10 ? '0' : '') + J;
-      }
-      let piece = time.split(':');
-      let mins = piece[0] * 60 + +piece[1] + +minsToAdd;
-
-      return D(((mins % (24 * 60)) / 60) | 0) + ':' + D(mins % 60);
-    };
-
-    (async () => {
-      const res = await StudentExamApi.get(route.params.id as any);
-      timeInformation.value = res.data.data;
-
-      let mDate = new Date(
-        shamsi_be_miladi(
-          timeInformation.value.date.split('/')[0],
-          timeInformation.value.date.split('/')[1],
-          timeInformation.value.date.split('/')[2]
-        ) as any
-      );
-
-      let currentDate = mDate.toLocaleDateString('fa-FA', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      }) as any;
-
-      currentDate = currentDate.split(',');
-      let year = currentDate[0].split(' ')[0],
-        monthInText = currentDate[0].split(' ')[1],
-        weekDay = currentDate[1],
-        dayInText = currentDate[0].split(' ')[2];
-
-      console.log(currentDate);
-
-      timeInformation.value.texts = {
-        monthInText,
-        weekDay,
-        year,
-        dayInText
-      };
-
-      apiData.value = res.data.data;
-      res.data.data.budgeting.forEach((item: any) => {
-        let tmp = {} as any;
-
-        if (item.course && item.session && item.questions) {
-          tmp = {
-            orientation: item.course.orientation,
-            title: item.course.title,
-            ...item
-          };
-          orientationTitleInformation.push(tmp);
-        }
-      });
-      isFetching.value = false;
-    })();
-
-    const goOnePageBack = () => {
-      router.push({
-        name: 'CompTest'
-      });
-    };
-
-    const goToquestions = () => {
-      let mDate = new Date(
-        shamsi_be_miladi(
-          apiData.value.date.split('/')[0],
-          apiData.value.date.split('/')[1],
-          apiData.value.date.split('/')[2]
-        ) as any
-      );
-
-      mDate.setHours(
-        apiData.value.time.split(':')[0],
-        apiData.value.time.split(':')[1]
-      );
-
-      if (compareAsc(mDate, new Date()) <= 0) {
-        router.push({
-          name: 'CompTestQuestions',
-          params: { id: apiData.value._id }
-        });
-      } else {
-        alertify
-          .alert('زمان این امتحان هنوز فرا نرسیده است')
-          .set('basic', true);
-      }
-    };
-
-    return {
-      goOnePageBack,
-      goToquestions,
-      orientationTitleInformation,
-      timeInformation,
-      apiData,
-      toPersianNumbers,
-      addMinutes,
-      isFetching
-    };
+const addMinutes = (time, minsToAdd) => {
+  function D(J) {
+    return (J < 10 ? '0' : '') + J;
   }
-});
+  let piece = time.split(':');
+  let mins = piece[0] * 60 + +piece[1] + +minsToAdd;
+
+  return D(((mins % (24 * 60)) / 60) | 0) + ':' + D(mins % 60);
+};
+
+(async () => {
+  const res = await StudentExamApi.get(route.params.id as any);
+  timeInformation.value = res.data.data;
+
+  let mDate = new Date(
+    shamsi_be_miladi(
+      +timeInformation.value.date.split('/')[0],
+      +timeInformation.value.date.split('/')[1],
+      +timeInformation.value.date.split('/')[2]
+    ) as any
+  );
+
+  let currentDate = mDate.toLocaleDateString('fa-FA', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  }) as any;
+
+  currentDate = currentDate.split(',');
+  let year = currentDate[0].split(' ')[0],
+    monthInText = currentDate[0].split(' ')[1],
+    weekDay = currentDate[1],
+    dayInText = currentDate[0].split(' ')[2];
+
+  timeInformation.value.texts = {
+    monthInText,
+    weekDay,
+    year,
+    dayInText
+  };
+
+  apiData.value = res.data.data;
+  res.data.data.budgeting.forEach((item: any) => {
+    let tmp = {} as any;
+
+    if (item.course && item.session && item.questions) {
+      tmp = {
+        orientation: item.course.orientation,
+        title: item.course.title,
+        ...item
+      };
+      orientationTitleInformation.push(tmp);
+    }
+  });
+  isFetching.value = false;
+})();
+
+const goOnePageBack = () => {
+  router.push({
+    name: 'CompTest'
+  });
+};
+
+const goToquestions = () => {
+  let mDate = new Date(
+    shamsi_be_miladi(
+      +apiData.value.date.split('/')[0],
+      +apiData.value.date.split('/')[1],
+      +apiData.value.date.split('/')[2]
+    ) as any
+  );
+
+  mDate.setHours(
+    apiData.value.time.split(':')[0],
+    apiData.value.time.split(':')[1]
+  );
+
+  if (compareAsc(mDate, new Date()) <= 0) {
+    router.push({
+      name: 'CompTestQuestions',
+      params: { id: apiData.value._id }
+    });
+  } else {
+    alertify.alert('زمان این امتحان هنوز فرا نرسیده است').set('basic', true);
+  }
+};
 </script>
 
 <style lang="scss" scoped>

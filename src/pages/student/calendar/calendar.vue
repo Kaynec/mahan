@@ -122,8 +122,7 @@ import {
   toPersianNumbers
 } from '@/utilities/to-persian-numbers';
 import shamsi_be_miladi, {
-  isLeapJalaaliYear,
-  shamsi_be_miladi
+  isLeapJalaaliYear
 } from '@/utilities/date-converter';
 let currentDay = ref(),
   currentMonth = ref();
@@ -330,9 +329,9 @@ const formatCardDate = (date) => {
 
   let m = new Date(
     shamsi_be_miladi(
-      date.split('/')[0],
-      date.split('/')[1],
-      date.split('/')[2]
+      +date.split('/')[0],
+      +date.split('/')[1],
+      +date.split('/')[2]
     ) as any
   ) as any;
 

@@ -57,7 +57,7 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import compareAsc from 'date-fns/compareAsc';
 import CompTestDetail from '@/modules/student-modules/azmoon/comp-test-detail.vue';
-import {shamsi_be_miladi} from '@/utilities/date-converter';
+import shamsi_be_miladi from '@/utilities/date-converter';
 import { useStudentStore } from '@/store';
 import alertify from '@/assets/alertifyjs/alertify'
 
@@ -70,7 +70,7 @@ StudentExamApi.getAll().then((res) => {
   res.data.data.forEach((date: any) => {
     const splitted = date.date.split('/');
     const jalalidateConvertedToMiladi = new Date(
-      shamsi_be_miladi(splitted[0], splitted[1], splitted[2]) as any
+      shamsi_be_miladi(+splitted[0], +splitted[1], +splitted[2]) as any
     );
 
     jalalidateConvertedToMiladi.setHours(
@@ -85,9 +85,9 @@ StudentExamApi.getAll().then((res) => {
   azmoonData.forEach((child: any) => {
     let mDate = new Date(
       shamsi_be_miladi(
-        child.date.split('/')[0],
-        child.date.split('/')[1],
-        child.date.split('/')[2]
+        +child.date.split('/')[0],
+        +child.date.split('/')[1],
+        +child.date.split('/')[2]
       ) as any
     );
     let currentDate = mDate.toLocaleDateString('fa-FA', {

@@ -96,7 +96,7 @@
                 <label for="gender"> جنسیت :</label>
                 <div
                   class="form-control"
-                  style="background: unset; border: unset"
+                  style="background: unset; border: unset;"
                 >
                   <label class="radio-inline"
                     ><Field
@@ -132,36 +132,25 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.css';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.js';
 import { useAdminStore } from '@/store';
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import { defineComponent, computed } from 'vue';
+import { computed } from 'vue';
 
-export default defineComponent({
-  components: {
-    Form,
-    Field,
-    ErrorMessage
-  },
+(window as any).jalaliDatepicker.startWatch();
+const currentUser = computed(() => {
+  return { ...useAdminStore().getters.getCurrentUser };
+});
 
-  setup() {
-    (window as any).jalaliDatepicker.startWatch();
-    const currentUser = computed(() => {
-      return { ...useAdminStore().getters.getCurrentUser };
-    });
-
-    const validateSchema = computed(() => {
-      return yup.object({
-        firstname: yup.string().required().label('نام'),
-        lastname: yup.string().required().label('نام خانوادگی'),
-        gender: yup.string().required().label('جنسیت'),
-        birthdate: yup.string().label('تاریخ تولد')
-      });
-    });
-    return { currentUser, validateSchema };
-  }
+const validateSchema = computed(() => {
+  return yup.object({
+    firstname: yup.string().required().label('نام'),
+    lastname: yup.string().required().label('نام خانوادگی'),
+    gender: yup.string().required().label('جنسیت'),
+    birthdate: yup.string().label('تاریخ تولد')
+  });
 });
 </script>

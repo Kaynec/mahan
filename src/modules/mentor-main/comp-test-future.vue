@@ -26,7 +26,7 @@
           class="text-detail text-right warning"
           v-else-if="
             item.date.isLessThanFiveMinutesAway &&
-            timeLeft(`${item.time}:00`) >= 0
+            +timeLeft(`${item.time}:00`) >= 0
           "
         >
           <i class="far fa-clock"></i>
@@ -70,147 +70,126 @@
   <!--  -->
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { onBeforeMount, reactive, ref } from 'vue';
 import router from '@/router';
 import {
   toEnglishNumbers,
   parseTime,
-  toPersianNumbers,
-  strToMins,
-  minsToStr,
   secondsToTimeString
 } from '@/utilities/to-persian-numbers';
 import { compareAsc } from 'date-fns';
 import { MentorAuthServiceApi } from '@/api/services/mentor/mentor-auth-service';
 import alertify from '@/assets/alertifyjs/alertify';
-import {shamsi_be_miladi} from '@/utilities/date-converter';
-
-export default defineComponent({
-  props: {
-    id: { type: String, required: true }
-  },
-  setup(props) {
-    const isLoading = ref(false);
-    const currentHMS = ref(
-      toEnglishNumbers(new Date().toLocaleTimeString('fa-FA'))
-    );
-    setInterval(() => {
-      currentHMS.value = toEnglishNumbers(
-        new Date().toLocaleTimeString('fa-FA')
-      );
-    }, 1000);
-
-    const azmoonData = reactive([] as any);
-
-    MentorAuthServiceApi.getStudentExams(props.id).then((res) => {
-      res.data.data.forEach((date: any) => {
-        let mDate = new Date(
-          shamsi_be_miladi(
-            date.date.split('/')[0],
-            date.date.split('/')[1],
-            date.date.split('/')[2]
-          ) as any
-        );
-        mDate.setHours(date.time.split(':')[0], date.time.split(':')[1]);
-
-        if (compareAsc(mDate, new Date()) >= 1) azmoonData.push(date);
-      });
-      isLoading.value = true;
-    });
-
-    const currentDate = new Date();
-    const faDate = new Intl.DateTimeFormat('fa', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric'
-    }).format(currentDate);
-    const faHour = new Intl.DateTimeFormat('fa', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).format(currentDate);
-    //
-    azmoonData.forEach((child: any) => {
-      let mDate = new Date(
-        shamsi_be_miladi(
-          child.date.split('/')[0],
-          child.date.split('/')[1],
-          child.date.split('/')[2]
-        ) as any
-      );
-      let currentDate = mDate.toLocaleDateString('fa-FA', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric'
-      }) as any;
-      currentDate = currentDate.split(',');
-      let monthInText = currentDate[0].split(' ')[0],
-        dayInText = currentDate[0].split(' ')[1],
-        weekDay = currentDate[1],
-        tmp = child.date[0];
-      let day = tmp[2];
-      let isLessThanOneHourAway = false,
-        isLessThanFiveMinutesAway = false,
-        isLessThanAminuteAway = false,
-        isToday = false;
-
-      let getToday = toEnglishNumbers(faDate.split('/')[2]),
-        getHour = toEnglishNumbers(faHour.split('/')[0]);
-      if (+getToday === +day) {
-        isToday = true;
-        let currentHourConverted = +getHour.split(':').join('');
-        let dateHourConverted = +child.time.split(':').join('');
-        if (currentHourConverted - dateHourConverted <= 100) {
-          isLessThanOneHourAway = true;
-          if (currentHourConverted - dateHourConverted <= 1)
-            isLessThanAminuteAway = true;
-          else if (currentHourConverted - dateHourConverted <= 5)
-            isLessThanFiveMinutesAway = true;
-        }
-      }
-      child.date = {
-        ...child.date,
-        monthInText,
-        dayInText,
-        weekDay,
-        isToday,
-        isLessThanOneHourAway,
-        isLessThanFiveMinutesAway,
-        isLessThanAminuteAway
-      };
-    });
-
-    const timeLeft = (time) => {
-      return secondsToTimeString(
-        parseTime(`${time}`) - parseTime(`${currentHMS.value}`)
-      );
-    };
-
-    const moveToReportCardOrExam = (item) => {
-      if (item.results && item.results.length) {
-        router.push({
-          name: 'MentorReportCard',
-          params: { id: item._id, studentId: props.id }
-        });
-      } else {
-        alertify.error('کارنامه این امتحان هنوز در دسترس نیست');
-      }
-    };
-
-    return {
-      azmoonData,
-      moveToReportCardOrExam,
-      toPersianNumbers,
-      toEnglishNumbers,
-      strToMins,
-      minsToStr,
-      currentHMS,
-      parseTime,
-      timeLeft,
-      isLoading
-    };
-  }
+import shamsi_be_miladi from '@/utilities/date-converter';
+const { id } = defineProps({
+  id: { type: String, required: true }
 });
+const isLoading = ref(false);
+const currentHMS = ref(
+  toEnglishNumbers(new Date().toLocaleTimeString('fa-FA'))
+);
+setInterval(() => {
+  currentHMS.value = toEnglishNumbers(new Date().toLocaleTimeString('fa-FA'));
+}, 1000);
+
+const azmoonData = reactive([] as any);
+
+onBeforeMount(async () => {
+  const res = await MentorAuthServiceApi.getStudentExams(id);
+
+  res.data.data.forEach((date: any) => {
+    let mDate = new Date(
+      shamsi_be_miladi(
+        +date.date.split('/')[0],
+        +date.date.split('/')[1],
+        +date.date.split('/')[2]
+      ) as any
+    );
+    mDate.setHours(date.time.split(':')[0], date.time.split(':')[1]);
+
+    if (compareAsc(mDate, new Date()) >= 1) azmoonData.push(date);
+  });
+  isLoading.value = true;
+});
+
+const currentDate = new Date();
+const faDate = new Intl.DateTimeFormat('fa', {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric'
+}).format(currentDate);
+const faHour = new Intl.DateTimeFormat('fa', {
+  hour: 'numeric',
+  minute: 'numeric'
+}).format(currentDate);
+//
+azmoonData.forEach((child: any) => {
+  let mDate = new Date(
+    shamsi_be_miladi(
+      +child.date.split('/')[0],
+      +child.date.split('/')[1],
+      +child.date.split('/')[2]
+    ) as any
+  );
+  let currentDate = mDate.toLocaleDateString('fa-FA', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  }) as any;
+  currentDate = currentDate.split(',');
+  let monthInText = currentDate[0].split(' ')[0],
+    dayInText = currentDate[0].split(' ')[1],
+    weekDay = currentDate[1],
+    tmp = child.date[0];
+  let day = tmp[2];
+  let isLessThanOneHourAway = false,
+    isLessThanFiveMinutesAway = false,
+    isLessThanAminuteAway = false,
+    isToday = false;
+
+  let getToday = toEnglishNumbers(faDate.split('/')[2]),
+    getHour = toEnglishNumbers(faHour.split('/')[0]);
+  if (+getToday === +day) {
+    isToday = true;
+    let currentHourConverted = +getHour.split(':').join('');
+    let dateHourConverted = +child.time.split(':').join('');
+    if (currentHourConverted - dateHourConverted <= 100) {
+      isLessThanOneHourAway = true;
+      if (currentHourConverted - dateHourConverted <= 1)
+        isLessThanAminuteAway = true;
+      else if (currentHourConverted - dateHourConverted <= 5)
+        isLessThanFiveMinutesAway = true;
+    }
+  }
+  child.date = {
+    ...child.date,
+    monthInText,
+    dayInText,
+    weekDay,
+    isToday,
+    isLessThanOneHourAway,
+    isLessThanFiveMinutesAway,
+    isLessThanAminuteAway
+  };
+});
+
+const timeLeft = (time) => {
+  return secondsToTimeString(
+    parseTime(`${time}`) - parseTime(`${currentHMS.value}`)
+  );
+};
+
+const moveToReportCardOrExam = (item) => {
+  if (item.results && item.results.length) {
+    router.push({
+      name: 'MentorReportCard',
+      params: { id: item._id, studentId: id }
+    });
+  } else {
+    alertify.error('کارنامه این امتحان هنوز در دسترس نیست');
+  }
+};
 </script>
 
 <style lang="scss" scoped>

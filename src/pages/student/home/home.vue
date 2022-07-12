@@ -309,7 +309,7 @@ export default class Login extends Vue {
     }
 
     img {
-      width: 8rem;
+      width: clamp(5rem, 6.5rem, 8rem);
       max-width: 12rem;
       transition: 0.3s all;
 

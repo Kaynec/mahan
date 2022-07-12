@@ -196,7 +196,7 @@
               @blur="v$$.items.$touch()"
             >
               <option
-                v-for="Course in cumputedCourses()"
+                v-for="Course in computedCourses()"
                 :value="{ _id: Course._id, title: Course.title }"
                 :key="Course._id"
               >
@@ -206,7 +206,7 @@
           </div>
           <!--  -->
           <button
-            style="margin: 0.5rem"
+            style="margin: 0.5rem;"
             type="button"
             class="btn btn-secondary"
             @click="addSession(firstIdx)"
@@ -242,7 +242,7 @@
             <label> تعداد سوالات این فصل :</label>
 
             <input
-              style="display: block"
+              style="display: block;"
               @blur="v$$.items.$touch()"
               v-model="session.questionCount"
               type="number"
@@ -291,8 +291,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { reactive, defineComponent, computed, ref, watch } from 'vue';
+<script setup lang="ts">
+import { reactive, computed, ref, watch } from 'vue';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import {
@@ -308,362 +308,327 @@ import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.css';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.js';
 import { ExamServiceApi } from '@/api/services/admin/exam-service';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
-import alertify from "@/assets/alertifyjs/alertify"
-export default defineComponent({
-  props: {
-    exam: {
-      type: String,
-      default: '{}'
-    }
-  },
-  setup(props) {
-    let model = reactive(JSON.parse(props.exam));
-    let Courses = ref<any>([]);
-    let Sessions = ref<any>([]);
-    let items = ref<any>([]);
-    let grades = ref([]);
-
-    const groups = () => {
-      return grades.value.find((el: any) => {
-        return el._id === model.grade._id;
-      }) as any;
-    };
-
-    const fields = () => {
-      if (groups() && groups().groups) {
-        return groups().groups.find((el) => {
-          console.log(el._id, model.group._id);
-          return el._id === model.group._id;
-        })?.fields;
-      }
-    };
-
-    const cumputedCourses = () => {
-      // means we have a filed and we can't set a new filed (update)
-
-      if (typeof model.field === 'string') {
-        return Courses.value.filter((el) => {
-          return el.field === model.field;
-        });
-      } else {
-        return Courses.value.filter((el) => {
-          return el.field === model.field._id || el.field === model.field;
-        });
-      }
-    };
-
-    // getting a list of all courses and sessions from the database
-
-    CourseServiceApi.getAll({}).then((res) => {
-      res.data.data.forEach((el: any) => {
-        Courses.value.push(el);
-      });
-    });
-    SessionServiceApi.getAll({}).then((res) => {
-      res.data.data.forEach((el: any) => {
-        Sessions.value.push(el);
-      });
-    });
-
-    GradeServiceApi.getAll().then((res) => {
-      grades.value = res.data.data;
-    });
-
-    // for each item make a course and if the course exists push a session into it
-    if (JSON.stringify(model) != '{}') {
-      model.budgeting.forEach((item: any) => {
-        const duplicate = items.value.find(
-          (el: any) => el.course._id == item.course
-        );
-        // if an item with that id does not exist on the items array create one
-        if (!duplicate)
-          items.value.push({
-            sessions: [],
-            course: { _id: item.course }
-          });
-      });
-      // push the sessions into it's appropiate place
-      items.value.forEach((itemel: any) => {
-        CourseServiceApi.get(itemel.course._id).then((res) => {
-          itemel.course = {
-            title: res.data.data.title,
-            _id: res.data.data._id
-          };
-        });
-
-        model.budgeting.forEach((item: any) => {
-          if (itemel.course._id == item.course) {
-            //
-            SessionServiceApi.get(item.session).then((res) => {
-              itemel.sessions.push({
-                questionCount: item.questionCount,
-                session: { _id: item.session, title: res.data.data.title }
-              });
-            });
-            //
-          }
-        });
-      });
-    }
-    // initializing date picker
-    (window as any).jalaliDatepicker.startWatch();
-    //
-    model =
-      JSON.stringify(model) === '{}'
-        ? reactive({
-            title: '',
-            date: '',
-            time: '',
-            duration: 10,
-            grade: '',
-            group: '',
-            field: ''
-          })
-        : model;
-    // The filteredSessions => sessions only for that course
-    let filteredSessions = (item: any) => {
-      return Sessions.value.filter((el: any) => {
-        return el.course == item.course._id;
-      });
-    };
-    //
-    const addCourse = () =>
-      items.value.push({
-        questionCount: 1,
-        sessions: [],
-        course: {}
-      });
-
-    const deleteCourse = (idx: number) => {
-      items.value.splice(idx, 1);
-    };
-
-    const addSession = (index: number) => {
-      items.value[index].sessions.push({
-        session: {},
-        questionCount: 1
-      });
-    };
-
-    const deleteSession = (courseIdx: number, index: number) =>
-      items.value[courseIdx].sessions.splice(index, 1);
-    //
-    const save = () => {
-      /// error handeling
-      v$.value.$touch();
-      v$$.value.$touch();
-      let budgeting: any = [];
-      items.value.forEach((item: any) => {
-        item.sessions.forEach((ses: any) => {
-          budgeting.push({
-            questionCount: ses.questionCount,
-            course: { _id: item.course._id },
-            session: { _id: ses.session._id }
-          });
-        });
-      });
-      //
-      if (!v$.value.$invalid && !v$$.value.$invalid) {
-        let tmp: any = {
-          title: model.title,
-          date: model.date,
-          time: model.time,
-          duration: model.duration,
-          budgeting: budgeting,
-          grade: model.grade,
-          group: model.group,
-          field: model.field
-        };
-        if (model._id) {
-          // if there is a id , means that it's coming from DB and it's a string
-          tmp.grade = { _id: tmp.grade };
-          tmp.group = { _id: tmp.group };
-          tmp.field = { _id: tmp.field };
-          ExamServiceApi.update(model._id, tmp).then((result) => {
-            alertify.success(result.data.message);
-            router.push({
-              name: 'exam'
-            });
-          });
-        } else {
-          ExamServiceApi.create(tmp).then((result) => {
-            alertify.success(result.data.message);
-            router.push({
-              name: 'exam'
-            });
-          });
-        }
-      }
-    };
-    // Validations
-    const unique = (group: any): any => {
-      return () => {
-        let boolean = true;
-        group.forEach((item: any, index: number) => {
-          const copyOfCourse = group.find((course: any, idx: number) => {
-            return course.course._id == item.course._id && index != idx;
-          });
-          if (copyOfCourse) boolean = false;
-        });
-        return boolean;
-      };
-    };
-    //
-    const innerUnique = (group: any): any => {
-      return () => {
-        let boolean = true;
-        group.forEach((item: any) => {
-          item.sessions.forEach((ses: any, idx: number) => {
-            const copyOfSession = item.sessions.find(
-              (session: any, i: number) => {
-                return session.session._id == ses.session._id && idx != i;
-              }
-            );
-            if (copyOfSession) boolean = false;
-          });
-        });
-        return boolean;
-      };
-    };
-    //
-    const rules = computed(() => {
-      if (model._id) {
-        return {
-          title: {
-            required: helpers.withMessage('عنوان آزمون ضروری است', required),
-            minLength: helpers.withMessage(
-              'عنوان باید بیشتر از 3حرف باشد',
-              minLength(3)
-            )
-          },
-          time: {
-            required: helpers.withMessage(
-              'لطفا  ساعت آزمون را مشخص کنید',
-              required
-            )
-          },
-
-          date: {
-            required: helpers.withMessage(
-              'لطفا تاریخ آزمون را مشخص کنید',
-              required
-            )
-          },
-
-          duration: {
-            required: helpers.withMessage(
-              'لطفا مدت زمان آزمون را مشخص کنید',
-              required
-            ),
-            numeric,
-            minValue: helpers.withMessage(
-              'زمان آزمون باید حداقل ده دقیقه باشد',
-              minValue(10)
-            )
-          }
-        };
-      } else {
-        return {
-          title: {
-            required: helpers.withMessage('عنوان آزمون ضروری است', required),
-            minLength: helpers.withMessage(
-              'عنوان باید بیشتر از 3حرف باشد',
-              minLength(3)
-            )
-          },
-          time: {
-            required: helpers.withMessage(
-              'لطفا  ساعت آزمون را مشخص کنید',
-              required
-            )
-          },
-
-          date: {
-            required: helpers.withMessage(
-              'لطفا تاریخ آزمون را مشخص کنید',
-              required
-            )
-          },
-          duration: {
-            required: helpers.withMessage(
-              'لطفا مدت زمان آزمون را مشخص کنید',
-              required
-            ),
-            numeric,
-            minValue: helpers.withMessage(
-              'زمان آزمون باید حداقل ده دقیقه باشد',
-              minValue(10)
-            )
-          },
-          grade: {
-            required: helpers.withMessage(
-              'لطفا مقطح تحصیلی آزمون را مشخص کنید',
-              required
-            )
-          },
-
-          group: {
-            required: helpers.withMessage(
-              'لطفا گروه تحصیلی آزمون را مشخص کنید',
-              required
-            )
-          },
-
-          field: {
-            required: helpers.withMessage(
-              'لطفا فیلد تحصیلی آزمون را مشخص کنید',
-              required
-            )
-          }
-        };
-      }
-    }) as any;
-    const itemRules = computed(() => ({
-      items: {
-        unique: helpers.withMessage(
-          'لطفا درس های  تکراری را حذف کنید',
-          unique(items.value)
-        ),
-        innerUnique: helpers.withMessage(
-          'لطفا فصل های تکراری را حذف کنید',
-          innerUnique(items.value)
-        )
-      }
-    }));
-
-    const tempItems: any = { items };
-    const v$ = useVuelidate(rules, model);
-    const v$$ = useVuelidate(itemRules, tempItems);
-    // cancel //
-    const cancel = () => {
-      router.push({
-        name: 'exam'
-      });
-      alertify.notify('cancelled action');
-    };
-    //
-    watch(items.value, () => console.log(items.value));
-    //
-    return {
-      model,
-      save,
-      cancel,
-      v$,
-      v$$,
-      Courses,
-      addCourse,
-      deleteCourse,
-      filteredSessions,
-      items,
-      addSession,
-      deleteSession,
-      grades,
-      fields,
-      groups,
-      cumputedCourses
-    };
+import alertify from '@/assets/alertifyjs/alertify';
+// initializing date picker
+(window as any).jalaliDatepicker.startWatch();
+const props = defineProps({
+  exam: {
+    type: String,
+    default: '{}'
   }
 });
+
+let model = reactive(JSON.parse(props.exam));
+let Courses = ref<any>([]);
+let Sessions = ref<any>([]);
+let items = ref<any>([]);
+let grades = ref([]);
+
+const groups = () => {
+  return grades.value.find((el: any) => {
+    return el._id === model.grade._id;
+  }) as any;
+};
+
+const fields = () => {
+  if (groups() && groups().groups) {
+    return groups().groups.find((el) => {
+      console.log(el._id, model.group._id);
+      return el._id === model.group._id;
+    })?.fields;
+  }
+};
+
+const computedCourses = () => {
+  // means we have a filed and we can't set a new filed (update)
+
+  if (typeof model.field === 'string') {
+    return Courses.value.filter((el) => {
+      return el.field === model.field;
+    });
+  } else {
+    return Courses.value.filter((el) => {
+      return el.field === model.field._id || el.field === model.field;
+    });
+  }
+};
+
+// getting a list of all courses and sessions from the database
+
+CourseServiceApi.getAll({}).then((res) => {
+  res.data.data.forEach((el: any) => {
+    Courses.value.push(el);
+  });
+});
+SessionServiceApi.getAll({}).then((res) => {
+  res.data.data.forEach((el: any) => {
+    Sessions.value.push(el);
+  });
+});
+
+GradeServiceApi.getAll().then((res) => {
+  grades.value = res.data.data;
+});
+
+// for each item make a course and if the course exists push a session into it
+if (JSON.stringify(model) != '{}') {
+  model.budgeting.forEach((item: any) => {
+    const duplicate = items.value.find(
+      (el: any) => el.course._id == item.course
+    );
+    // if an item with that id does not exist on the items array create one
+    if (!duplicate)
+      items.value.push({
+        sessions: [],
+        course: { _id: item.course }
+      });
+  });
+  // push the sessions into it's appropiate place
+  items.value.forEach((item1: any) => {
+    CourseServiceApi.get(item1.course._id).then((res) => {
+      item1.course = {
+        title: res.data.data.title,
+        _id: res.data.data._id
+      };
+    });
+
+    model.budgeting.forEach((item: any) => {
+      if (item1.course._id == item.course) {
+        //
+        SessionServiceApi.get(item.session).then((res) => {
+          item1.sessions.push({
+            questionCount: item.questionCount,
+            session: { _id: item.session, title: res.data.data.title }
+          });
+        });
+        //
+      }
+    });
+  });
+}
+
+//
+model =
+  JSON.stringify(model) === '{}'
+    ? reactive({
+        title: '',
+        date: '',
+        time: '',
+        duration: 10,
+        grade: '',
+        group: '',
+        field: ''
+      })
+    : model;
+// The filteredSessions => sessions only for that course
+let filteredSessions = (item: any) => {
+  return Sessions.value.filter((el: any) => {
+    return el.course == item.course._id;
+  });
+};
+//
+const addCourse = () =>
+  items.value.push({
+    questionCount: 1,
+    sessions: [],
+    course: {}
+  });
+
+const deleteCourse = (idx: number) => {
+  items.value.splice(idx, 1);
+};
+
+const addSession = (index: number) => {
+  items.value[index].sessions.push({
+    session: {},
+    questionCount: 1
+  });
+};
+
+const deleteSession = (courseIdx: number, index: number) =>
+  items.value[courseIdx].sessions.splice(index, 1);
+//
+const save = () => {
+  /// error handeling
+  v$.value.$touch();
+  v$$.value.$touch();
+  let budgeting: any = [];
+  items.value.forEach((item: any) => {
+    item.sessions.forEach((ses: any) => {
+      budgeting.push({
+        questionCount: ses.questionCount,
+        course: { _id: item.course._id },
+        session: { _id: ses.session._id }
+      });
+    });
+  });
+  //
+  if (!v$.value.$invalid && !v$$.value.$invalid) {
+    let tmp: any = {
+      title: model.title,
+      date: model.date,
+      time: model.time,
+      duration: model.duration,
+      budgeting: budgeting,
+      grade: model.grade,
+      group: model.group,
+      field: model.field
+    };
+    if (model._id) {
+      // if there is a id , means that it's coming from DB and it's a string
+      tmp.grade = { _id: tmp.grade };
+      tmp.group = { _id: tmp.group };
+      tmp.field = { _id: tmp.field };
+      ExamServiceApi.update(model._id, tmp).then((result) => {
+        alertify.success(result.data.message);
+        router.push({
+          name: 'exam'
+        });
+      });
+    } else {
+      ExamServiceApi.create(tmp).then((result) => {
+        alertify.success(result.data.message);
+        router.push({
+          name: 'exam'
+        });
+      });
+    }
+  }
+};
+// Validations
+const unique = (group: any): any => {
+  return () => {
+    let boolean = true;
+    group.forEach((item: any, index: number) => {
+      const copyOfCourse = group.find((course: any, idx: number) => {
+        return course.course._id == item.course._id && index != idx;
+      });
+      if (copyOfCourse) boolean = false;
+    });
+    return boolean;
+  };
+};
+//
+const innerUnique = (group: any): any => {
+  return () => {
+    let boolean = true;
+    group.forEach((item: any) => {
+      item.sessions.forEach((ses: any, idx: number) => {
+        const copyOfSession = item.sessions.find((session: any, i: number) => {
+          return session.session._id == ses.session._id && idx != i;
+        });
+        if (copyOfSession) boolean = false;
+      });
+    });
+    return boolean;
+  };
+};
+//
+const rules = computed(() => {
+  if (model._id) {
+    return {
+      title: {
+        required: helpers.withMessage('عنوان آزمون ضروری است', required),
+        minLength: helpers.withMessage(
+          'عنوان باید بیشتر از 3حرف باشد',
+          minLength(3)
+        )
+      },
+      time: {
+        required: helpers.withMessage('لطفا  ساعت آزمون را مشخص کنید', required)
+      },
+
+      date: {
+        required: helpers.withMessage('لطفا تاریخ آزمون را مشخص کنید', required)
+      },
+
+      duration: {
+        required: helpers.withMessage(
+          'لطفا مدت زمان آزمون را مشخص کنید',
+          required
+        ),
+        numeric,
+        minValue: helpers.withMessage(
+          'زمان آزمون باید حداقل ده دقیقه باشد',
+          minValue(10)
+        )
+      }
+    };
+  } else {
+    return {
+      title: {
+        required: helpers.withMessage('عنوان آزمون ضروری است', required),
+        minLength: helpers.withMessage(
+          'عنوان باید بیشتر از 3حرف باشد',
+          minLength(3)
+        )
+      },
+      time: {
+        required: helpers.withMessage('لطفا  ساعت آزمون را مشخص کنید', required)
+      },
+
+      date: {
+        required: helpers.withMessage('لطفا تاریخ آزمون را مشخص کنید', required)
+      },
+      duration: {
+        required: helpers.withMessage(
+          'لطفا مدت زمان آزمون را مشخص کنید',
+          required
+        ),
+        numeric,
+        minValue: helpers.withMessage(
+          'زمان آزمون باید حداقل ده دقیقه باشد',
+          minValue(10)
+        )
+      },
+      grade: {
+        required: helpers.withMessage(
+          'لطفا مقطح تحصیلی آزمون را مشخص کنید',
+          required
+        )
+      },
+
+      group: {
+        required: helpers.withMessage(
+          'لطفا گروه تحصیلی آزمون را مشخص کنید',
+          required
+        )
+      },
+
+      field: {
+        required: helpers.withMessage(
+          'لطفا فیلد تحصیلی آزمون را مشخص کنید',
+          required
+        )
+      }
+    };
+  }
+}) as any;
+const itemRules = computed(() => ({
+  items: {
+    unique: helpers.withMessage(
+      'لطفا درس های  تکراری را حذف کنید',
+      unique(items.value)
+    ),
+    innerUnique: helpers.withMessage(
+      'لطفا فصل های تکراری را حذف کنید',
+      innerUnique(items.value)
+    )
+  }
+}));
+
+const tempItems: any = { items };
+const v$ = useVuelidate(rules, model);
+const v$$ = useVuelidate(itemRules, tempItems);
+// cancel //
+const cancel = () => {
+  router.push({
+    name: 'exam'
+  });
+  alertify.notify('cancelled action');
+};
+//
+watch(items.value, () => console.log(items.value));
 </script>
 
 <style lang="scss" scoped>
