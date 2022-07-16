@@ -1,6 +1,6 @@
 <template>
   <main class="splash animate__animated animate__fadeOut">
-    <img src="../assets/img/logo@3x.png" alt="Logo" class="logo" />
+    <img src="../assets/img/logo-mahan.png" alt="Logo" class="logo" />
     <br />
     <footer>
       <img

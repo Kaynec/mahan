@@ -4,7 +4,7 @@
       <aside>
         <img
           @click="moveToComponent('Home')"
-          src="@/assets/img/logo@2x.png"
+          src="@/assets/img/logo-mahan.png"
           class="header"
           alt="header"
         />

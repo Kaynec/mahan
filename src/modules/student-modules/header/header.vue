@@ -2,7 +2,7 @@
   <header>
     <img
       alt="logo"
-      src="@/assets/img/logo-copy@3x.png"
+      src="@/assets/img/logo-mahan.png"
       class="logo-mahan animate__animated animate__fadeIn"
     />
     <div class="user-part">

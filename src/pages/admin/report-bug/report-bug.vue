@@ -36,7 +36,7 @@ import grid from '@/modules/shared/grid.vue';
 import { ReportBugServiceApi } from '@/api/services/admin/report-bug-service';
 import { useRoute } from 'vue-router';
 const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: { grid },
@@ -59,7 +59,7 @@ export default defineComponent({
         data: 'student',
         responsivePriority: 3,
         render(data: any) {
-          let text = data.firstname + ' ' + data.lastname;
+          let text = data ? data.firstname + ' ' + data.lastname : '';
           return `<span class="bug-sender">${text}</ span>`;
         }
       },

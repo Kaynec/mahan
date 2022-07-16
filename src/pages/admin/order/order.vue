@@ -42,7 +42,7 @@ import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { OrderServiceApi } from '@/api/services/admin/order-service';
 const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 var moment = require('jalali-moment');
 
 export default defineComponent({
@@ -55,7 +55,9 @@ export default defineComponent({
       {
         label: 'دانشجو ',
         data: (data: any) => {
-          return data.student.firstname + ' ' + data.student.lastname;
+          return data.student
+            ? data.student.firstname + ' ' + data.student.lastname
+            : '';
         },
         responsivePriority: 1
       },

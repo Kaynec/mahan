@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { useAdminStore } from '@/store';
-import alertify from "@/assets/alertifyjs/alertify"
+import { useAdminStore, store } from '@/store';
+import alertify from '@/assets/alertifyjs/alertify';
+import router from '@/router';
+import { AdminActionTypes } from '@/store/modules/admin/action-types';
 
 export const baseUrlDomain = process.env.VUE_APP_BASE_URL;
 
@@ -28,6 +30,10 @@ instance.interceptors.response.use(
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if (error.response && error.response.status == 401)
+      store.dispatch(AdminActionTypes.LOG_OUT).then((res) => {
+        if (res) router.push({ name: 'Login' });
+      });
     if (error.response && error.response.data && error.response.data.message) {
       alertify.error(error.response.data.message);
     }

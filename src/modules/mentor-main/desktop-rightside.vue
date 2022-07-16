@@ -2,7 +2,7 @@
   <div class="container">
     <div class="wrapper">
       <aside>
-        <img src="@/assets/img/logo@2x.png" class="header" />
+        <img src="@/assets/img/logo-mahan.png" class="header" />
         <div class="cart-container">
           <img
             @click="moveToComponent('Requests')"

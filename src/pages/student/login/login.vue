@@ -16,7 +16,7 @@
           v-for="error in v$.username.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -48,7 +48,7 @@
           v-for="error in v$.password.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -56,7 +56,7 @@
         <button @click="login" class="button-linear">
           <template v-if="isRequesting">
             <span
-              style="width: 1.3rem; height: 1.3rem;"
+              style="width: 1.3rem; height: 1.3rem"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -77,6 +77,33 @@
         >
           فراموشی رمز عبور
         </span>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="https://api.mahanplus.com/api/auth/app/app.apk"
+          target="_blank"
+        >
+          دریافت اپلیکیشن اندروید
+        </a>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="#"
+          target="_blank"
+        >
+          دریافت اپلیکیشن آی او اس
+        </a>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="https://api.mahanplus.com/api/auth/app/SetupBrowser.msi"
+          target="_blank"
+        >
+          دریافت اپلیکیشن ویندوز شرکت در کلاس آنلاین
+        </a>
       </div>
     </div>
     <img src="@/assets/img/mahan.png" alt="footer logo" />
@@ -85,7 +112,11 @@
   <div class="mobile" v-else>
     <div class="imgs animate__animated animate__fadeIn">
       <img src="@/assets/img/bitmap.png" class="bitmap" alt="bitmap" />
-      <img src="@/assets/img/logo-mahan.png" alt="logo" />
+      <img
+        src="@/assets/img/logo-mahan.png"
+        style="height: 50px; width: 225px"
+        alt="logo"
+      />
       <img src="@/assets/img/mahan.png" alt="footer logo" />
     </div>
     <div class="Login animate__animated animate__fadeIn">
@@ -117,7 +148,7 @@
           v-for="error in v$.username.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -149,7 +180,7 @@
           v-for="error in v$.password.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -157,7 +188,7 @@
         <button @click="login" class="button-linear">
           <template v-if="isRequesting">
             <span
-              style="width: 1.3rem; height: 1.3rem;"
+              style="width: 1.3rem; height: 1.3rem"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -177,6 +208,33 @@
         >
           فراموشی رمز عبور
         </span>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="https://api.mahanplus.com/api/auth/app/app.apk"
+          target="_blank"
+        >
+          دریافت اپلیکیشن اندروید
+        </a>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="#"
+          target="_blank"
+        >
+          دریافت اپلیکیشن آی او اس
+        </a>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="https://api.mahanplus.com/api/auth/app/SetupBrowser.msi"
+          target="_blank"
+        >
+          دریافت اپلیکیشن ویندوز شرکت در کلاس آنلاین
+        </a>
       </div>
     </div>
   </div>
@@ -352,6 +410,15 @@ export default defineComponent({
     color: #ed1b24;
     cursor: pointer;
   }
+  .download-link {
+    margin-top: 16px;
+    font-family: 'IRANSans';
+    font-size: 13px;
+    text-align: center;
+    color: #3a1bed;
+    cursor: pointer;
+    text-decoration: none;
+  }
 
   .Login {
     width: 100%;
@@ -390,6 +457,15 @@ export default defineComponent({
       text-align: center;
       margin: 0;
       cursor: pointer;
+    }
+    .download-link {
+      margin-top: 16px;
+      font-family: 'IRANSans';
+      font-size: 13px;
+      text-align: center;
+      color: #3a1bed;
+      cursor: pointer;
+      text-decoration: none;
     }
   }
 }
@@ -468,6 +544,15 @@ export default defineComponent({
       letter-spacing: -1.15px;
       text-align: center;
       margin: 0;
+    }
+    .download-link {
+      margin-top: 16px;
+      font-family: 'IRANSans';
+      font-size: 13px;
+      text-align: center;
+      color: #3a1bed;
+      cursor: pointer;
+      text-decoration: none;
     }
   }
 }

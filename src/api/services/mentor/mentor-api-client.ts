@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { useMentorStore } from '@/store';
+import { useMentorStore, store } from '@/store';
 import { baseUrl } from '@/api/apiclient';
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
+import router from '@/router';
+import { MentorActionTypes } from '@/store/modules/mentor/action-types';
 
 export const MentorInstance = axios.create({
   baseURL: baseUrl,
@@ -21,6 +23,10 @@ MentorInstance.interceptors.response.use(
     // Do something with response error
     if (error.response && error.response.data && error.response.data.message)
       alertify.error(error.response.data.message);
+    if (error.response && error.response.status == 401)
+      store.dispatch(MentorActionTypes.LOG_OUT_MENTOR).then((res) => {
+        if (res) router.push({ name: 'MentorLogin' });
+      });
     return Promise.reject(error);
   }
 );
