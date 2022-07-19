@@ -5,6 +5,62 @@
     </h2>
     <form @submit.prevent="save" class="mt-5">
       <div class="form-row">
+        <div class="form-group col-md-4 col-sm-12">
+          <label> مقطع </label>
+          <select
+            v-model="currentGrade"
+            class="form-select"
+            aria-label="مقطع را انتخاب کنید "
+            placeholder="مقطع را انتخاب کنید"
+          >
+            <option
+              v-for="grade in grades"
+              :key="grade.title"
+              @blur="v$.grade.$touch()"
+              :value="grade._id"
+            >
+              {{ grade.title }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-md-4 col-sm-12">
+          <label> گروه </label>
+          <select
+            v-model="currentGroup"
+            class="form-select"
+            aria-label="مقطع را انتخاب کنید "
+            placeholder="مقطع را انتخاب کنید"
+          >
+            <option
+              v-for="group in filteredGroups"
+              :key="group.title"
+              @blur="v$.group.$touch()"
+              :value="group._id"
+            >
+              {{ group.title }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-md-4 col-sm-12">
+          <label> رشته </label>
+          <select
+            v-model="currentField"
+            class="form-select"
+            aria-label="مقطع را انتخاب کنید "
+            placeholder="مقطع را انتخاب کنید"
+          >
+            <option
+              v-for="field in filteredFields"
+              :key="field.title"
+              @blur="v$.field.$touch()"
+              :value="field._id"
+            >
+              {{ field.title }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group col-md-5 col-sm-12">
           <label for="title">نام محصول:</label>
           <input
@@ -174,6 +230,7 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue';
 import { StoreServiceApi } from '@/api/services/admin/store-service';
+import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import {
@@ -183,23 +240,62 @@ import {
   requiredIf
 } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 export default defineComponent({
   setup() {
     const route = useRoute();
     let model = ref({} as any);
 
+    let grades = ref([] as any);
+    let currentGrade = ref('');
+    let currentGroup = ref('');
+    let currentField = ref('');
     // getting data from the database
     if (route.params.productId) {
-     const result = StoreServiceApi.get(route.params.productId as string).then((result) => {
-        let data = result.data.data;
-        model.value = data;
-      });
+      const result = StoreServiceApi.get(route.params.productId as string).then(
+        (result) => {
+          let data = result.data.data;
+          model.value = data;
+          currentGrade.value = data.grade;
+          currentGroup.value = data.group;
+          currentField.value = data.field;
+        }
+      );
     }
     const allCategories = ref([]);
 
     StoreServiceApi.getAllCategories().then((res) => {
       allCategories.value = res.data?.data;
+    });
+
+    let filteredGroups = computed(() => {
+      if (currentGrade.value) {
+        let result = grades.value.find(
+          (p) => `${p._id}` == `${currentGrade.value}`
+        );
+        if (result) return result.groups;
+        else return [];
+      } else {
+        return [];
+      }
+    });
+
+    let filteredFields = computed(() => {
+      if (currentGroup.value) {
+        let result = filteredGroups.value.find(
+          (p) => `${p._id}` == `${currentGroup.value}`
+        );
+        if (result) return result.fields;
+        else return [];
+      } else {
+        return [];
+      }
+    });
+
+    GradeServiceApi.getAll().then((res) => {
+      res.data.data.forEach((data: any) => {
+        grades.value.push(data);
+      });
     });
 
     // validation
@@ -259,6 +355,9 @@ export default defineComponent({
         // temp.append('category', { _id: model.category._id });
         temp.append('description', model.value.description);
         temp.append('newProduct', model.value.newProduct);
+        temp.append('grade[_id]', currentGrade.value);
+        temp.append('group[_id]', currentGroup.value);
+        temp.append('field[_id]', currentField.value);
 
         for (let key in model.value) {
           if (
@@ -283,6 +382,15 @@ export default defineComponent({
             specialPrice: model.value.specialPrice,
             category: { _id: model.value.category._id },
             newProduct: model.value.newProduct,
+            grade: {
+              _id: currentGrade.value
+            },
+            group: {
+              _id: currentGroup.value
+            },
+            field: {
+              _id: currentField.value
+            }
           } as any;
           // model.coverImageFile && (tmp.coverImageFile = model.coverImageFile);
           // console.log(model);
@@ -317,7 +425,20 @@ export default defineComponent({
     };
     //
 
-    return { v$, model, changeFile, save, cancel, allCategories };
+    return {
+      v$,
+      model,
+      changeFile,
+      save,
+      cancel,
+      allCategories,
+      currentGrade,
+      currentGroup,
+      currentField,
+      filteredGroups,
+      filteredFields,
+      grades
+    };
   }
 });
 </script>
