@@ -68,5 +68,10 @@ export const menus = [
     name: 'دسته محصول',
     url: '/admin/category',
     code: 12
+  },
+  {
+    name: 'کلاس ها',
+    url: '/admin/classes',
+    code: 15
   }
 ];

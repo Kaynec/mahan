@@ -206,7 +206,7 @@
           </div>
           <!--  -->
           <button
-            style="margin: 0.5rem;"
+            style="margin: 0.5rem"
             type="button"
             class="btn btn-secondary"
             @click="addSession(firstIdx)"
@@ -242,7 +242,7 @@
             <label> تعداد سوالات این فصل :</label>
 
             <input
-              style="display: block;"
+              style="display: block"
               @blur="v$$.items.$touch()"
               v-model="session.questionCount"
               type="number"
@@ -310,7 +310,9 @@ import { ExamServiceApi } from '@/api/services/admin/exam-service';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import alertify from '@/assets/alertifyjs/alertify';
 // initializing date picker
-(window as any).jalaliDatepicker.startWatch();
+setTimeout(() => {
+  (window as any).jalaliDatepicker.startWatch();
+}, 500);
 const props = defineProps({
   exam: {
     type: String,

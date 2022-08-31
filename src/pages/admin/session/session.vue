@@ -61,7 +61,7 @@ import { QuestionServiceApi } from '@/api/services/admin/question-service';
 import { useRoute } from 'vue-router';
 import readXlsxFile from 'read-excel-file';
 const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 // import { string } from 'yup/lib/locale';
 
@@ -184,7 +184,8 @@ export default defineComponent({
 
     const createSession = () => {
       router.push({
-        name: 'session-create'
+        name: 'session-create',
+        params: { ...route.params }
       });
     };
 
@@ -192,7 +193,6 @@ export default defineComponent({
     const onFileChange = (e: any) => {
       const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
-      debugger;
       readXlsxFile(files[0]).then((rows) => {
         let excelRows = rows.splice(1) as [];
         excelRows = excelRows.filter((p) => !!p) as [];

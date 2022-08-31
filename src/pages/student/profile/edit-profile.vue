@@ -13,7 +13,7 @@
       <div class="img">
         <template v-if="imageIsBeingUploaded">
           <span
-            style="width: 1.3rem; height: 1.3rem;"
+            style="width: 1.3rem; height: 1.3rem"
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
@@ -38,7 +38,7 @@
         <input
           type="file"
           accept="image/x-png,image/jpeg,image/gif,image/svg"
-          style="display: none;"
+          style="display: none"
           ref="imgInput"
           name="image"
           @input="uploadImage"
@@ -59,13 +59,13 @@
     <!-- Form -->
     <form @submit.prevent="onSubmit" class="animate__animated animate__fadeIn">
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> نام کاربری </span>
+        <span style="white-space: nowrap; padding: 0"> نام کاربری </span>
         <input type="text" v-model="model.username" maxlength="20" disabled />
       </div>
 
       <!--  -->
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> نام </span>
+        <span style="white-space: nowrap; padding: 0"> نام </span>
         <input
           type="text"
           @blur="v$.firstname.$touch()"
@@ -84,7 +84,7 @@
       <!--  -->
 
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> نام خانوادگی </span>
+        <span style="white-space: nowrap; padding: 0"> نام خانوادگی </span>
         <input
           type="text"
           @blur="v$.lastname.$touch()"
@@ -131,7 +131,7 @@
       </p>
 
       <div class="select custom">
-        <span style="white-space: nowrap; padding: 0;"> مقطع تحصیلی </span>
+        <span style="white-space: nowrap; padding: 0"> مقطع تحصیلی </span>
         <select @blur="v$.grade.$touch()" v-model="model.grade">
           <option
             v-for="grade in allGrades"
@@ -151,7 +151,7 @@
       </p>
 
       <div class="select custom">
-        <span style="white-space: nowrap; padding: 0;"> گروه تحصیلی </span>
+        <span style="white-space: nowrap; padding: 0"> گروه تحصیلی </span>
         <select @blur="v$.group.$touch()" v-model="model.group">
           <option
             v-for="group in groups.groups"
@@ -171,7 +171,7 @@
       </p>
 
       <div class="select custom">
-        <span style="white-space: nowrap; padding: 0;"> فیلد تحصیلی </span>
+        <span style="white-space: nowrap; padding: 0"> فیلد تحصیلی </span>
         <select @blur="v$.field.$touch()" v-model="model.field">
           <option
             v-for="field in fields()"
@@ -191,7 +191,7 @@
       </p>
 
       <div class="select custom">
-        <span style="white-space: nowrap; padding: 0;"> گرایش تحصیلی </span>
+        <span style="white-space: nowrap; padding: 0"> گرایش تحصیلی </span>
         <select @blur="v$.orientation.$touch()" v-model="model.orientation">
           <option
             v-for="orientation in orientations()"
@@ -213,7 +213,7 @@
       <button
         type="submit"
         class="button-linear"
-        style="padding: 1rem; color: #fff;"
+        style="padding: 1rem; color: #fff"
       >
         ثبت اطلاعات
       </button>
@@ -236,7 +236,7 @@ import { StudentGradeApi } from '@/api/services/student/student-grade-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { baseUrl } from '@/api/apiclient';
 import { resizeImage } from '@/utilities/get-image-from-url';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader },
@@ -397,7 +397,7 @@ export default defineComponent({
         showThisWhileUplading.value = true;
 
         const { img, ...restOfModel } = model as any;
-
+        delete restOfModel.username;
         const temp = new FormData();
 
         try {

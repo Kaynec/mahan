@@ -195,7 +195,7 @@
       <!--  -->
     </div>
     <div class="else" v-else>
-      <h1 style="color: #000;">سوالی برای نمایش وجود ندارد</h1>
+      <h1 style="color: #000">سوالی برای نمایش وجود ندارد</h1>
     </div>
   </div>
 </template>
@@ -211,7 +211,8 @@ import ShowImages from '@/modules/student-modules/show-images.vue';
 import { useRoute } from 'vue-router';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
-import  shamsi_be_miladi  from '@/utilities/date-converter';import alertify from '@/assets/alertifyjs/alertify';
+import shamsi_be_miladi from '@/utilities/date-converter';
+import alertify from '@/assets/alertifyjs/alertify';
 
 const showImages = ref(false);
 const isFetching = ref(true);
@@ -235,17 +236,16 @@ const setCurrentImages = (images) => {
   const res = await StudentDuelApi.get(route.params.id as any);
 
   data.value = res.data.data;
-
   let endDate = new Date(
     shamsi_be_miladi(
-      +res.data?.data?.endDate.split('/')[0],
-      +res.data?.data?.endDate.split('/')[1],
-      +res.data?.data?.endDate.split('/')[2]
+      +res.data?.data?.endDate?.split('/')[0],
+      +res.data?.data?.endDate?.split('/')[1],
+      +res.data?.data?.endDate?.split('/')[2]
     ) as any
   );
   endDate.setHours(
-    res.data?.data.time.split(':')[0],
-    res.data?.data.time.split(':')[1]
+    res.data?.data.endTime.split(':')[0],
+    res.data?.data.endTime.split(':')[1]
   );
 
   // if for example end time of duel is 18 and currentTime is 17 and the duration left is 1 hour no matter the actual duel duration
@@ -322,7 +322,7 @@ const showPreviousQuestion = () => {
 
 const showNextQuestion = () => {
   if (
-    currentQuestionIndex.value + 1 <=
+    currentQuestionIndex.value + 1 <
     allQuestions.value[currentLessonIndex.value].length
   ) {
     currentQuestionIndex.value += 1;
@@ -343,7 +343,7 @@ const endAzmoon = () => {
     alertify.error('لطفا بعد از بارگیری سوال ها دوباره تلاش کنید');
   } else {
     const objectToSend = {
-      exam: { _id: examId },
+      duel: { _id: examId },
       answers: []
     };
     const answers = [] as any;

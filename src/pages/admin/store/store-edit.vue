@@ -16,7 +16,6 @@
             <option
               v-for="grade in grades"
               :key="grade.title"
-              @blur="v$.grade.$touch()"
               :value="grade._id"
             >
               {{ grade.title }}
@@ -34,7 +33,6 @@
             <option
               v-for="group in filteredGroups"
               :key="group.title"
-              @blur="v$.group.$touch()"
               :value="group._id"
             >
               {{ group.title }}
@@ -52,10 +50,26 @@
             <option
               v-for="field in filteredFields"
               :key="field.title"
-              @blur="v$.field.$touch()"
               :value="field._id"
             >
               {{ field.title }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-md-4 col-sm-12">
+          <label> گرایش </label>
+          <select
+            v-model="currentOrientation"
+            class="form-select"
+            aria-label="گرایش را انتخاب کنید "
+            placeholder="گرایش را انتخاب کنید"
+          >
+            <option
+              v-for="orientation in filteredOrientation"
+              :key="orientation.title"
+              :value="orientation._id"
+            >
+              {{ orientation.title }}
             </option>
           </select>
         </div>
@@ -250,6 +264,7 @@ export default defineComponent({
     let currentGrade = ref('');
     let currentGroup = ref('');
     let currentField = ref('');
+    let currentOrientation = ref('');
     // getting data from the database
     if (route.params.productId) {
       const result = StoreServiceApi.get(route.params.productId as string).then(
@@ -259,6 +274,7 @@ export default defineComponent({
           currentGrade.value = data.grade;
           currentGroup.value = data.group;
           currentField.value = data.field;
+          currentOrientation.value = data.orientation;
         }
       );
     }
@@ -286,6 +302,18 @@ export default defineComponent({
           (p) => `${p._id}` == `${currentGroup.value}`
         );
         if (result) return result.fields;
+        else return [];
+      } else {
+        return [];
+      }
+    });
+
+    let filteredOrientation = computed(() => {
+      if (currentField.value) {
+        let result = filteredFields.value.find(
+          (p) => `${p._id}` == `${currentField.value}`
+        );
+        if (result) return result.orientations;
         else return [];
       } else {
         return [];
@@ -358,6 +386,7 @@ export default defineComponent({
         temp.append('grade[_id]', currentGrade.value);
         temp.append('group[_id]', currentGroup.value);
         temp.append('field[_id]', currentField.value);
+        temp.append('orientation[_id]', currentOrientation.value);
 
         for (let key in model.value) {
           if (
@@ -390,6 +419,9 @@ export default defineComponent({
             },
             field: {
               _id: currentField.value
+            },
+            orientation: {
+              _id: currentOrientation.value
             }
           } as any;
           // model.coverImageFile && (tmp.coverImageFile = model.coverImageFile);
@@ -435,8 +467,10 @@ export default defineComponent({
       currentGrade,
       currentGroup,
       currentField,
+      currentOrientation,
       filteredGroups,
       filteredFields,
+      filteredOrientation,
       grades
     };
   }

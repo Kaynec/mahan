@@ -90,10 +90,10 @@
 
         <a
           class="download-link hover-make-big mt-2"
-          href="#"
+          href="https://sibche.com/applications/mahan-2"
           target="_blank"
         >
-          دریافت اپلیکیشن آی او اس
+          دریافت اپلیکیشن IOS
         </a>
         <br />
 
@@ -102,7 +102,16 @@
           href="https://api.mahanplus.com/api/auth/app/SetupBrowser.msi"
           target="_blank"
         >
-          دریافت اپلیکیشن ویندوز شرکت در کلاس آنلاین
+          دریافت اپلیکیشن شرکت در کلاس آنلاین ویندوز 10
+        </a>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="https://api.mahanplus.com/api/auth/app/SetupBrowserWin7.msi"
+          target="_blank"
+        >
+          دریافت اپلیکیشن شرکت در کلاس آنلاین ویندوز 7
         </a>
       </div>
     </div>
@@ -221,10 +230,10 @@
 
         <a
           class="download-link hover-make-big mt-2"
-          href="#"
+          href="https://sibche.com/applications/mahan-2"
           target="_blank"
         >
-          دریافت اپلیکیشن آی او اس
+          دریافت اپلیکیشن IOS
         </a>
         <br />
 
@@ -233,7 +242,16 @@
           href="https://api.mahanplus.com/api/auth/app/SetupBrowser.msi"
           target="_blank"
         >
-          دریافت اپلیکیشن ویندوز شرکت در کلاس آنلاین
+          دریافت اپلیکیشن شرکت در کلاس آنلاین ویندوز 10
+        </a>
+        <br />
+
+        <a
+          class="download-link hover-make-big mt-2"
+          href="https://api.mahanplus.com/api/auth/app/SetupBrowserWin7.msi"
+          target="_blank"
+        >
+          دریافت اپلیکیشن شرکت در کلاس آنلاین ویندوز 7
         </a>
       </div>
     </div>

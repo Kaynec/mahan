@@ -120,32 +120,6 @@
         </div>
         <!--  !!!!   Courses   !!!! -->
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-4 col-sm-12" v-if="!model._id">
-          <label> درس مرتبط </label>
-          <select
-            v-model="model.course"
-            class="form-select"
-            aria-label="فصل را انتخاب کنید  "
-          >
-            <option
-              v-for="course in courses"
-              :key="course.title"
-              @blur="v$.course.$touch()"
-              :value="{ _id: course._id }"
-            >
-              {{ course.title }} - {{ course.code }}
-            </option>
-          </select>
-          <span
-            v-for="error in v$.course.$errors"
-            :key="error.id"
-            class="form-text text-danger"
-          >
-            {{ error.$message }}
-          </span>
-        </div>
-      </div>
 
       <button class="btn btn-secondary ml-3 mt-4" @click="cancel()">
         برگشت
@@ -166,7 +140,7 @@ import { useRoute } from 'vue-router';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import { baseUrl } from '@/api/apiclient';
 import { jsonToFormData } from '@/api/helper';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   setup() {
@@ -312,9 +286,6 @@ export default defineComponent({
           'عتوان باید حدقا 2 حرف باشد',
           minLength(3)
         )
-      },
-      course: {
-        required: helpers.withMessage(' لطفا یک درس را انتخاب کنید', required)
       }
     }));
 

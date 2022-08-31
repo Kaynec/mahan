@@ -59,6 +59,7 @@ const ReportBug = () => import('@/pages/admin/report-bug/report-bug.vue');
 const hamnavardAdmin = () => import('@/pages/admin/hamnavard/hamnavard.vue');
 const hamnavardEdit = () =>
   import('@/pages/admin/hamnavard/hamnavard-create.vue');
+const classSetting = () => import('@/pages/admin/classes/setting.vue');
 
 // student page import
 
@@ -328,7 +329,7 @@ const routes: Array<RouteRecordRaw> = [
         component: Session
       },
       {
-        path: 'session-create/:gradeId/:groupId/:fieldId',
+        path: 'session-create/:gradeId/:groupId/:fieldId/:courseId',
         name: 'session-create',
         props: true,
         component: SessionEdit
@@ -512,6 +513,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'hamnavard-create',
         name: 'hamnavard-create',
         component: hamnavardEdit
+      },
+      {
+        path: 'classes',
+        name: 'classes',
+        component: classSetting
       }
     ],
     beforeEnter: ifAuthenticated
