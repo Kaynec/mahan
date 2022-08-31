@@ -242,7 +242,7 @@ onUpdated(() => {
 })();
 
 const moveToSelfTestQuestions = (index, id) => {
-  if (index >= 1) {
+  if (index >= 1 && !store.getters.getCurrentStudent.purchased) {
     alertify.error('لطفا اول برنامه را خریداری کنید');
 
   } else
@@ -312,7 +312,7 @@ const showVideo = (session) => {
 };
 
 const showPdf = (pdf, index) => {
-  if (index >= 1) {
+  if (index >= 1 && !store.getters.getCurrentStudent.purchased) {
     alertify.error('لطفا اول برنامه را خریداری کنید');
     return;
   }
