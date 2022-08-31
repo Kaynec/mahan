@@ -42,9 +42,8 @@
       :data="currentItem"
       @convertBoolean="changeShowDetail"
     />
-    
   </div>
-  
+
   <!--  -->
   <div class="loader-parent" v-else>
     <div class="loading1"></div>
@@ -52,19 +51,17 @@
 </template>
 
 <script lang="ts" setup>
-import {  reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import compareAsc from 'date-fns/compareAsc';
 import CompTestDetail from '@/modules/student-modules/azmoon/comp-test-detail.vue';
 import shamsi_be_miladi from '@/utilities/date-converter';
 import { useStudentStore } from '@/store';
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 const isLoading = ref(false);
 const azmoonData = reactive([] as any);
-
-
 
 StudentExamApi.getAll().then((res) => {
   res.data.data.forEach((date: any) => {
@@ -78,7 +75,12 @@ StudentExamApi.getAll().then((res) => {
       +date.time.split(':')[1]
     );
 
-    if (compareAsc(jalalidateConvertedToMiladi, new Date()) <= 0)
+    if (
+      compareAsc(
+        new Date(jalalidateConvertedToMiladi.getTime() + date.duration * 60000),
+        new Date()
+      ) <= 0
+    )
       azmoonData.push(date);
   });
 

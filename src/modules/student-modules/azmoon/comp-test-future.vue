@@ -120,9 +120,15 @@ export default defineComponent({
         );
         mDate.setHours(date.time.split(':')[0], date.time.split(':')[1]);
 
-        if (compareAsc(mDate, new Date()) >= 1) azmoonData.push(date);
+        if (
+          compareAsc(
+            new Date(mDate.getTime() + date.duration * 60000),
+            new Date()
+          ) >= 1
+        )
+          azmoonData.push(date);
       });
-
+      
       azmoonData.forEach((child: any) => {
         let mDate = new Date(
           shamsi_be_miladi(

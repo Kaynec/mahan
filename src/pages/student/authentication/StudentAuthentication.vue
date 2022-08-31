@@ -19,7 +19,7 @@
       class="Rectangle animate__animated animate__fadeIn"
     >
       <h6
-        style="font-family: IRANSans; margin-bottom: 1rem;"
+        style="font-family: IRANSans; margin-bottom: 1rem"
         class="text-nowrap text-center"
       >
         ورود به حساب کاربری
@@ -27,7 +27,7 @@
 
       <p
         class="text-muted text-custom text-nowrap"
-        style="font-family: IRANSans;"
+        style="font-family: IRANSans"
       >
         پیامکی حاوی یک کد ۶ رقمی برای شما ارسال شد
       </p>
@@ -60,7 +60,7 @@
         v-for="(error, index) in v$.code.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans;"
+        style="font-family: IRANSans"
       >
         {{ error.$message }}
       </p>
@@ -68,7 +68,7 @@
       <button class="button-linear">
         <span
           v-if="isSendingAMainReq"
-          style="width: 1.3rem; height: 1.3rem;"
+          style="width: 1.3rem; height: 1.3rem"
           class="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"
@@ -79,7 +79,7 @@
       <p
         @click="resendVerificationCode()"
         class="text-custom text text-nowrap text-center text-secondary hover-make-big"
-        style="font-family: IRANSans; font-size: 0.75rem;"
+        style="font-family: IRANSans; font-size: 0.75rem"
       >
         ارسال مجدد کد
       </p>
@@ -87,14 +87,14 @@
       <p
         @click="cancel()"
         class="text-custom text text-nowrap text-center hover-make-big"
-        style="font-family: IRANSans; font-size: 0.75rem;"
+        style="font-family: IRANSans; font-size: 0.75rem"
       >
         برگشت به صفحه ورود
       </p>
     </form>
     <!--  -->
     <img
-      style="margin-top: 2rem;"
+      style="margin-top: 2rem"
       v-show="!isMobile.value"
       src="@/assets/img/mahan.png"
       alt="logo"
@@ -113,7 +113,7 @@ import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { StudentActionTypes } from '@/store/modules/student/action-types';
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
 import { baseUrl } from '@/api/apiclient';
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   props: {
@@ -143,32 +143,57 @@ export default defineComponent({
 
       if (props.whatToAuthenticate == 'signup') {
         try {
-          const sendCode = await axios({
-            method: 'post',
-            url: `${baseUrl}auth/verificationcode`,
-            headers: {
-              token:
-                props.token ||
-                (useStudentStore().getters.getAuthObject as any).token
-            },
-            data: {
-              code: code.code
-            }
+          let studentInstance = axios.create({
+            baseURL: baseUrl,
+            // 5 minutes
+            timeout: 300000,
+            headers: {}
           });
+          studentInstance.interceptors.request.use((config) => {
+            const token =
+              props.token ||
+              (useStudentStore().getters.getAuthObject as any).token;
+            if (token) config.headers.token = `${token}`;
+            return config;
+          });
+          studentInstance.interceptors.response.use(
+            (response) => response,
+            (error) => {
+              // Any status codes that falls outside the range of 2xx cause this function to trigger
+              // Do something with response errord
 
-          isSendingAMainReq.value = false;
+              isSendingAMainReq.value = false;
+              if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message
+              )
+                alertify.error(error.response.data.message);
+              return Promise.reject(error);
+            }
+          );
+          studentInstance
+            .post('auth/verificationcode', code, {
+              headers: {
+                // Overwrite Axios's automatically set Content-Type
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(async (sendCode) => {
+              isSendingAMainReq.value = false;
 
-          if (
-            sendCode.data.status == 0 ||
-            sendCode.data.status == 200 ||
-            sendCode.data.message == 'messages.verification.success'
-          ) {
-            // Set The Token If All Working
-            store.commit(StudentMutationTypes.SET_TOKEN, props.token);
-            // Change Current Student To Then Created One
-            await store.dispatch(StudentActionTypes.CURRENT_STUDENT);
-            router.push({ name: 'Home' });
-          }
+              if (
+                sendCode.data.status == 0 ||
+                sendCode.data.status == 200 ||
+                sendCode.data.message == 'messages.verification.success'
+              ) {
+                // Set The Token If All Working
+                store.commit(StudentMutationTypes.SET_TOKEN, props.token);
+                // Change Current Student To Then Created One
+                await store.dispatch(StudentActionTypes.CURRENT_STUDENT);
+                router.push({ name: 'Home' });
+              }
+            });
         } catch (error) {
           isSendingAMainReq.value = false;
           alertify.error(error);
@@ -178,7 +203,7 @@ export default defineComponent({
 
         try {
           const res = await StudentAuthServiceApi.activateCodeForgetPassword({
-            username: (model.value as string) as string,
+            username: model.value as string as string,
             code: code.code
           });
           isSendingAMainReq.value = false;
