@@ -14,6 +14,12 @@
             >
               جدید
             </button>
+            <button
+              class="ml-2 float-left btn btn-success"
+              @click="deleteAllSessionQuestions()"
+            >
+              حذف همه سوالات فصل
+            </button>
           </div>
         </div>
         <!-- /.row -->
@@ -45,7 +51,7 @@ import { QuestionServiceApi } from '@/api/services/admin/question-service';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: { grid },
@@ -164,6 +170,21 @@ export default defineComponent({
       });
     };
 
+    const deleteAllSessionQuestions = () => {
+      alertify.defaults.glossary.cancel = 'بله';
+      alertify.defaults.glossary.ok = 'خیر';
+      alertify.confirm('حذف', 'آیا اطمینان دارید؟', function (e: any) {
+        if (e) {
+          QuestionServiceApi.deleteAllSessionQuestions(sessionId).then(
+            (result) => {
+              alertify.success(result.data.message);
+              (grid.value as any).getDatatable().ajax.reload();
+            }
+          );
+        }
+      });
+    };
+
     onMounted(() => {
       if (grid.value.getDatatable()) {
         grid.value
@@ -191,6 +212,7 @@ export default defineComponent({
       options,
       columns,
       createSession,
+      deleteAllSessionQuestions,
       deleteQuestion,
       editQuestion,
       grid

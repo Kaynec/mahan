@@ -43,6 +43,14 @@ class QuestionService {
       }
     });
   }
+  async deleteAllSessionQuestions(sessionId: string) {
+    return instance.delete(`question/deleteBySessionId/${sessionId}`, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        'Content-Type': 'application/json'
+      }
+    });
+  }
 }
 
 export const QuestionServiceApi = new QuestionService();

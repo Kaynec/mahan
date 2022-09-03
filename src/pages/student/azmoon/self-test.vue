@@ -8,7 +8,7 @@
       <img
         :src="`${
           isMobile.value
-            ? require('@/assets/img/selftest.png')
+            ? require('@/assets/img/selftest.jpg')
             : require('@/assets/img/selftest-pc@3x.png')
         }`"
         alt="header image of self test"
