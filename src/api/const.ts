@@ -30,6 +30,16 @@ export const menus = [
     code: 5
   },
   {
+    name: 'دسته محصول',
+    url: '/admin/category',
+    code: 12
+  },
+  {
+    name: 'باندل',
+    url: '/admin/bundle',
+    code: 12
+  },
+  {
     name: 'فاکتورها',
     url: '/admin/order',
     code: 13
@@ -37,6 +47,16 @@ export const menus = [
   {
     name: 'اطلاعیه ها',
     url: '/admin/announcement',
+    code: 6
+  },
+  {
+    name: 'کانت داون ها',
+    url: '/admin/count-down',
+    code: 6
+  },
+  {
+    name: 'پیام های ساعت دار ',
+    url: '/admin/scheduled-message',
     code: 6
   },
   {
@@ -64,11 +84,7 @@ export const menus = [
     url: '/admin/duel',
     code: 11
   },
-  {
-    name: 'دسته محصول',
-    url: '/admin/category',
-    code: 12
-  },
+
   {
     name: 'کلاس ها',
     url: '/admin/classes',

@@ -42,17 +42,12 @@ import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 const $ = require('jquery');
 import { StoreServiceApi } from '@/api/services/admin/store-service';
-import alertify from '@/assets/alertifyjs/alertify'
-
-// import { string } from 'yup/lib/locale';
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: { grid },
 
   setup() {
-    StoreServiceApi.getAll().then((res) => {
-      console.log(res);
-    });
     // ref
     const grid = ref();
     // Data

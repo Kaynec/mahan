@@ -80,14 +80,13 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref, onUpdated } from 'vue';
+import { ref, onUpdated } from 'vue';
 import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
-import { returnProtectedImage } from '@/utilities/get-image-from-url';
 import router from '@/router';
 import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 let data = ref();
 StudentSupportApi.getAll().then((res) => {
@@ -103,13 +102,14 @@ const MoveToBackUpInfo = (supportPerson) => {
 
 // Images For The Categories
 let imageRefs = [] as any;
-const setImageRef = (el) => {
-  if (el) imageRefs.push(el);
-};
 
 onUpdated(() => {
   data.value.forEach((mentor, idx) => {
+    console.log(mentor.profileImage);
+    mentor.profileImage =
+      mentor.profileImage || 'profile-profile-1653731430277-blob';
     const imageUrl = `${baseUrl}mentor/getProfileImage/${mentor.profileImage}`;
+
     data.value[idx].img = imageUrl;
   });
 });

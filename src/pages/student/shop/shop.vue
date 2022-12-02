@@ -129,6 +129,7 @@
           <div class="plus">
             <img
               src="@/assets/img/shop/pluss.png"
+              style="max-width: 15rem height: 80%"
               @click.stop="addToBasket(product)"
               alt="plus img"
             />

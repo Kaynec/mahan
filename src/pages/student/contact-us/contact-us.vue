@@ -178,7 +178,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   background-color: #0e0505c5;
-  z-index: 9999999;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;

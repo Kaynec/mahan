@@ -1,5 +1,6 @@
 <template>
   <!-- Spinner -->
+
   <div
     class="loader-parent"
     v-if="JSON.stringify(model) === JSON.stringify({})"
@@ -48,7 +49,7 @@
                 v-if="objectToAddToBasket.item.quantity > 0"
               >
                 <span @click="addToBasket(1)">➕ </span>
-                <strong style="color: #fff;">
+                <strong style="color: #fff">
                   {{ toPersianNumbers(`${objectToAddToBasket.item.quantity}`) }}
                 </strong>
                 <span @touchstart="addToBasket(-1)"> ➖ </span>
@@ -58,6 +59,7 @@
                 @touchstart="addToBasket(1)"
                 class="img-add"
                 src="@/assets/img/shop/pluss.png"
+                style="max-width: 15rem height: 80%"
                 alt="plus icon "
               />
             </template>
@@ -73,6 +75,7 @@
               @click="addToBasket(objectToAddToBasket.item.quantity)"
               class="img-add"
               src="@/assets/img/shop/pluss.png"
+              style="max-width: 15rem height: 80%"
               alt="plus icon "
             />
           </template>

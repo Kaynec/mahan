@@ -15,7 +15,7 @@
           placeholder=" کد ملی"
           v-model="model.address"
           @blur="v$.address.$touch()"
-          style="appearance: none; min-height: 10rem;"
+          style="appearance: none; min-height: 10rem"
           @focus="changeTextareaPlaceHolder('آدرس')"
           @focusout="changeTextareaPlaceHolder('آدرس خود را کامل وارد کنید  ')"
         ></textarea>
@@ -26,7 +26,7 @@
         v-for="error in v$.address.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -37,7 +37,7 @@
           placeholder=" تلفن "
           v-model="model.phone"
           @blur="v$.phone.$touch()"
-          style="appearance: none;"
+          style="appearance: none"
         />
         <span> تلفن </span>
       </label>
@@ -46,14 +46,14 @@
         v-for="error in v$.phone.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
       <!--  -->
     </form>
     <!-- Btn  -->
-    <div class="continue">
+    <div class="continue" @click="submitOrder">
       <i class="fas fa-arrow-right"></i>
       <span> ثبت و پرداخت نهایی </span>
     </div>
@@ -66,67 +66,78 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, ref, reactive } from 'vue';
+<script lang="ts" setup>
+import { computed, ref, reactive } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import router from '@/router';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import { StudentBasketApi } from '@/api/services/student/student-basket-service';
+import alertify from '@/assets/alertifyjs/alertify';
 
-export default defineComponent({
-  components: { MinimalHeader, DesktopMinimalHeader },
-  setup() {
-    const model = reactive({
-      address: '',
-      phone: ''
-    });
-    const textareaPlaceHolder = ref('آدرس کامل خود را بنویسید');
-    const changeTextareaPlaceHolder = (text: string) =>
-      (textareaPlaceHolder.value = text);
-
-    const mustBeValidPhone = (value: string) => value.length === 11;
-    const mustBeNumber = (value: string) => {
-      let allAreNumbers = true;
-      for (let i = 0; i < value.length; i++) {
-        if (isNaN(+value[i])) allAreNumbers = false;
-      }
-      return allAreNumbers;
-    };
-
-    const rules = computed(() => ({
-      address: {
-        required: helpers.withMessage('لطفا آدرس خود را وارد کنید', required)
-      },
-      phone: {
-        required: helpers.withMessage(
-          'لطفا شماره همراه خود را وارد کنید',
-          required
-        ),
-        mustBeNumber: helpers.withMessage(
-          'شماره همراه نباید دارای حروف باشد',
-          mustBeNumber
-        ),
-        mustBeValidPhone: helpers.withMessage(
-          'شماره همراه باید 11 رقم باشد',
-          mustBeValidPhone
-        )
-      }
-    }));
-
-    const v$ = useVuelidate(rules, model);
-
-    const goOnepageBack = () => router.push({ name: 'Home' });
-
-    return {
-      goOnepageBack,
-      model,
-      v$,
-      textareaPlaceHolder,
-      changeTextareaPlaceHolder
-    };
-  }
+const model = reactive({
+  address: '',
+  phone: ''
 });
+const textareaPlaceHolder = ref('آدرس کامل خود را بنویسید');
+const changeTextareaPlaceHolder = (text: string) =>
+  (textareaPlaceHolder.value = text);
+
+const mustBeValidPhone = (value: string) => value.length === 11;
+const mustBeNumber = (value: string) => {
+  let allAreNumbers = true;
+  for (let i = 0; i < value.length; i++) {
+    if (isNaN(+value[i])) allAreNumbers = false;
+  }
+  return allAreNumbers;
+};
+
+const submitOrder = async () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) {
+    alertify.error(v$.value.$errors[0].$message);
+    return;
+  }
+
+  try {
+    const res = await StudentBasketApi.finalizeOrder();
+    if (res.data || res.data.status == 0) {
+      router.push({
+        name: 'ShopSuccess'
+      });
+    }
+  } catch (error) {
+    alertify.error(err.message);
+    router.push({
+      name: 'ShoFailure'
+    });
+  }
+};
+
+const rules = computed(() => ({
+  address: {
+    required: helpers.withMessage('لطفا آدرس خود را وارد کنید', required)
+  },
+  phone: {
+    required: helpers.withMessage(
+      'لطفا شماره همراه خود را وارد کنید',
+      required
+    ),
+    mustBeNumber: helpers.withMessage(
+      'شماره همراه نباید دارای حروف باشد',
+      mustBeNumber
+    ),
+    mustBeValidPhone: helpers.withMessage(
+      'شماره همراه باید 11 رقم باشد',
+      mustBeValidPhone
+    )
+  }
+}));
+
+const v$ = useVuelidate(rules, model);
+
+const goOnepageBack = () => router.push({ name: 'Home' });
 </script>
 
 <style lang="scss" scoped>
@@ -201,7 +212,7 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 9999999;
+  z-index: 9999;
 
   h6 {
     color: #fff;

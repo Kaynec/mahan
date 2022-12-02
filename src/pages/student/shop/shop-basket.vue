@@ -11,7 +11,9 @@
     <div class="container animate__animated animate__fadeIn">
       <!-- Change The Data -->
       <div class="text-flex">
-        <span> شماره سفارش: {{ toPersianNumbers(`${purchaseId}`) }} </span>
+        <span>
+          شماره سفارش: {{ toPersianNumbers(`${purchaseId || ''}`) }}
+        </span>
         <span> {{ faDate }} </span>
       </div>
 
@@ -29,7 +31,7 @@
                 }`
               }}
             </span>
-            <span @click="removeItem(item)" style="display: block;" class="red"
+            <span @click="removeItem(item)" style="display: block" class="red"
               >حذف محصول</span
             >
           </div>
@@ -105,16 +107,13 @@
               <span class="sr-only">Loading...</span>
             </div>
             <img :src="item.img" alt="product img" v-else />
-            <div class="label" style="margin-right: 0.5rem;">
+            <div class="label" style="margin-right: 0.5rem">
               {{
                 `${item.product.title} ${
                   +item.quantity > 1 ? `تعداد (${item.quantity})` : ''
                 }`
               }}
-              <span
-                @click="removeItem(item)"
-                style="display: block;"
-                class="red"
+              <span @click="removeItem(item)" style="display: block" class="red"
                 >حذف محصول</span
               >
             </div>
@@ -163,7 +162,7 @@
           :chapterContainer="payment"
         />
       </div>
-      <div class="continue" @touchstart="submitOrder">
+      <div class="continue" @click="submitOrder">
         <i class="fas fa-arrow-right"></i>
         <span> ثبت و پرداخت نهایی </span>
       </div>
@@ -176,8 +175,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
 import ChapterList from '@/modules/student-modules/chapter-list.vue';
 import router from '@/router';
 import { StudentBasketApi } from '@/api/services/student/student-basket-service';
@@ -189,161 +188,126 @@ import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minim
 import { baseUrl } from '@/api/apiclient';
 import { returnAProtectedUrl } from '@/utilities/get-image-from-url';
 
-export default defineComponent({
-  components: {
-    ChapterList,
-    MinimalHeader,
-    DesktopMinimalHeader
-  },
-  setup() {
-    const date = new Date();
-    const faDate = new Intl.DateTimeFormat('fa', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date);
+const date = new Date();
+const faDate = new Intl.DateTimeFormat('fa', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}).format(date);
 
-    const point = ref(store.getters.getCurrentStudent.point);
-    const allPrice = ref(0);
-    const allSpecialPrice = ref(0);
-    const basketItems = ref([]) as any;
-    const purchaseId = ref(0);
+const point = ref(store.getters.getCurrentStudent.point);
+const allPrice = ref(0);
+const allSpecialPrice = ref(0);
+const basketItems = ref([]) as any;
+const purchaseId = ref(0);
 
-    (async () => {
-      const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-        method: 'GET',
-        headers: {
-          token: store.getters.getStudentToken
-        }
-      });
-      const res = await resPromise.json();
+(async () => {
+  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
+    method: 'GET',
+    headers: {
+      token: store.getters.getStudentToken
+    }
+  });
+  const res = await resPromise.json();
 
-      console.log(res);
+  const imgPromises = [] as any;
 
-      const imgPromises = [] as any;
+  purchaseId.value = res.data._id;
+  res.data.items.forEach((item) => {
+    const imageUrl = `${baseUrl}product/coverImage/${item.product._id}`;
+    imgPromises.push(returnAProtectedUrl(imageUrl));
+    if (item.product != null) {
+      allPrice.value += item.product.price * item.quantity;
+      allSpecialPrice.value += item.product.specialPrice * item.quantity;
 
-      purchaseId.value = res.data._id;
-      res.data.items.forEach((item) => {
-        const imageUrl = `${baseUrl}product/coverImage/${item.product._id}`;
-        imgPromises.push(returnAProtectedUrl(imageUrl));
-        if (item.product != null) {
-          allPrice.value += item.product.price * item.quantity;
-          allSpecialPrice.value += item.product.specialPrice * item.quantity;
+      basketItems.value.push(item);
+    }
+  });
 
-          basketItems.value.push(item);
-        }
-      });
+  const imgs = await Promise.all(imgPromises);
 
-      const imgs = await Promise.all(imgPromises);
+  imgs.forEach((img, idx) => {
+    basketItems.value[idx].img = img;
+  });
+})();
 
-      imgs.forEach((img, idx) => {
-        basketItems.value[idx].img = img;
-      });
-    })();
+const payment = ref();
 
-    const payment = ref();
+const paidPrice = computed(() => {
+  let discountedPrice = discount.value;
 
-    const paidPrice = computed(() => {
-      let discountedPrice = discount.value;
-
-      return allPrice.value - discountedPrice;
-    });
-
-    const discount = computed(() => {
-      return basketItems.value.reduce((acc, item: any) => {
-        let discount =
-          (item.product.price - item.product.specialPrice) * item.quantity;
-        acc += discount;
-        return acc;
-      }, 0);
-    });
-
-    const goOnePageBack = () => router.go(-1);
-
-    const submitOrder = () => {
-      StudentBasketApi.finalizeOrder().then((res) => {
-        if (res.data || res.data.status == 0) {
-          router.push({ name: 'ShopAddress' });
-        }
-      });
-    };
-    const removeItem = async (item) => {
-      const tmpObject = {
-        item: {
-          product: { _id: item.product._id },
-          quantity: -Math.abs(item.quantity)
-        }
-      };
-
-      const res = await StudentBasketApi.add(tmpObject);
-
-      if (res.data) {
-        (basketItems.value = []), (allPrice.value = 0);
-        store.commit(
-          StudentMutationTypes.SET_BASKET_COUNT,
-          store.getters.getBasketCount - item.quantity
-        );
-        const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-          method: 'GET',
-          headers: {
-            token: store.getters.getStudentToken
-          }
-        });
-        const response = await resPromise.json();
-
-        // Reset The data And fill Again
-
-        allSpecialPrice.value = 0;
-
-        response.data.items.forEach((item) => {
-          if (!item.product) return;
-
-          allPrice.value += item.product.price;
-
-          basketItems.value.push(item);
-
-          if (item.product.specialPrice)
-            allSpecialPrice.value += item.product.specialPrice;
-        });
-
-        const imgPromises = [] as any;
-
-        basketItems.value.forEach((item: any) => {
-          const imageUrl = `${baseUrl}product/coverImage/${item.product._id}`;
-          imgPromises.push(returnAProtectedUrl(imageUrl));
-        });
-
-        const imgs = await Promise.all(imgPromises);
-
-        imgs.forEach((img, idx) => {
-          basketItems.value[idx].img = img;
-        });
-      }
-    };
-
-    const goOnepageBack = () => {
-      router.go(-1);
-    };
-
-    return {
-      goOnePageBack,
-      payment,
-      submitOrder,
-      toPersianNumbers,
-      point,
-      faDate,
-      store,
-      basketItems,
-      allPrice,
-      allSpecialPrice,
-      paidPrice,
-      discount,
-      removeItem,
-      purchaseId,
-      goOnepageBack
-    };
-  }
+  return allPrice.value - discountedPrice;
 });
+
+const discount = computed(() => {
+  return basketItems.value.reduce((acc, item: any) => {
+    let discount =
+      (item.product.price - item.product.specialPrice) * item.quantity;
+    acc += discount;
+    return acc;
+  }, 0);
+});
+
+const submitOrder = () => {
+  router.push({ name: 'ShopAddress' });
+};
+const removeItem = async (item) => {
+  const tmpObject = {
+    item: {
+      product: { _id: item.product._id },
+      quantity: -Math.abs(item.quantity)
+    }
+  };
+
+  const res = await StudentBasketApi.add(tmpObject);
+
+  if (res.data) {
+    (basketItems.value = []), (allPrice.value = 0);
+    store.commit(
+      StudentMutationTypes.SET_BASKET_COUNT,
+      store.getters.getBasketCount - item.quantity
+    );
+    const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
+      method: 'GET',
+      headers: {
+        token: store.getters.getStudentToken
+      }
+    });
+    const response = await resPromise.json();
+
+    // Reset The data And fill Again
+
+    allSpecialPrice.value = 0;
+
+    response.data.items.forEach((item) => {
+      if (!item.product) return;
+
+      allPrice.value += item.product.price;
+
+      basketItems.value.push(item);
+
+      if (item.product.specialPrice)
+        allSpecialPrice.value += item.product.specialPrice;
+    });
+
+    const imgPromises = [] as any;
+
+    basketItems.value.forEach((item: any) => {
+      const imageUrl = `${baseUrl}product/coverImage/${item.product._id}`;
+      imgPromises.push(returnAProtectedUrl(imageUrl));
+    });
+
+    const imgs = await Promise.all(imgPromises);
+
+    imgs.forEach((img, idx) => {
+      basketItems.value[idx].img = img;
+    });
+  }
+};
+
+const goOnepageBack = () => {
+  router.go(-1);
+};
 </script>
 
 <style lang="scss" scoped>

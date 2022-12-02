@@ -12,7 +12,7 @@
         v-else
         alt="hero img"
         class="hero"
-        @click="goToChatPage"
+        @click="goToChatPage(model)"
       />
       <div v-if="model.connect" class="icons">
         <img
@@ -61,7 +61,7 @@ import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
 
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: { MinimalHeader, DesktopMinimalHeader },
@@ -85,7 +85,9 @@ export default defineComponent({
       });
 
     const goToChatPage = (item) => {
-      router.push({ name: 'ContactBackupChat', params: { id: item._id } });
+      if (!item.connect) {
+        alertify.error('پشتیبان هنوز درخواست شما را قبول نکرده است');
+      }
     };
 
     const sendRequest = (item) => {

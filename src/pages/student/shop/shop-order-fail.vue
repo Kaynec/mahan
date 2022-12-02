@@ -134,7 +134,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999999;
+  z-index: 9999;
 
   h6 {
     color: #fff;

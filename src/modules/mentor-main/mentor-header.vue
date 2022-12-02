@@ -65,7 +65,7 @@ nav {
   background-color: #171717;
   padding: 1rem;
   box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.09), 0 4px 6px 0 rgba(0, 0, 0, 0.49);
-  z-index: 9999999;
+  z-index: 9999;
 
   .right {
     display: flex;

@@ -33,6 +33,9 @@ const QuestionEdit = () => import('@/pages/admin/question/question-edit.vue');
 const Store = () => import('@/pages/admin/store/store.vue');
 const StoreEdit = () => import('@/pages/admin/store/store-edit.vue');
 
+const Bundle = () => import('@/pages/admin/bundle/bundle.vue');
+const BundleEdit = () => import('@/pages/admin/bundle/bundle-edit.vue');
+
 const Order = () => import('@/pages/admin/order/order.vue');
 const OrderEdit = () => import('@/pages/admin/order/order-edit.vue');
 
@@ -48,6 +51,15 @@ const Notification = () =>
   import('@/pages/admin/notification/notification.vue');
 const NotificationEdit = () =>
   import('@/pages/admin/notification/notification-edit.vue');
+
+const ScheduledMessage = () =>
+  import('@/pages/admin/scheduled-message/scheduled-message.vue');
+const ScheduledMessageEdit = () =>
+  import('@/pages/admin/scheduled-message/scheduled-message-edit.vue');
+
+const CountDown = () => import('@/pages/admin/count-down/count-down.vue');
+const CountDownEdit = () =>
+  import('@/pages/admin/count-down/count-down-edit.vue');
 
 const Exam = () => import('@/pages/admin/exam/exam.vue');
 const ExamEdit = () => import('@/pages/admin/exam/exam-edit.vue');
@@ -377,6 +389,25 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
         component: StoreEdit
       },
+
+      {
+        path: 'bundle',
+        name: 'bundle',
+        component: Bundle
+      },
+      {
+        path: 'bundle-create',
+        name: 'bundle-create',
+        props: true,
+        component: BundleEdit
+      },
+      {
+        path: 'bundle-edit/:productId',
+        name: 'bundle-edit',
+        props: true,
+        component: BundleEdit
+      },
+
       {
         path: 'order',
         name: 'order',
@@ -449,6 +480,43 @@ const routes: Array<RouteRecordRaw> = [
         name: 'notification-edit',
         props: true,
         component: NotificationEdit
+      },
+      {
+        path: 'scheduled-message',
+        name: 'scheduled-message',
+        props: true,
+        component: ScheduledMessage
+      },
+      {
+        path: 'scheduled-message-create',
+        name: 'scheduled-message-create',
+        props: true,
+        component: ScheduledMessageEdit
+      },
+      {
+        path: 'scheduled-message-edit',
+        name: 'scheduled-message-edit',
+        props: true,
+        component: ScheduledMessageEdit
+      },
+
+      {
+        path: 'count-down',
+        name: 'count-down',
+        props: true,
+        component: CountDown
+      },
+      {
+        path: 'count-down-create',
+        name: 'count-down-create',
+        props: true,
+        component: CountDownEdit
+      },
+      {
+        path: 'count-down-edit',
+        name: 'count-down-edit',
+        props: true,
+        component: CountDownEdit
       },
 
       {

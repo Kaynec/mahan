@@ -1,6 +1,7 @@
+script
 <template>
   <!-- Spinner -->
-  <div class="loader-parent" v-if="JSON.stringify(data) === JSON.stringify({})">
+  <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
   </div>
   <!--  -->
@@ -62,14 +63,14 @@
       <section
         class="Card animate__animated animate__fadeIn"
         v-for="product in data.data"
-        @click="openSingleBookPage(JSON.stringify(product))"
+        @click.self="openSingleBookPage(JSON.stringify(product))"
         :key="product"
       >
         <img
           class="animate__animated animate__fadeIn"
           v-if="product.img"
           :src="product.img"
-          style="margin: 0.4rem;"
+          style="margin: 0.4rem"
           alt="product img"
         />
         <div class="txts" @click="openSingleBookPage(JSON.stringify(product))">
@@ -90,10 +91,11 @@
           </p>
         </div>
 
-        <div class="plus">
+        <div class="plus" @click.self="addToBasket(product)">
           <img
             src="@/assets/img/shop/pluss.png"
-            @click.stop="addToBasket(product)"
+            @click="addToBasket(product)"
+            class="pluss"
             alt="plus"
           />
           <select v-model="product.quantity">
@@ -114,9 +116,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 // Get All The Books The Relate To This Genre And List It In The Template
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 import { StudentproductApi } from '@/api/services/student/student-product';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import router from '@/router';
@@ -131,109 +133,97 @@ import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { store } from '@/store';
 import alertify from '@/assets/alertifyjs/alertify';
 
-export default defineComponent({
-  props: { id: { type: String } },
-  components: { ShopFooter, MinimalHeader, DesktopMinimalHeader },
-  setup() {
-    const data = ref({} as any);
-    const route = useRoute();
-    let title = ref('');
+const data = ref({} as any);
+const route = useRoute();
+const isFetching = ref(false);
+let title = ref('');
 
-    const openSingleBookPage = (item) => {
-      router.push({ name: 'SingleBookInfo', params: { item } });
-    };
+const openSingleBookPage = (item) => {
+  router.push({ name: 'SingleBookInfo', params: { item } });
+};
 
-    const goOnePageBack = () => {
-      router.push({
-        name: 'studentShop'
-      });
-    };
+const goOnePageBack = () => {
+  router.push({
+    name: 'studentShop'
+  });
+};
 
-    (async () => {
-      const getAllProducts = await StudentproductApi.getAllProducts(
-        route.params.id
-      );
-      data.value = getAllProducts.data;
+(async () => {
+  isFetching.value = true;
+  const getAllProducts = await StudentproductApi.getAllProducts(
+    route.params.id
+  );
+  data.value = getAllProducts.data;
 
-      const imgPromises = [] as any;
+  const imgPromises = [] as any;
 
-      data.value.data.forEach((data) => {
-        // Setting The Initial Quantity
+  data.value.data.forEach((data) => {
+    // Setting The Initial Quantity
 
-        data.quantity = 1;
+    data.quantity = 1;
 
-        const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-        // For Each Data Element Set It's Image to Returned Image from DB
-        imgPromises.push(returnAProtectedUrl(imageUrl));
-      });
+    const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
+    // For Each Data Element Set It's Image to Returned Image from DB
+    imgPromises.push(returnAProtectedUrl(imageUrl));
+  });
 
-      const promises = await Promise.all(imgPromises);
-      promises.forEach((img, idx) => {
-        data.value.data[idx].img = img;
-      });
+  const promises = await Promise.all(imgPromises);
+  promises.forEach((img, idx) => {
+    data.value.data[idx].img = img;
+  });
 
-      // We Want to Get the Id of the current Category
-      const idOfCurrentSubcategory = data.value.data[0].category;
-      const Res = await StudentproductApi.getAllCategories();
-      StudentproductApi.getAllCategories();
-      const find = Res.data.data.find((el) => {
-        return el._id == idOfCurrentSubcategory;
-      });
-      title.value = find.title || '';
+  // We Want to Get the Id of the current Category
+  const idOfCurrentSubcategory = data.value.data[0].category;
+  const Res = await StudentproductApi.getAllCategories();
+  StudentproductApi.getAllCategories();
+  const find = Res.data.data.find((el) => {
+    return el._id == idOfCurrentSubcategory;
+  });
+  title.value = find.title || '';
 
-      // making a list of promises for images and appending them to their list
-    })();
+  // making a list of promises for images and appending them to their list
+  isFetching.value = false;
+})();
 
-    const addToBasket = async (product) => {
-      const itemToSend = {
-        item: {
-          product: { _id: product._id },
-          quantity: product.quantity
-        }
-      };
+const addToBasket = async (product) => {
+  const itemToSend = {
+    item: {
+      product: { _id: product._id },
+      quantity: product.quantity
+    }
+  };
 
-      const res = await StudentBasketApi.add(itemToSend);
+  const res = await StudentBasketApi.add(itemToSend);
 
-      if (res.data) {
-        store.commit(
-          StudentMutationTypes.SET_BASKET_COUNT,
-          store.getters.getBasketCount + product.quantity
-        );
+  if (res.data) {
+    store.commit(
+      StudentMutationTypes.SET_BASKET_COUNT,
+      store.getters.getBasketCount + product.quantity
+    );
 
-        alertify.success('محصول مورد نظر به سبد شما اضافه شد');
-      }
-    };
-
-    (async () => {
-      const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-        method: 'GET',
-        headers: {
-          token: store.getters.getStudentToken
-        }
-      });
-      const res = await resPromise.json();
-
-      let quantity = 0;
-
-      res.data.items.forEach((item) => {
-        if (item) {
-          quantity += 1;
-        }
-      });
-
-      store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
-    })();
-
-    return {
-      data,
-      openSingleBookPage,
-      goOnePageBack,
-      toPersianNumbers,
-      title,
-      addToBasket
-    };
+    alertify.success('محصول مورد نظر به سبد شما اضافه شد');
   }
-});
+};
+
+(async () => {
+  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
+    method: 'GET',
+    headers: {
+      token: store.getters.getStudentToken
+    }
+  });
+  const res = await resPromise.json();
+
+  let quantity = 0;
+
+  res.data.items.forEach((item) => {
+    if (item) {
+      quantity += 1;
+    }
+  });
+
+  store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
+})();
 </script>
 
 <style lang="scss" scoped>
@@ -365,6 +355,10 @@ export default defineComponent({
       border-bottom-left-radius: 14.5px;
       padding: 0 1rem;
       cursor: pointer;
+
+      .pluss {
+        max-width: 10rem;
+      }
 
       img {
         width: 50%;

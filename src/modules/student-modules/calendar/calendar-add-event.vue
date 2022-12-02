@@ -28,7 +28,7 @@
           placeholder="عنوان"
           v-model="model.eventName"
           @blur="v$.eventName.$touch()"
-          style="appearance: none;"
+          style="appearance: none"
         />
         <span> عنوان رویداد </span>
       </label>
@@ -37,12 +37,12 @@
         v-for="error in v$.eventName.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
 
-      <button class="button-linear" style="color: #fff; padding: 0.7rem 1rem;">
+      <button class="button-linear" style="color: #fff; padding: 0.7rem 1rem">
         اضافه کردن رویداد
       </button>
     </form>
@@ -63,7 +63,7 @@ import useVuelidate from '@vuelidate/core';
 import { StudentEventApi } from '@/api/services/student/student-event-service';
 import { helpers, required } from '@vuelidate/validators';
 import { toEnglishNumbers } from '@/utilities/to-persian-numbers';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   props: {
@@ -130,7 +130,7 @@ export default defineComponent({
   background: rgba(0, 0, 0, 0.5);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  z-index: 9999999;
+  z-index: 9999;
 
   form {
     width: 80%;

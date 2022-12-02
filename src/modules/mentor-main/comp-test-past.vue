@@ -69,7 +69,7 @@ onBeforeMount(async () => {
       ) as any
     );
 
-    console.log(mDate)
+    console.log(mDate);
     mDate.setHours(date.time.split(':')[0], date.time.split(':')[0]);
 
     // let mDate = moment(date.date, 'jYYYY/jM/jD');

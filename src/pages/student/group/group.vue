@@ -17,7 +17,13 @@
     </nav>
     <DesktopMinimalHeader v-if="!isMobile.value" />
 
-    <section class="circles" ref="circles" v-if="allExams && allExams.length">
+    <section
+      class="circles custom"
+      ref="circles"
+      v-if="allExams && allExams.length"
+      v-dragscroll
+    >
+      <div class="scroll"></div>
       <div
         class="circle animate__animatd animate__fadeIn"
         v-for="(circle, i) in allExams"
@@ -73,6 +79,7 @@
           </div>
         </div>
         <img
+          @click="currentIndex = i"
           src="@/assets/img/roadmap/asset-11@3x.png"
           class="circle-main-img animate__animatd animate__fadeIn"
           alt="circle image"
@@ -101,7 +108,6 @@
         <div class="info">{{ circle.title }}</div>
       </div>
     </section>
-    <h1 class="center" v-else>محتوایی برای نمایش وجود ندارد</h1>
   </main>
 </template>
 
@@ -113,6 +119,7 @@ import router from '@/router';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
 import { baseUrl } from '@/api/apiclient';
+import { dragscroll as vDragscroll } from 'vue-dragscroll';
 
 const isLoading = ref(true);
 const roadmap = ref();
@@ -219,6 +226,12 @@ const moveToReportCard = (circle) =>
   background: #555;
 }
 .roadmap {
+  width: 100vw;
+  background: url('../../../assets/img/roadmap/3-d-space-scene@3x.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
+
   .circles {
     display: flex;
     flex-direction: row-reverse;
@@ -228,6 +241,7 @@ const moveToReportCard = (circle) =>
     width: 100vw;
     scrollbar-width: thin;
     scrollbar-color: orange red;
+    background-color: red;
 
     background: url('../../../assets/img/roadmap/3-d-space-scene@3x.png');
 
@@ -400,14 +414,32 @@ const moveToReportCard = (circle) =>
     }
   }
 }
+</style>
 
-.center {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  font-weight: 500;
-  font-size: 2.2rem;
-  color: rgb(95, 92, 92);
+<style scoped lang="scss">
+.custom {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: -o-grab;
+  cursor: grab;
+
+  &:active {
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: -o-grabbing;
+    cursor: grabbing;
+  }
+}
+.custom {
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  overflow: scroll;
+}
+
+.custom::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
 }
 </style>

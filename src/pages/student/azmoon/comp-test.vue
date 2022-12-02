@@ -29,12 +29,8 @@
       </button>
     </div>
 
-    <keep-alive>
-      <CompTestFuture v-if="currentState == 'future'" />
-    </keep-alive>
-    <keep-alive>
-      <CompTestPast v-if="currentState == 'past'" />
-    </keep-alive>
+    <CompTestFuture v-if="currentState == 'future'" />
+    <CompTestPast v-if="currentState == 'past'" />
   </div>
 </template>
 
