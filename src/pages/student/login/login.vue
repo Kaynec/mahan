@@ -354,6 +354,7 @@ export default defineComponent({
   }
 });
 </script>
+
 <style lang="scss" scoped>
 .desktop {
   width: 100%;
