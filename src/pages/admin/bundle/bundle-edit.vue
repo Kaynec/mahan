@@ -137,27 +137,199 @@
           </span>
         </div>
 
-        <div class="form-group col-md-6 col-sm-12">
+        <div class="form-group col-md-6 col-sm-12 bg-red">
           <label for="products">محصولات باندل</label>
-          <v-select
-            :options="
-              allProdocts.map((prod) => ({
-                label: prod.title,
-                value: {
-                  _id: prod._id
-                }
-              }))
-            "
-            multiple
-            v-model="products"
-          ></v-select>
-          <span
-            v-for="error in v$.price.$errors"
-            :key="error.id"
-            class="form-text text-danger"
-          >
-            {{ error.$message }}
-          </span>
+          <main>
+            <div
+              class="bg-red"
+              flex
+              gap-5
+              flex-col
+              justify-center
+              md:flex-row-reverse
+              max-w="11/12"
+              mx-auto
+            >
+              <button
+                bg="#F3F4F9"
+                min-w-35
+                min-h-12
+                rounded-lg
+                text-primary
+                @click="selectAll"
+              >
+                انتخاب همه
+              </button>
+              <div
+                class="md:min-w-120 min-h-12 grow rounded-xl bg-#F3F4F9 relative flex items-center"
+              >
+                <input
+                  type="text"
+                  bg-transparent
+                  placeholder="جستجو...."
+                  text-right
+                  w-full
+                  h-full
+                  pr-2
+                  text-primary
+                  placeholder:text-primary
+                  rounded-xl
+                  v-model="search"
+                />
+                <div
+                  bg-primary
+                  px-3
+                  text-white
+                  rounded-tl-xl
+                  rounded-bl-xl
+                  h-full
+                  absolute
+                  left-0
+                  top-0
+                  items-center
+                  flex
+                >
+                  <div class="i-akar-icons:search w-8 h-8" />
+                </div>
+              </div>
+              <div class="flex items-center justify-center">
+                <button
+                  @click="handleDelete"
+                  min-w-35
+                  bg-primary
+                  text-white
+                  rounded-xl
+                  mx-1
+                  p-3
+                >
+                  حذف جزیی
+                </button>
+              </div>
+            </div>
+            <!-- Table -->
+            <section
+              bg="#F3F4F9"
+              w="11/12"
+              max-w-95vw
+              overflow-auto
+              mx-auto
+              rounded-xl
+              my-2
+            >
+              <!-- Heads -->
+              <div
+                grid
+                grid-cols-4
+                grid-flow-col
+                content-end
+                items-center
+                w="full"
+                min-w-150
+              >
+                <span> حذف کامل </span>
+                <span>شماره همراه</span>
+                <span>پروفایل</span>
+                <span>
+                  <el-checkbox @change="change" size="large" />
+
+                  نام
+                </span>
+              </div>
+              <!--  -->
+              <div flex flex-col-reverse mx-auto w="full">
+                <div
+                  min-w-150
+                  grid
+                  grid-cols-4
+                  justify-between
+                  items-center
+                  mx-3
+                  py-3
+                  gap-2
+                  v-for="item in filteredData"
+                >
+                  <div>
+                    <button btn @click="handleFullDelete(+item?.id)">
+                      حذف
+                    </button>
+                  </div>
+
+                  <span>{{ item.user.phone_number }}</span>
+                  <div flex w-full flex-center-row>
+                    <img
+                      max-w="100%"
+                      max-h-60
+                      rounded-xl
+                      :src="item.user.profile_image"
+                      v-if="item.user.profile_image"
+                      alt="profile image"
+                    />
+                  </div>
+
+                  <span flex-center-row gap-3>
+                    {{
+                      item.user.firstname +
+                      ' ' +
+                      item.user.lastname +
+                      `${item?.beenRemoved ? '(حدف شده)' : ''}`
+                    }}
+                    <el-checkbox size="large" v-model="item.selected" />
+                  </span>
+                </div>
+              </div>
+            </section>
+            <!-- Navigation  -->
+            <div flex flex-row-reverse items-center justify-center gap-3>
+              <div
+                class="i-fontisto:angle-right"
+                bg="orange"
+                rounded-lg
+                width="24"
+                text-primary
+                p="1.5"
+                @click="moveRight"
+              />
+
+              <span
+                bg="orange"
+                rounded-lg
+                width="24"
+                text-primary
+                px-3
+                py-1
+                font-600
+                v-if="currentIndex + 1 <= howManySections"
+              >
+                {{ currentIndex + 1 }}
+              </span>
+              <span text-white font-600 bg-primary px-3 py-1 rounded-lg>
+                {{ currentIndex }}
+              </span>
+              <span
+                v-if="currentIndex - 1 > 0"
+                bg="orange"
+                rounded-lg
+                width="24"
+                text-primary
+                px-3
+                py-1
+                font-600
+              >
+                {{ currentIndex - 1 }}
+              </span>
+
+              <div
+                class="i-fontisto:angle-left"
+                bg="orange"
+                rounded-lg
+                width="24"
+                text-primary
+                p="1.5"
+                @click="moveLeft"
+              />
+            </div>
+          </main>
+          <!--  -->
         </div>
       </div>
 

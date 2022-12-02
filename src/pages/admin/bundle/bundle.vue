@@ -1,5 +1,61 @@
 <template>
   <div class="panel panel-default">
+    <div class="form-row">
+      <div class="form-group col-md-4 col-sm-12">
+        <label> مقطع </label>
+        <select
+          v-model="currentGrade"
+          class="form-select"
+          aria-label="مقطع را انتخاب کنید "
+          placeholder="مقطع را انتخاب کنید"
+        >
+          <option
+            v-for="grade in grades"
+            :key="grade.title"
+            @blur="v$.course.$touch()"
+            :value="grade._id"
+          >
+            {{ grade.title }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-md-4 col-sm-12">
+        <label> گروه </label>
+        <select
+          v-model="currentGroup"
+          class="form-select"
+          aria-label="مقطع را انتخاب کنید "
+          placeholder="مقطع را انتخاب کنید"
+        >
+          <option
+            v-for="group in filteredGroups"
+            :key="group.title"
+            @blur="v$.course.$touch()"
+            :value="group._id"
+          >
+            {{ group.title }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-md-4 col-sm-12">
+        <label> رشته </label>
+        <select
+          v-model="currentField"
+          class="form-select"
+          aria-label="مقطع را انتخاب کنید "
+          placeholder="مقطع را انتخاب کنید"
+        >
+          <option
+            v-for="field in filteredFields"
+            :key="field.title"
+            @blur="v$.course.$touch()"
+            :value="field._id"
+          >
+            {{ field.title }}
+          </option>
+        </select>
+      </div>
+    </div>
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -40,16 +96,81 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, watch, computed } from 'vue';
 import { baseUrl } from '@/api/apiclient';
 import gridComponent from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { BundleServiceApi } from '@/api/services/admin/bundle-service';
 import alertify from '@/assets/alertifyjs/alertify';
-import { useAdminStore } from '@/store';
+import { useRoute } from 'vue-router';
+import { GradeServiceApi } from '@/api/services/admin/grade-service';
+import { StoreServiceApi } from '@/api/services/admin/store-service';
 const $ = require('jquery');
 
-console.log(useAdminStore().state.users);
+const products = ref<any[]>([]);
+
+StoreServiceApi.getAll().then((res) => {
+  products.value = res.data.data;
+  grid.value.getDatatable().ajax.reload();
+});
+
+const route = useRoute();
+
+let grades = ref([] as any);
+let currentGrade = ref(route.params.gradeId || '');
+let currentGroup = ref(route.params.groupId || '');
+let currentField = ref(route.params.fieldId || '');
+GradeServiceApi.getAll().then((res) => {
+  res.data.data.forEach((data: any) => {
+    grades.value.push(data);
+  });
+});
+let filteredGroups = computed(() => {
+  if (currentGrade.value) {
+    let result = grades.value.find(
+      (p) => `${p._id}` == `${currentGrade.value}`
+    );
+    if (result) return result.groups;
+    else return [];
+  } else {
+    return [];
+  }
+});
+
+let filteredFields = computed(() => {
+  if (currentGroup.value) {
+    let result = filteredGroups.value.find(
+      (p) => `${p._id}` == `${currentGroup.value}`
+    );
+    if (result) return result.fields;
+    else return [];
+  } else {
+    return [];
+  }
+});
+
+watch(currentGrade, (cur, prev) => {
+  currentGroup.value = '';
+  currentField.value = '';
+  route.params.gradeId = currentGrade.value;
+  grid.value.getDatatable().ajax.reload();
+});
+watch(currentGroup, (cur, prev) => {
+  currentField.value = '';
+  route.params.groupId = currentGroup.value;
+  grid.value.getDatatable().ajax.reload();
+});
+watch(currentField, (cur, prev) => {
+  route.params.fieldId = currentField.value;
+  grid.value.getDatatable().ajax.reload();
+});
+watch(route.params, (cur, prev) => {
+  currentGrade.value = route.params.gradeId;
+  currentGroup.value = route.params.groupId;
+  currentField.value = route.params.fieldId;
+  grid.value.getDatatable().ajax.reload();
+});
+
 // ref
 const grid = ref();
 // Data
@@ -62,6 +183,15 @@ const columns = reactive([
       orthogonal: 'sp',
       show: true
     }
+  },
+  {
+    label: 'آیتم های باندل',
+    data: 'products',
+    render: (d: any) => {
+      const titles = d.map((el) => el.title);
+      return `${titles}`;
+    },
+    responsivePriority: 3
   },
   {
     label: 'قیمت ',
@@ -94,11 +224,23 @@ const columns = reactive([
     responsivePriority: 1
   }
 ]);
+
 const options = reactive({
-  // gridName: 'session-grid',
   gridName: 'bundle-grid',
   url: `${baseUrl}productBundle`,
-  type: 'GET'
+  type: 'GET',
+  data: (d: any) => {
+    d.filter = {};
+    if (currentGrade.value) {
+      d.filter.grade = currentGrade.value;
+    }
+    if (currentGroup.value) {
+      d.filter.group = currentGroup.value;
+    }
+    if (currentField.value) {
+      d.filter.field = currentField.value;
+    }
+  }
 });
 
 const editItem = (item: any) => {

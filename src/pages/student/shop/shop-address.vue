@@ -75,6 +75,7 @@ import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentBasketApi } from '@/api/services/student/student-basket-service';
 import alertify from '@/assets/alertifyjs/alertify';
+import { AxiosError } from 'axios';
 
 const model = reactive({
   address: '',
@@ -108,7 +109,7 @@ const submitOrder = async () => {
       });
     }
   } catch (error) {
-    alertify.error(err.message);
+    alertify.error((error as AxiosError).message);
     router.push({
       name: 'ShoFailure'
     });

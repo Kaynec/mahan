@@ -106,7 +106,7 @@ import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 import { CourseServiceApi } from '@/api/services/admin/course-service';
 import { SessionServiceApi } from '@/api/services/admin/session-service';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
@@ -150,22 +150,22 @@ export default defineComponent({
       }
     });
 
-    watch(currentGrade, (cur, prev) => {
+    watch(currentGrade, () => {
       currentGroup.value = '';
       currentField.value = '';
       route.params.gradeId = currentGrade.value;
       grid.value.getDatatable().ajax.reload();
     });
-    watch(currentGroup, (cur, prev) => {
+    watch(currentGroup, () => {
       currentField.value = '';
       route.params.groupId = currentGroup.value;
       grid.value.getDatatable().ajax.reload();
     });
-    watch(currentField, (cur, prev) => {
+    watch(currentField, () => {
       route.params.fieldId = currentField.value;
       grid.value.getDatatable().ajax.reload();
     });
-    watch(route.params, (cur, prev) => {
+    watch(route.params, () => {
       currentGrade.value = route.params.gradeId;
       currentGroup.value = route.params.groupId;
       currentField.value = route.params.fieldId;

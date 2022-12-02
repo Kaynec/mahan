@@ -2,7 +2,12 @@
   <table class="display nowrap" :id="options.gridName" style="width: 100%">
     <thead>
       <tr>
-        <th v-for="col in columns" :key="col.data" :class="col.headerClass">
+        <th
+          v-for="col in columns"
+          class="table-head"
+          :key="col.data"
+          :class="col.headerClass"
+        >
           {{ col.label }}
         </th>
       </tr>
@@ -95,4 +100,8 @@ export default defineComponent({
   }
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.table-head {
+  text-align: right;
+}
+</style>
