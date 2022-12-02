@@ -43,7 +43,7 @@
         >
           <div class="control" v-if="circle.state === 0">
             <h1>خواندن کتاب</h1>
-            <h2>{{ (circle.title as string).substring(0 , 25) }}</h2>
+            <h2>{{ (circle.title as string).substring(0, 25) }}</h2>
 
             <button @click="showPdf(circle, i, index)" class="green">
               شروع خواندن کتاب
@@ -64,7 +64,7 @@
 
           <div class="control" v-else-if="circle.state === 1">
             <h1>آزمون خودسنجی</h1>
-            <h2>{{ (circle.title as string).substring(0 , 25) }}</h2>
+            <h2>{{ (circle.title as string).substring(0, 25) }}</h2>
             <button
               class="green"
               @click="moveToSelfTestQuestions(i, circle._id)"
@@ -150,7 +150,7 @@
           </div>
         </div>
         <div class="info">
-          {{ (circle.title as string).substring(0 , 50)  }}...
+          {{ (circle.title as string).substring(0, 50) }}...
         </div>
       </div>
     </div>
@@ -178,7 +178,7 @@ import { baseUrl } from '@/api/apiclient';
 import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import Alert from '@/modules/student-modules/alert/alert.vue';
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
 
 const isLoading = ref(true);
 const roadmap = ref();
@@ -202,14 +202,16 @@ onUpdated(() => {
 });
 
 (async () => {
-  const res = await StudentSelfTestApi.getOneCourse(Route.params.id as any);
+  const res = await StudentSelfTestApi.getSessionByCourse(
+    Route.params.id as any
+  );
 
   const historyOfExamPromises = [] as any;
   // Looping Through Sessions of the Course
-  if (res.data.data.sessions) {
-    for (let i = 0; i < res.data.data?.sessions.length; i++) {
+  if (res.data.data.length) {
+    for (let i = 0; i < res.data.data?.length; i++) {
       const session = {
-        ...res.data.data.sessions[i]
+        ...res.data.data[i]
       };
       if (session.image) {
         session.img = `${baseUrl}course/download-image/${session.image}`;
@@ -218,7 +220,7 @@ onUpdated(() => {
 
       historyOfExamPromises.push(
         StudentSelfTestApi.selfTestResult({
-          course: { _id: res.data.data._id },
+          course: { _id: Route.params.id },
           session: { _id: session._id }
         })
       );
@@ -244,7 +246,6 @@ onUpdated(() => {
 const moveToSelfTestQuestions = (index, id) => {
   if (index >= 1 && !store.getters.getCurrentStudent.purchased) {
     alertify.error('لطفا اول برنامه را خریداری کنید');
-
   } else
     router.push({
       name: 'SelfTestQuestions',

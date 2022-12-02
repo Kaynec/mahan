@@ -491,6 +491,8 @@ h6 {
 
 .table-container {
   max-height: 400px;
+  width: 100%;
+  background-color: #f2f2f2;
   overflow: auto;
   position: relative;
 }

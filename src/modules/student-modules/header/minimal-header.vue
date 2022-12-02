@@ -48,6 +48,8 @@ export default defineComponent({
 
   color: #e51c21;
 
+  margin-top: 4rem;
+
   i {
     font-size: 1rem;
   }

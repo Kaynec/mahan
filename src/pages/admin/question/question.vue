@@ -67,7 +67,6 @@ export default defineComponent({
       {
         label: 'عنوان سوال',
         data: (data) => {
-          debugger;
           return data;
         },
         render(data: any) {

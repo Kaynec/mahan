@@ -25,6 +25,17 @@ class BundleService {
       }
     });
   }
+  async getbundleByProperties(gradeId, groupId, fieldId, orientationId) {
+    return instance.get(
+      `/productBundle/getByProperties/${gradeId}/${groupId}/${fieldId}/${orientationId}?`,
+      {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
   async update(id: number, user: any) {
     return instance.put(`productBundle/${id}`, user, {
       headers: {

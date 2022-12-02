@@ -68,6 +68,9 @@ export default defineComponent({
           data.items.forEach((item) => {
             sum += item.quantity;
           });
+
+          sum += data.bundles.length;
+          sum += data.sessions.length;
           return sum;
         },
         responsivePriority: 1

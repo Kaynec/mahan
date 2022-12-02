@@ -20,6 +20,14 @@ class SessionService {
       }
     });
   }
+  async getForCourse(courseId: number) {
+    return instance.get(`session/getByCourse/${courseId}`, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        'Content-Type': 'application/json'
+      }
+    });
+  }
   async create(user) {
     return instance.post(`session`, user, {
       headers: {

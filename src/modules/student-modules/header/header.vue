@@ -7,9 +7,11 @@
         {{ toPersianNumbers(`${point}`) }}
       </span>
 
-      <div class="home">
-        <i class="fa fa-home" aria-hidden="true"></i>
-      </div>
+      <router-link to="/student/home" style="text-decoration: none">
+        <div class="home">
+          <i class="fa fa-home" aria-hidden="true"></i>
+        </div>
+      </router-link>
     </div>
   </header>
 </template>
@@ -48,7 +50,7 @@ header {
   // height: 8vh;
   max-height: 10vh;
   padding: 1rem;
-
+  border-bottom: 1px solid #ccc;
   z-index: 2;
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */

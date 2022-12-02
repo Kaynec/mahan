@@ -116,10 +116,11 @@ StoreServiceApi.getAll().then((res) => {
 
 const route = useRoute();
 
-let grades = ref([] as any);
-let currentGrade = ref(route.params.gradeId || '');
 let currentGroup = ref(route.params.groupId || '');
 let currentField = ref(route.params.fieldId || '');
+
+let grades = ref([] as any);
+let currentGrade = ref(route.params.gradeId || '');
 GradeServiceApi.getAll().then((res) => {
   res.data.data.forEach((data: any) => {
     grades.value.push(data);

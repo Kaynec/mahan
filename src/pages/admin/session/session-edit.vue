@@ -103,6 +103,23 @@
           </span>
         </div>
         <div class="form-group col-md-4 col-sm-12">
+          <label for="code"> قیمت فصل:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="code"
+            v-model="model.price"
+            @blur="v$.price.$touch()"
+          />
+          <span
+            v-for="error in v$.price.$errors"
+            :key="error.id"
+            class="form-text text-danger"
+          >
+            {{ error.$message }}
+          </span>
+        </div>
+        <div class="form-group col-md-4 col-sm-12">
           <label for="orientation"> تصویر در رودمپ:</label>
           <input
             type="file"
@@ -128,228 +145,211 @@
     </form>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { computed, ref, watch } from 'vue';
 
 import { CourseServiceApi } from '@/api/services/admin/course-service';
 import { SessionServiceApi } from '@/api/services/admin/session-service';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
-import { helpers, minLength, required } from '@vuelidate/validators';
+import { helpers, minLength, minValue, required } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import { baseUrl } from '@/api/apiclient';
 import { jsonToFormData } from '@/api/helper';
 import alertify from '@/assets/alertifyjs/alertify';
 
-export default defineComponent({
-  setup() {
-    const route = useRoute();
-    let model = ref({
-      title: '',
-      code: '',
-      course: {}
-    } as any);
+const route = useRoute();
 
-    // All The Questions And Courses
-    let currentCourse = ref(route.params.courseId || '');
-    let currentCourseTitle = ref('');
-    const courses = ref([] as any);
-    let grades = ref([] as any);
-    let currentGrade = ref(route.params.gradeId || '');
-    let currentGroup = ref(route.params.groupId || '');
-    let currentField = ref(route.params.fieldId || '');
+let model = ref({
+  title: '',
+  code: '',
+  course: {}
+} as any);
 
-    if (currentField.value) {
-      CourseServiceApi.getAllByField(currentField.value).then((res) => {
-        courses.value = res.data.data;
-      });
+// All The Questions And Courses
+let currentCourse = ref(route.params.courseId || '');
+let currentCourseTitle = ref('');
+const courses = ref([] as any);
+let grades = ref([] as any);
+let currentGrade = ref(route.params.gradeId || '');
+let currentGroup = ref(route.params.groupId || '');
+let currentField = ref(route.params.fieldId || '');
+
+if (currentField.value) {
+  CourseServiceApi.getAllByField(currentField.value).then((res) => {
+    courses.value = res.data.data;
+  });
+}
+
+// getting data from the database
+if (route.params.sessionId) {
+  SessionServiceApi.get(route.params.sessionId as string).then(
+    (result) => {
+      let data = result.data.data;
+      model.value._id = data._id;
+      model.value.title = data.title;
+      model.value.code = data.code;
+      model.value.image = data.image;
+      model.value.course = data.course._id;
+      model.value.price = data.price;
+      currentCourse.value = data.course._id;
+      currentCourseTitle.value = data.course.title;
+    },
+    (error) => {
+      cancel();
     }
-
-    // getting data from the database
-    if (route.params.sessionId) {
-      SessionServiceApi.get(route.params.sessionId as string).then(
-        (result) => {
-          let data = result.data.data;
-          model.value._id = data._id;
-          model.value.title = data.title;
-          model.value.code = data.code;
-          model.value.image = data.image;
-          model.value.course = data.course._id;
-          currentCourse.value = data.course._id;
-          currentCourseTitle.value = data.course.title;
-        },
-        (error) => {
-          cancel();
-        }
-      );
-    }
-    let filteredGroups = computed(() => {
-      if (currentGrade.value) {
-        let result = grades.value.find(
-          (p) => `${p._id}` == `${currentGrade.value}`
-        );
-        if (result) return result.groups;
-        else return [];
-      } else {
-        return [];
-      }
-    });
-
-    let filteredFields = computed(() => {
-      if (currentGroup.value) {
-        let result = filteredGroups.value.find(
-          (p) => `${p._id}` == `${currentGroup.value}`
-        );
-        if (result) return result.fields;
-        else return [];
-      } else {
-        return [];
-      }
-    });
-
-    GradeServiceApi.getAll().then((res) => {
-      res.data.data.forEach((data: any) => {
-        grades.value.push(data);
-      });
-    });
-
-    watch(currentField, (cur, prev) => {
-      CourseServiceApi.getAllByField(currentField.value).then((res) => {
-        courses.value = res.data.data;
-      });
-    });
-
-    const save = () => {
-      /// error handeling
-      v$.value.$touch();
-      if (!v$.value.$invalid) {
-        if (model.value._id) {
-          let tmp: any = {
-            title: model.value.title,
-            code: model.value.code
-          };
-          let formData = jsonToFormData(tmp);
-          if (model.value.image && model.value.image.file) {
-            formData.append(
-              'imageFile',
-              model.value.image.file,
-              model.value.image.file.name
-            );
-          }
-          SessionServiceApi.update(model.value._id, formData).then((result) => {
-            alertify.success(result.data.message);
-            router.push({
-              name: 'session',
-              params: route.params
-            });
-          });
-        } else {
-          let tmp: any = {
-            title: model.value.title,
-            code: model.value.code,
-            course: {
-              _id: currentCourse.value
-            }
-          };
-          let formData = jsonToFormData(tmp);
-          if (model.value.image && model.value.image.file) {
-            formData.append(
-              'imageFile',
-              model.value.image.file,
-              model.value.image.file.name
-            );
-          }
-          SessionServiceApi.create(formData).then((result) => {
-            alertify.success(result.data.message);
-            router.push({
-              name: 'session',
-              params: route.params
-            });
-          });
-        }
-      }
-    };
-
-    // Validations
-    const rules = computed(() => ({
-      title: {
-        required: helpers.withMessage('عتوان فصل را وارد کنید', required),
-        minLength: helpers.withMessage(
-          'عتوان باید حدقا 3 حرف باشد',
-          minLength(3)
-        )
-      },
-      code: {
-        required: helpers.withMessage('کد فصل را وارد کنید', required),
-        minLength: helpers.withMessage(
-          'عتوان باید حدقا 2 حرف باشد',
-          minLength(3)
-        )
-      }
-    }));
-
-    const v$ = useVuelidate(rules, model);
-    // cancel //
-    const cancel = () => {
-      if (currentCourse.value) {
-        router.push({
-          name: 'session',
-          params: { ...route.params, courseId: currentCourse.value }
-        });
-      } else {
-        router.push({
-          name: 'course',
-          params: route.params
-        });
-      }
-    };
-
-    /// Handle The Image
-    const onFileChange = (e: any) => {
-      const files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-
-      model.value.image = { file: files[0] };
-      getBase64(files[0]).then((str) => {
-        model.value.image.base64 = str;
-      });
-    };
-
-    const getBase64 = (file: any) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
-    };
-
-    const getImageUrl = () => {
-      if (model.value.image && !model.value.image.base64)
-        return `${baseUrl}course/download-image/${model.value.image}`;
-      else return model.value.image.base64;
-    };
-
-    return {
-      model,
-      save,
-      cancel,
-      courses,
-      currentGrade,
-      currentGroup,
-      currentField,
-      currentCourse,
-      filteredGroups,
-      filteredFields,
-      grades,
-      v$,
-      getImageUrl,
-      onFileChange,
-      currentCourseTitle
-    };
+  );
+}
+let filteredGroups = computed(() => {
+  if (currentGrade.value) {
+    let result = grades.value.find(
+      (p) => `${p._id}` == `${currentGrade.value}`
+    );
+    if (result) return result.groups;
+    else return [];
+  } else {
+    return [];
   }
 });
+
+let filteredFields = computed(() => {
+  if (currentGroup.value) {
+    let result = filteredGroups.value.find(
+      (p) => `${p._id}` == `${currentGroup.value}`
+    );
+    if (result) return result.fields;
+    else return [];
+  } else {
+    return [];
+  }
+});
+
+GradeServiceApi.getAll().then((res) => {
+  res.data.data.forEach((data: any) => {
+    grades.value.push(data);
+  });
+});
+
+watch(currentField, (cur, prev) => {
+  CourseServiceApi.getAllByField(currentField.value).then((res) => {
+    courses.value = res.data.data;
+  });
+});
+
+const save = () => {
+  /// error handeling
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  if (model.value._id) {
+    let tmp: any = {
+      title: model.value.title,
+      code: model.value.code,
+      price: model.value.price
+    };
+    let formData = jsonToFormData(tmp);
+    if (model.value.image && model.value.image.file) {
+      formData.append(
+        'imageFile',
+        model.value.image.file,
+        model.value.image.file.name
+      );
+    }
+    SessionServiceApi.update(model.value._id, formData).then((result) => {
+      alertify.success(result.data.message);
+      router.push({
+        name: 'session',
+        params: route.params
+      });
+    });
+  } else {
+    let tmp: any = {
+      title: model.value.title,
+      code: model.value.code,
+      price: model.value.price,
+
+      course: {
+        _id: currentCourse.value
+      }
+    };
+    let formData = jsonToFormData(tmp);
+    if (model.value.image && model.value.image.file) {
+      formData.append(
+        'imageFile',
+        model.value.image.file,
+        model.value.image.file.name
+      );
+    }
+    SessionServiceApi.create(formData).then((result) => {
+      alertify.success(result.data.message);
+      router.push({
+        name: 'session',
+        params: route.params
+      });
+    });
+  }
+};
+
+// Validations
+const rules = computed(() => ({
+  title: {
+    required: helpers.withMessage('عتوان فصل را وارد کنید', required),
+    minLength: helpers.withMessage('عتوان باید حدقا 3 حرف باشد', minLength(3))
+  },
+  code: {
+    required: helpers.withMessage('کد فصل را وارد کنید', required),
+    minLength: helpers.withMessage('عتوان باید حداقل 2 حرف باشد', minLength(3))
+  },
+  price: {
+    required: helpers.withMessage('قیمت فصل را وارد کنید', required),
+    minValue: helpers.withMessage(
+      'قیمت باید حداقل 1000 تومان باشد',
+      minValue(1000)
+    )
+  }
+}));
+
+const v$ = useVuelidate(rules, model);
+// cancel //
+const cancel = () => {
+  if (currentCourse.value) {
+    router.push({
+      name: 'session',
+      params: { ...route.params, courseId: currentCourse.value }
+    });
+  } else {
+    router.push({
+      name: 'course',
+      params: route.params
+    });
+  }
+};
+
+/// Handle The Image
+const onFileChange = (e: any) => {
+  const files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return;
+
+  model.value.image = { file: files[0] };
+  getBase64(files[0]).then((str) => {
+    model.value.image.base64 = str;
+  });
+};
+
+const getBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+const getImageUrl = () => {
+  if (model.value.image && !model.value.image.base64)
+    return `${baseUrl}course/download-image/${model.value.image}`;
+  else return model.value.image.base64;
+};
 </script>
 
 <style scoped lang="scss">

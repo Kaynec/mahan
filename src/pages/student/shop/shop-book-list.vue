@@ -244,7 +244,6 @@ const addToBasket = async (product) => {
   height: 100%;
   font-family: IRANSans;
   max-width: 1000px;
-  padding-top: 4rem;
 
   .card-container {
     width: 100%;

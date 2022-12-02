@@ -94,6 +94,7 @@ export default defineComponent({
         }
       },
       { label: 'کد', data: 'code' },
+      { label: 'قیمت', data: 'price' },
       {
         className: 'edit-control',
         orderable: false,

@@ -67,11 +67,7 @@
           </button>
         </div>
       </div>
-      <div
-        class="form-row"
-        v-for="(item, index) in productsComputed"
-        :key="index"
-      >
+      <div class="form-row" v-for="(item, index) in model.items" :key="index">
         <div class="form-group col-md-3 flex col-sm-12 center-block">
           <label for="student">محصول {{ index + 1 }}:</label>
           <vSelect
@@ -133,16 +129,12 @@
           </button>
         </div>
       </div>
-      <div
-        class="form-row"
-        v-for="(item, index) in bundlesComputed"
-        :key="index"
-      >
+      <div class="form-row" v-for="(item, index) in model.bundles" :key="index">
         <div class="form-group col-md-3 flex col-sm-12 center-block">
           <label for="student">باندل {{ index + 1 }}:</label>
           <vSelect
             class="style-chooser"
-            v-model="item.product._id"
+            v-model="item.productBundle._id"
             label="title"
             :options="bundles"
             :selectable="disableProductItem"
@@ -151,20 +143,11 @@
             dir="rtl"
           ></vSelect>
         </div>
-        <div class="form-group col-md-3 flex col-sm-12 center-block">
-          <label for="student">تعداد :</label>
 
-          <input
-            type="number"
-            class="form-control"
-            id="title"
-            v-model="item.quantity"
-          />
-        </div>
         <div class="form-group col-md-2 flex col-sm-12 center-block">
-          <label :for="'price-' + index">قیمت واحد :</label>
+          <label for="itemPrice">قیمت :</label>
           <span class="form-control" :id="'price-' + index">{{
-            getBundlePrice(item.product._id)
+            getBundlePrice(item.productBundle._id)
           }}</span>
         </div>
 
@@ -196,14 +179,14 @@
       </div>
       <div
         class="form-row"
-        v-for="(item, index) in sessionsComputed"
+        v-for="(item, index) in model.sessions"
         :key="index"
       >
         <div class="form-group col-md-3 flex col-sm-12 center-block">
           <label for="student">سر فصل {{ index + 1 }}:</label>
           <vSelect
             class="style-chooser"
-            v-model="item.product._id"
+            v-model="item.session._id"
             label="title"
             :options="sessions"
             :selectable="disableProductItem"
@@ -212,33 +195,18 @@
             dir="rtl"
           ></vSelect>
         </div>
-        <div class="form-group col-md-3 flex col-sm-12 center-block">
-          <label for="student">تعداد :</label>
 
-          <input
-            type="number"
-            class="form-control"
-            id="title"
-            v-model="item.quantity"
-          />
-        </div>
-        <div class="form-group col-md-2 flex col-sm-12 center-block">
-          <label :for="'price-' + index">قیمت واحد :</label>
-          <span class="form-control" :id="'price-' + index">{{
-            getProductPrice(item.product._id)
-          }}</span>
-        </div>
         <div class="form-group col-md-2 flex col-sm-12 center-block">
           <label for="itemPrice">قیمت :</label>
-          <span class="form-control" :id="'itemPrice-' + index">{{
-            getProductPrice(item.product._id) * item.quantity
+          <span class="form-control" :id="'price-' + index">{{
+            getSessionPrice(item.session._id)
           }}</span>
         </div>
         <div class="form-group col-md-2 flex col-sm-12 center-block">
           <button
             type="button"
             class="btn btn-secondary mt-4"
-            @click="removeSession"
+            @click="removeSession(index)"
           >
             <i class="fas fa-minus"></i>
           </button>
@@ -264,7 +232,7 @@ import { StudentServiceApi } from '@/api/services/admin/student-service';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
-import { computed, ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
@@ -274,12 +242,11 @@ import { SessionServiceApi } from '@/api/services/admin/session-service';
 
 const route = useRoute();
 // This decides if model should be the same thing or re created
-let model = ref({} as any);
+let model = ref<{
+  [index: string]: any;
+}>({});
 let students = ref<any>([]);
-let productsComputed = ref<any[]>([]);
-let bundlesComputed = ref<any[]>([]);
-let sessionsComputed = ref<any[]>([]);
-//
+
 let products = ref([]);
 let bundles = ref([]);
 let sessions = ref([]);
@@ -302,12 +269,11 @@ let statuses = ref<any>([
   }
 ]);
 
+const studentsInfo = ref<any[]>([]);
+
 onBeforeMount(async () => {
   // getting data from the database
   await (async () => {
-    model.value.products = [];
-    model.value.bundles = [];
-    model.value.sessions = [];
     if (route.params.orderId) {
       const res = await OrderServiceApi.get(route.params.orderId as string);
       let data = res.data.data;
@@ -316,92 +282,131 @@ onBeforeMount(async () => {
       model.value.status = data.status;
       model.value.createdAt = data.createdAt;
       model.value.items = data.items;
+      model.value.bundles = data.bundles || [];
+      model.value.sessions = data.sessions || [];
       model.value.totalIncludingTax = data.totalIncludingTax;
       model.value.totalTax = data.totalTax;
     } else {
       model.value.student = {};
       model.value.items = [];
+      model.value.bundles = [];
+      model.value.sessions = [];
     }
   })();
-  StudentServiceApi.getAll().then((response) => {
-    if (response.data.status == 0) {
-      students.value = response.data.data.map((m) => {
-        return { ...m, fullname: m.firstname + ' ' + m.lastname };
-      });
-    }
-  });
-  StoreServiceApi.getAll().then((response) => {
-    if (response.data.status === 0) {
-      products.value = response.data.data;
-      model.value.items.forEach((item) => {
-        const el = products.value.find(
-          (element) => element._id === item.product._id
-        );
-        if (el) productsComputed.value.push(item);
-      });
-    }
-  });
-  BundleServiceApi.getAll().then((response) => {
-    if (response.data.status == 0) bundles.value = response.data.data;
-    model.value.items.forEach((item) => {
-      const el = bundles.value.find(
-        (element) => element._id === item.product._id
-      );
-      if (el) bundlesComputed.value.push(item);
+  const res = await StudentServiceApi.getAll();
+  //
+  if (res.data.status == 0) {
+    studentsInfo.value = res.data.data;
+    students.value = res.data.data.map((m) => {
+      return { ...m, fullname: m.firstname + ' ' + m.lastname };
     });
-  });
-  SessionServiceApi.getAll(model.value.student._id).then((response) => {
-    if (response.data.status == 0) sessions.value = response.data.data;
-    model.value.items.forEach((item) => {
-      const el = sessions.value.find(
-        (element) => element._id === item.product._id
-      );
-      if (el) sessionsComputed.value.push(item);
+  }
+  //
+  const getProduts = () => {
+    const student = studentsInfo.value.find(
+      (student) => student._id === model.value.student._id
+    );
+
+    StoreServiceApi.getProductByProperties(
+      student.grade,
+      student.group,
+      student.field,
+      student.orientation
+    ).then((response) => {
+      if (response.data.status === 0) {
+        products.value = response.data.data;
+      }
     });
-  });
+  };
+  const getBundles = async () => {
+    const student = studentsInfo.value.find(
+      (student) => student._id === model.value.student._id
+    );
+    BundleServiceApi.getbundleByProperties(
+      student.grade,
+      student.group,
+      student.field,
+      student.orientation
+    ).then((response) => {
+      if (response.data.status == 0) bundles.value = response.data.data;
+    });
+  };
+
+  const getSessions = () => {
+    SessionServiceApi.getAll({
+      student: model.value.student.student
+    }).then((response) => {
+      if (response.data.status == 0) sessions.value = response.data.data;
+    });
+  };
+
+  if (model.value.student?._id) {
+    getSessions();
+    getProduts();
+    getBundles();
+    return;
+  }
+  watch(
+    () => model.value.student?._id,
+    () => {
+      getSessions();
+      getProduts();
+      getBundles();
+    }
+  );
 });
 
 const save = async () => {
   /// error handeling
   //
-  model.value.items = [
-    ...productsComputed.value.map((el) => ({ ...el, type: 'product' })),
-    ...bundlesComputed.value.map((el) => ({ ...el, type: 'bundle' })),
-    ...sessionsComputed.value.map((el) => ({ ...el, type: 'session' }))
-  ];
+
   if (v$.value.$invalid) return;
   let tmp = {
     student: {
       _id: model.value.student._id
     },
     status: model.value.status,
-    items: model.value.items
-      .filter((p) => !!p.product._id)
+    sessions: model.value.sessions
+      .filter((p: any) => !!p.session._id)
       .map((m) => {
-        // let product: any = products.value.find((p) => p._id == m.product._id);
-
-        const productFunc = () => {
-          if (m.type === 'product') {
-            return products.value.find((p) => p._id == m.product._id);
-          }
-          if (m.type === 'bundle') {
-            return bundles.value.find((p) => p._id == m.product._id);
-          }
-          if (m.type === 'session') {
-            return sessions.value.find((p) => p._id == m.product._id);
-          }
-          return false;
+        let session: any = sessions.value.find(
+          (p: any) => p._id == m.session._id
+        );
+        return {
+          session: {
+            _id: m.session._id
+          },
+          price: session.price,
+          course: { _id: session.course }
         };
-
-        const product = productFunc();
+      }),
+    bundles: model.value.bundles
+      .filter((p: any) => !!p.productBundle._id)
+      .map((m) => {
+        let productBundle: any = bundles.value.find(
+          (p: any) => p._id == m.productBundle._id
+        );
+        return {
+          productBundle: {
+            _id: m.productBundle._id
+          },
+          price: productBundle.price
+        };
+      }),
+    items: model.value.items
+      .filter((p: any) => !!p.product._id)
+      .map((m) => {
+        let product: any = products.value.find(
+          (p: any) => p._id == m.product._id
+        );
 
         return {
           product: {
             _id: m.product._id,
-            specialPrice: product.specialPrice ? product.specialPrice : 0,
-            price: product.price
+            specialPrice: product?.specialPrice ? product?.specialPrice : 0,
+            price: product?.price
           },
-          quantity: m.quantity
+          quantity: m?.quantity || 1
         };
       })
   };
@@ -433,11 +438,22 @@ const rules = computed(() => {
 
 const totalPrice = computed(() => {
   if (model.value.items) {
-    let total = model.value.items.reduce((partial_sum, a) => {
+    let total = model.value?.items?.reduce((partial_sum, a) => {
       let price = getProductPrice(a.product._id);
       return partial_sum + price * a.quantity;
     }, 0);
-    return total;
+    let totalBundle = model.value?.bundles?.reduce((partial_sum, item) => {
+      let price = getBundlePrice(item.productBundle._id);
+
+      return partial_sum + price;
+    }, 0);
+    let totalSession = model.value?.sessions?.reduce((partial_sum, a) => {
+      let price = getSessionPrice(a.session._id);
+
+      return partial_sum + price;
+    }, 0);
+    console.log(total, totalBundle, totalSession);
+    return total + totalBundle + totalSession;
   } else {
     return 0;
   }
@@ -452,36 +468,34 @@ const cancel = () => {
 };
 
 const addNewProduct = () => {
-  if (!productsComputed.value || productsComputed.value.length == 0) {
-    productsComputed.value = [];
+  if (!model.value.items || model.value.items.length == 0) {
+    model.value.items = [];
   }
 
-  productsComputed.value.push({
+  model.value.items.push({
     product: {},
     price: 0,
     quantity: 0
   });
 };
 const addNewBundle = () => {
-  if (!bundlesComputed.value || bundlesComputed.value.length == 0) {
-    bundlesComputed.value = [];
+  if (!model.value.bundles || model.value.bundles.length == 0) {
+    model.value.bundles = [];
   }
 
-  bundlesComputed.value.push({
-    product: {},
-    price: 0,
-    quantity: 0
+  model.value.bundles.push({
+    productBundle: {},
+    price: 0
   });
 };
 const addNewSession = () => {
-  if (!sessionsComputed.value || sessionsComputed.value.length == 0) {
-    sessionsComputed.value = [];
+  if (!model.value.sessions || model.value.sessions.length == 0) {
+    model.value.sessions = [];
   }
 
-  sessionsComputed.value.push({
-    product: {},
-    price: 0,
-    quantity: 0
+  model.value.sessions.push({
+    session: {},
+    price: 0
   });
 };
 
@@ -490,35 +504,33 @@ const disableProductItem = (option) => {
 };
 
 const removeProduct = (index) => {
-  productsComputed.value = productsComputed.value.filter(
+  model.value.items.value = model.value.items.value.filter(
     (el, idx) => idx !== index
   );
 };
 const removeBundle = (index) => {
-  bundlesComputed.value = bundlesComputed.value.filter(
+  model.value.bundles.value = model.value.bundles.value.filter(
     (el, idx) => idx !== index
   );
 };
 const removeSession = (index) => {
-  sessionsComputed.value = sessionsComputed.value.filter(
+  model.value.sessions.value = model.value.sessions.value.filter(
     (el, idx) => idx !== index
   );
 };
 
 const getProductPrice = (productId) => {
-  let product = products.value.find((p) => p._id == productId);
+  let product = products.value.find((p: any) => p._id == productId);
   if (product)
     return product.specialPrice ? product.specialPrice : product.price;
   else return 0;
 };
-const getBundlePrice = (productId) => {
-  let product = bundles.value.find((p) => p._id == productId);
-  if (product) return product.price;
-  else return 0;
+const getBundlePrice = (bundleId) => {
+  let product = bundles.value.find((p: any) => p._id == bundleId);
+  return product?.price || 0;
 };
 const getSessionPrice = (productId) => {
-  let product = sessions.value.find((p) => p._id == productId);
-  if (product) return product.price;
-  else return 0;
+  let product = sessions.value.find((p: any) => p._id == productId);
+  return product?.price;
 };
 </script>

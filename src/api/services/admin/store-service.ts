@@ -25,6 +25,18 @@ class StoreService {
       }
     });
   }
+  async getProductByProperties(gradeId, groupId, fieldId, orientationId) {
+    return instance.get(
+      `/product/getByProperties/${gradeId}/${groupId}/${fieldId}/${orientationId}?`,
+      {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
   async create(user: any) {
     return instance.post(`product`, user, {
       headers: {

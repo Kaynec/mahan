@@ -161,7 +161,7 @@
 import { computed, defineComponent, ref, watch } from 'vue';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import router from '@/router';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 import useVuelidate from '@vuelidate/core';
 import { required, minLength, helpers } from '@vuelidate/validators';
 import { useRoute } from 'vue-router';
@@ -276,7 +276,6 @@ export default defineComponent({
         return;
       }
       let oldVideos = model.value.videos.filter((p) => !!p._id);
-      debugger;
       for (const video of newVideos) {
         if (
           oldVideos.some(

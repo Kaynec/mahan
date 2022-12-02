@@ -147,7 +147,9 @@
   <!-- MOBILE  -->
 
   <main class="shop" v-else>
-    <SmallHeader onePageBack="Home" />
+    <!-- <SmallHeader onePageBack="Home" /> -->
+    <Header />
+    <MinimalHeader title="محصولات" />
     <div class="grid animate__animated animate__fadeIn">
       <div
         class="img-container"
@@ -230,9 +232,8 @@
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { StudentproductApi } from '@/api/services/student/student-product';
 import router from '@/router';
 import ShopFooter from '@/modules/student-modules/footer/shop-footer.vue';
@@ -244,172 +245,151 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { StudentBasketApi } from '@/api/services/student/student-basket-service';
 import alertify from '@/assets/alertifyjs/alertify';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 
-export default defineComponent({
-  components: { SmallHeader, ShopFooter, DesktopMinimalHeader },
-  setup() {
-    const productCategories = ref([]) as any;
-    const isFetching = ref(true);
-    const newsetData = ref([]) as any;
-    const yourProduct = ref([]) as any;
+const productCategories = ref([]) as any;
+const isFetching = ref(true);
+const newsetData = ref([]) as any;
+const yourProduct = ref([]) as any;
 
-    (async () => {
-      const getAllCategoriesImgs = [] as any;
-      const getNewProductsImgs = [] as any;
-      const res = await StudentproductApi.getAllCategories();
+(async () => {
+  const getAllCategoriesImgs = [] as any;
+  const getNewProductsImgs = [] as any;
+  const res = await StudentproductApi.getAllCategories();
 
-      if (res.data) {
-        productCategories.value = res.data.data;
-        productCategories.value.forEach((data) => {
-          const imageUrl = `${baseUrl}product-category/coverImage/${data._id}`;
-          getAllCategoriesImgs.push(returnAProtectedUrl(imageUrl));
-        });
-      }
-
-      const newDataRes = await StudentproductApi.getNewProducts();
-
-      if (newDataRes.data) {
-        newsetData.value = newDataRes.data.data;
-
-        newsetData.value.forEach((data) => {
-          const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-          data.quantity = 1;
-          getNewProductsImgs.push(returnAProtectedUrl(imageUrl));
-        });
-      }
-
-      const newImgs = await Promise.all(getNewProductsImgs);
-
-      newImgs.forEach((img, idx) => {
-        // Setting The Image and also quantity to default of 1
-        newsetData.value[idx].img = img;
-      });
-
-      const categoryImgs = await Promise.all(getAllCategoriesImgs);
-
-      categoryImgs.forEach((img, idx) => {
-        // Setting The Image and also quantity to default of 1
-        productCategories.value[idx].img = img;
-      });
-
-      // Using Fetch here To Avoid The Alertify Error message
-
-      const getBoughtProductsRes = await fetch(
-        `${baseUrl}order/getBoughtProducts`,
-        {
-          headers: {
-            token: store.getters.getStudentToken
-          }
-        }
-      );
-
-      const getBoughtProducts = await getBoughtProductsRes.json();
-
-      let boughtImgPromises = [] as any;
-
-      if (getBoughtProducts.data) {
-        getBoughtProducts.data.forEach((child) =>
-          yourProduct.value.push(child)
-        );
-        yourProduct.value.forEach((data, idx) => {
-          const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
-          boughtImgPromises.push(returnAProtectedUrl(imageUrl));
-          yourProduct.value[idx].img = imageUrl;
-        });
-      }
-
-      const boughtimages = await Promise.all(boughtImgPromises);
-      boughtimages.forEach((img, idx) => {
-        console.log(img, idx);
-        // Setting The Image and also quantity to default of 1
-        yourProduct.value[idx].img = img;
-      });
-
-      isFetching.value = false;
-    })();
-
-    (async () => {
-      const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-        method: 'GET',
-        headers: {
-          token: store.getters.getStudentToken
-        }
-      });
-      const res = await resPromise.json();
-
-      let quantity = 0;
-
-      res.data.items.forEach((item) => {
-        if (item) {
-          quantity += 1;
-        }
-      });
-
-      store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
-    })();
-
-    const currentState = ref('newsetProduct');
-    const sendToBookShopList = (id: string, title: string) => {
-      router.push({
-        name: 'ShopBookList',
-        params: { id, title }
-      });
-    };
-
-    const openSingleBookPage = (item) => {
-      router.push({
-        name: 'SingleBookInfo',
-        params: { item: JSON.stringify(item) }
-      });
-    };
-
-    const moveToBasket = () => {
-      router.push({
-        name: 'ShopBasket'
-      });
-    };
-
-    const addToBasket = async (product) => {
-      const itemToSend = {
-        item: {
-          product: { _id: product._id },
-          quantity: product.quantity
-        }
-      };
-
-      const res = await StudentBasketApi.add(itemToSend);
-
-      if (res.data) {
-        store.commit(
-          StudentMutationTypes.SET_BASKET_COUNT,
-          store.getters.getBasketCount + 1
-        );
-
-        alertify.success('محصول مورد نظر به سبد شما اضافه شد');
-      }
-    };
-
-    function showYourProductAlert() {
-      alertify.error('لطفا برای مشاهده محصول از اپلیکیشن ماهان استفاده کنید');
-    }
-
-    return {
-      currentState,
-      productCategories,
-      newsetData,
-      sendToBookShopList,
-      moveToBasket,
-      StudentproductApi,
-      store,
-      yourProduct,
-      openSingleBookPage,
-      isFetching,
-      toPersianNumbers,
-      addToBasket,
-      showYourProductAlert
-    };
+  if (res.data) {
+    productCategories.value = res.data.data;
+    productCategories.value.forEach((data) => {
+      const imageUrl = `${baseUrl}product-category/coverImage/${data._id}`;
+      getAllCategoriesImgs.push(returnAProtectedUrl(imageUrl));
+    });
   }
-});
+
+  const newDataRes = await StudentproductApi.getNewProducts();
+
+  if (newDataRes.data) {
+    newsetData.value = newDataRes.data.data;
+
+    newsetData.value.forEach((data) => {
+      const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
+      data.quantity = 1;
+      getNewProductsImgs.push(returnAProtectedUrl(imageUrl));
+    });
+  }
+
+  const newImgs = await Promise.all(getNewProductsImgs);
+
+  newImgs.forEach((img, idx) => {
+    // Setting The Image and also quantity to default of 1
+    newsetData.value[idx].img = img;
+  });
+
+  const categoryImgs = await Promise.all(getAllCategoriesImgs);
+
+  categoryImgs.forEach((img, idx) => {
+    // Setting The Image and also quantity to default of 1
+    productCategories.value[idx].img = img;
+  });
+
+  // Using Fetch here To Avoid The Alertify Error message
+
+  const getBoughtProductsRes = await fetch(
+    `${baseUrl}order/getBoughtProducts`,
+    {
+      headers: {
+        token: store.getters.getStudentToken
+      }
+    }
+  );
+
+  const getBoughtProducts = await getBoughtProductsRes.json();
+
+  let boughtImgPromises = [] as any;
+
+  if (getBoughtProducts.data) {
+    getBoughtProducts.data.forEach((child) => yourProduct.value.push(child));
+    yourProduct.value.forEach((data, idx) => {
+      const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
+      boughtImgPromises.push(returnAProtectedUrl(imageUrl));
+      yourProduct.value[idx].img = imageUrl;
+    });
+  }
+
+  const boughtimages = await Promise.all(boughtImgPromises);
+  boughtimages.forEach((img, idx) => {
+    console.log(img, idx);
+    // Setting The Image and also quantity to default of 1
+    yourProduct.value[idx].img = img;
+  });
+
+  isFetching.value = false;
+})();
+
+(async () => {
+  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
+    method: 'GET',
+    headers: {
+      token: store.getters.getStudentToken
+    }
+  });
+  const res = await resPromise.json();
+
+  let quantity = 0;
+
+  res.data.items.forEach((item) => {
+    if (item) {
+      quantity += 1;
+    }
+  });
+
+  store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
+})();
+
+const currentState = ref('newsetProduct');
+const sendToBookShopList = (id: string, title: string) => {
+  router.push({
+    name: 'ShopBookList',
+    params: { id, title }
+  });
+};
+
+const openSingleBookPage = (item) => {
+  router.push({
+    name: 'SingleBookInfo',
+    params: { item: JSON.stringify(item) }
+  });
+};
+
+const moveToBasket = () => {
+  router.push({
+    name: 'ShopBasket'
+  });
+};
+
+const addToBasket = async (product) => {
+  const itemToSend = {
+    item: {
+      product: { _id: product._id },
+      quantity: product.quantity
+    }
+  };
+
+  const res = await StudentBasketApi.add(itemToSend);
+
+  if (res.data) {
+    store.commit(
+      StudentMutationTypes.SET_BASKET_COUNT,
+      store.getters.getBasketCount + 1
+    );
+
+    alertify.success('محصول مورد نظر به سبد شما اضافه شد');
+  }
+};
+
+function showYourProductAlert() {
+  alertify.error('لطفا برای مشاهده محصول از اپلیکیشن ماهان استفاده کنید');
+}
 </script>
 
 <style lang="scss" scoped>

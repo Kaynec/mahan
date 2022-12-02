@@ -1,5 +1,25 @@
 <template>
   <div class="panel panel-default">
+    <div class="form-row">
+      <div class="form-group col-md-4 col-sm-12">
+        <label> مقطع </label>
+        <select
+          v-model="currentGrade"
+          class="form-select"
+          aria-label="مقطع را انتخاب کنید "
+          placeholder="مقطع را انتخاب کنید"
+        >
+          <option
+            v-for="grade in grades"
+            :key="grade.title"
+            @blur="v$.course.$touch()"
+            :value="grade._id"
+          >
+            {{ grade.title }}
+          </option>
+        </select>
+      </div>
+    </div>
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -40,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, computed, watch } from 'vue';
 import { baseUrl } from '@/api/apiclient';
 import router from '@/router';
 import { useRoute } from 'vue-router';
@@ -53,16 +73,25 @@ const $ = require('jquery');
 
 const route = useRoute();
 
-const grid = ref();
-
-const grades = ref<any[]>([]);
-
+let grades = ref([] as any);
+let currentGrade = ref(route.params.gradeId || '');
 GradeServiceApi.getAll().then((res) => {
   res.data.data.forEach((data: any) => {
     grades.value.push(data);
-    grid.value.getDatatable().ajax.reload();
   });
 });
+
+watch(currentGrade, (cur, prev) => {
+  route.params.gradeId = currentGrade.value;
+  grid.value.getDatatable().ajax.reload();
+});
+
+watch(route.params, (cur, prev) => {
+  currentGrade.value = route.params.gradeId;
+  grid.value.getDatatable().ajax.reload();
+});
+
+const grid = ref();
 
 const columns = reactive([
   {
@@ -92,18 +121,7 @@ const columns = reactive([
       show: true
     }
   },
-  {
-    label: 'مقطع',
-    data: 'grade',
-    render: (data: any) => {
-      return `${grades.value.find((el) => el._id === data)?.title || ''} `;
-    },
-    responsivePriority: 3,
-    searchPanes: {
-      orthogonal: 'sp',
-      show: true
-    }
-  },
+
   {
     className: 'edit-control',
     orderable: false,
@@ -133,7 +151,13 @@ const columns = reactive([
 const options = reactive({
   gridName: 'count-down-grid',
   url: `${baseUrl}count-down`,
-  type: 'GET'
+  type: 'GET',
+  data: (d: any) => {
+    d.filter = {};
+    if (currentGrade.value) {
+      d.filter.grade = currentGrade.value;
+    }
+  }
 });
 
 const editCountDown = (countDown: any) => {
