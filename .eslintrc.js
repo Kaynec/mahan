@@ -1,4 +1,7 @@
 module.exports = {
+  settings: {
+    'import/core-modules': ['windi.css']
+  },
   sourceType: 'module',
   root: true,
   env: {

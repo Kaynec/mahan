@@ -115,7 +115,7 @@
       </div>
       <!--  -->
       <div class="form-row">
-        <div class="form-group col-md-6 col-sm-12">
+        <div class="form-group col-md-4 col-sm-12">
           <label for="price">قیمت :</label>
           <input
             type="number"
@@ -137,200 +137,42 @@
           </span>
         </div>
 
-        <div class="form-group col-md-6 col-sm-12 bg-red">
-          <label for="products">محصولات باندل</label>
-          <main>
-            <div
-              class="bg-red"
-              flex
-              gap-5
-              flex-col
-              justify-center
-              md:flex-row-reverse
-              max-w="11/12"
-              mx-auto
-            >
-              <button
-                bg="#F3F4F9"
-                min-w-35
-                min-h-12
-                rounded-lg
-                text-primary
-                @click="selectAll"
-              >
-                انتخاب همه
-              </button>
-              <div
-                class="md:min-w-120 min-h-12 grow rounded-xl bg-#F3F4F9 relative flex items-center"
-              >
-                <input
-                  type="text"
-                  bg-transparent
-                  placeholder="جستجو...."
-                  text-right
-                  w-full
-                  h-full
-                  pr-2
-                  text-primary
-                  placeholder:text-primary
-                  rounded-xl
-                  v-model="search"
+        <!-- Items -->
+        <div class="form-group col-md-8 col-sm-12 bg-red! products-wrapper">
+          <div class="search-container">
+            <span> محصولات باندل: </span>
+            <div class="search">
+              <input type="text" v-model="search" placeholder="جستجو" />
+            </div>
+          </div>
+          <div class="table-container">
+            <div class="table-head">
+              <div>
+                عنوان محصول
+                <el-checkbox
+                  v-model="allActive"
+                  @change="change"
+                  size="large"
                 />
-                <div
-                  bg-primary
-                  px-3
-                  text-white
-                  rounded-tl-xl
-                  rounded-bl-xl
-                  h-full
-                  absolute
-                  left-0
-                  top-0
-                  items-center
-                  flex
-                >
-                  <div class="i-akar-icons:search w-8 h-8" />
-                </div>
               </div>
-              <div class="flex items-center justify-center">
-                <button
-                  @click="handleDelete"
-                  min-w-35
-                  bg-primary
-                  text-white
-                  rounded-xl
-                  mx-1
-                  p-3
-                >
-                  حذف جزیی
-                </button>
-              </div>
+
+              <div>نوع محصول</div>
+              <div>قیمت</div>
+              <!-- <div>قیمت ویژه</div> -->
             </div>
-            <!-- Table -->
-            <section
-              bg="#F3F4F9"
-              w="11/12"
-              max-w-95vw
-              overflow-auto
-              mx-auto
-              rounded-xl
-              my-2
-            >
-              <!-- Heads -->
-              <div
-                grid
-                grid-cols-4
-                grid-flow-col
-                content-end
-                items-center
-                w="full"
-                min-w-150
-              >
-                <span> حذف کامل </span>
-                <span>شماره همراه</span>
-                <span>پروفایل</span>
-                <span>
-                  <el-checkbox @change="change" size="large" />
-
-                  نام
-                </span>
+            <div class="table-row" v-for="item in filteredData">
+              <div>
+                <el-checkbox size="large" v-model="item.selected" />
+                {{ item.title }}
               </div>
-              <!--  -->
-              <div flex flex-col-reverse mx-auto w="full">
-                <div
-                  min-w-150
-                  grid
-                  grid-cols-4
-                  justify-between
-                  items-center
-                  mx-3
-                  py-3
-                  gap-2
-                  v-for="item in filteredData"
-                >
-                  <div>
-                    <button btn @click="handleFullDelete(+item?.id)">
-                      حذف
-                    </button>
-                  </div>
 
-                  <span>{{ item.user.phone_number }}</span>
-                  <div flex w-full flex-center-row>
-                    <img
-                      max-w="100%"
-                      max-h-60
-                      rounded-xl
-                      :src="item.user.profile_image"
-                      v-if="item.user.profile_image"
-                      alt="profile image"
-                    />
-                  </div>
-
-                  <span flex-center-row gap-3>
-                    {{
-                      item.user.firstname +
-                      ' ' +
-                      item.user.lastname +
-                      `${item?.beenRemoved ? '(حدف شده)' : ''}`
-                    }}
-                    <el-checkbox size="large" v-model="item.selected" />
-                  </span>
-                </div>
-              </div>
-            </section>
-            <!-- Navigation  -->
-            <div flex flex-row-reverse items-center justify-center gap-3>
-              <div
-                class="i-fontisto:angle-right"
-                bg="orange"
-                rounded-lg
-                width="24"
-                text-primary
-                p="1.5"
-                @click="moveRight"
-              />
-
-              <span
-                bg="orange"
-                rounded-lg
-                width="24"
-                text-primary
-                px-3
-                py-1
-                font-600
-                v-if="currentIndex + 1 <= howManySections"
-              >
-                {{ currentIndex + 1 }}
-              </span>
-              <span text-white font-600 bg-primary px-3 py-1 rounded-lg>
-                {{ currentIndex }}
-              </span>
-              <span
-                v-if="currentIndex - 1 > 0"
-                bg="orange"
-                rounded-lg
-                width="24"
-                text-primary
-                px-3
-                py-1
-                font-600
-              >
-                {{ currentIndex - 1 }}
-              </span>
-
-              <div
-                class="i-fontisto:angle-left"
-                bg="orange"
-                rounded-lg
-                width="24"
-                text-primary
-                p="1.5"
-                @click="moveLeft"
-              />
+              <div>{{ item.category }}</div>
+              <div>{{ item.price }}</div>
+              <!-- <div>قیمت ویژه</div> -->
             </div>
-          </main>
-          <!--  -->
+          </div>
         </div>
+        <!--  -->
       </div>
 
       <!--  -->
@@ -362,7 +204,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref, onBeforeMount, watch } from 'vue';
+import { computed, ref, onBeforeMount, watch, watchEffect } from 'vue';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
@@ -376,8 +218,8 @@ import { useRoute } from 'vue-router';
 import alertify from '@/assets/alertifyjs/alertify';
 import { BundleServiceApi } from '@/api/services/admin/bundle-service';
 import { StoreServiceApi } from '@/api/services/admin/store-service';
-import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
+import { useFuse } from '@vueuse/integrations/useFuse';
+import { ElCheckbox } from 'element-plus';
 
 const route = useRoute();
 let model = ref<{
@@ -392,11 +234,42 @@ let currentOrientation = ref('');
 // getting data from the database
 
 const allProdocts = ref<any[]>([]);
-const products = ref<any[]>([]);
 
-StoreServiceApi.getAll().then((res) => (allProdocts.value = res.data.data));
+const results = ref<any[]>([]);
+
+const options = computed(() => ({
+  fuseOptions: {
+    keys: ['price', 'title'],
+    useExtendedSearch: true
+  },
+  matchAllWhenSearchEmpty: true
+}));
+
+let search = ref('');
+
+watch(search, () => {
+  results.value = useFuse(search, allProdocts, options).results.value;
+});
+
+const allActive = ref(true);
+
+function change() {
+  console.log('TOGGLE', allActive.value);
+  allProdocts.value.forEach((item) => {
+    if (allActive.value) item.selected = true;
+    else item.selected = false;
+  });
+}
+
+let filteredData = computed(() => {
+  return results.value.map((el) => el.item);
+});
 
 onBeforeMount(async () => {
+  const res = await StoreServiceApi.getAll();
+  allProdocts.value = res.data.data;
+  results.value = useFuse(search, allProdocts, options).results.value;
+  //
   if (route.params.productId) {
     const result = await BundleServiceApi.get(route.params.productId as string);
 
@@ -406,13 +279,18 @@ onBeforeMount(async () => {
     currentGroup.value = data.group;
     currentField.value = data.field;
     currentOrientation.value = data.orientation;
+
+    // Set ALl To False But Change The ones we have
+    allProdocts.value.map((prod) => (prod.selected = false));
+
+    //
     model.value.products.forEach((el) => {
-      products.value.push({
-        label: el.title,
-        value: {
-          _id: el._id
-        }
-      });
+      const item = allProdocts.value.findIndex((item) => item._id === el._id);
+      allProdocts.value[item].selected = true;
+    });
+
+    allProdocts.value.forEach((item) => {
+      if (!item.selected) allActive.value = false;
     });
   }
 });
@@ -508,8 +386,10 @@ const save = () => {
   temp.append('orientation[_id]', currentOrientation.value);
   temp.append('newBundle', !!model.value.newBundle);
 
-  products.value.forEach((prod, idx) => {
-    temp.append(`products[${idx}][_id]`, prod.value._id);
+  allProdocts.value.forEach((prod, idx) => {
+    if (!!prod.selected) {
+      temp.append(`products[${idx}][_id]`, prod._id);
+    }
   });
 
   for (let key in model.value) {
@@ -545,7 +425,9 @@ const save = () => {
       orientation: {
         _id: currentOrientation.value
       },
-      products: products.value.map((el) => ({ _id: el.value._id }))
+      products: allProdocts.value
+        .filter((el) => el.selected)
+        .map((el) => ({ _id: el._id }))
     } as any;
     BundleServiceApi.update(model.value._id, tmp).then((result) => {
       alertify.success(result.data.message);
@@ -578,5 +460,71 @@ const cancel = () => {
 h6 {
   font-size: smaller;
   color: rgb(136, 133, 133);
+}
+.products-wrapper {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+}
+
+.search {
+  flex-grow: 1;
+  padding: 0 1rem;
+
+  input {
+    border-radius: 0.5rem;
+    outline: none;
+    border: 1px solid gray;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}
+
+.table-container {
+  max-height: 400px;
+  overflow: auto;
+  position: relative;
+}
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: #a3a3a3;
+  color: #ffffff;
+  // padding: 1rem;
+  div {
+    padding: 1rem;
+  }
+}
+
+.table-head {
+  position: sticky;
+  top: 0;
+}
+
+.table-row {
+  background-color: #cfcfcf;
+  background-color: #f2f2f2;
+  div {
+    border: 1px solid #a3a3a3;
+    height: full;
+    color: #828282;
+
+    &:first-child {
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.3rem;
+    }
+  }
 }
 </style>
