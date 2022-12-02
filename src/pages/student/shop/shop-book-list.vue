@@ -7,6 +7,7 @@ script
   <!--  -->
   <div class="shop-book-list" v-else>
     <DesktopMinimalHeader v-if="!isMobile.value" component="shop" />
+    <Header />
     <MinimalHeader
       :title="`لیست محصولات ${title}  ( ${toPersianNumbers(
         title ? data.data.length : ''
@@ -125,6 +126,7 @@ import router from '@/router';
 import ShopFooter from '@/modules/student-modules/footer/shop-footer.vue';
 import { returnAProtectedUrl } from '@/utilities/get-image-from-url';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 import { useRoute } from 'vue-router';
 import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
@@ -173,7 +175,11 @@ const goOnePageBack = () => {
   });
 
   // We Want to Get the Id of the current Category
-  const idOfCurrentSubcategory = data.value.data[0].category;
+  const idOfCurrentSubcategory = data.value.data[0]?.category;
+  if (!idOfCurrentSubcategory) {
+    isFetching.value = false;
+    return;
+  }
   const Res = await StudentproductApi.getAllCategories();
   StudentproductApi.getAllCategories();
   const find = Res.data.data.find((el) => {
@@ -238,6 +244,7 @@ const addToBasket = async (product) => {
   height: 100%;
   font-family: IRANSans;
   max-width: 1000px;
+  padding-top: 4rem;
 
   .card-container {
     width: 100%;

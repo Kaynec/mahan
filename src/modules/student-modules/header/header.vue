@@ -1,16 +1,15 @@
 <template>
   <header>
-    <img
-      alt="logo"
-      src="@/assets/img/logo-mahan.png"
-      class="logo-mahan animate__animated animate__fadeIn"
-    />
+    <img alt="logo" src="@/assets/img/logo-mahan.png" />
     <div class="user-part">
       <span class="points">
         امتیاز شما:
         {{ toPersianNumbers(`${point}`) }}
       </span>
-      <img :src="imageUrl" class="profile-image" alt="avatar" />
+
+      <div class="home">
+        <i class="fa fa-home" aria-hidden="true"></i>
+      </div>
     </div>
   </header>
 </template>
@@ -45,7 +44,7 @@ header {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.09);
-  background-color: black;
+  background-color: white;
   // height: 8vh;
   max-height: 10vh;
   padding: 1rem;
@@ -60,6 +59,19 @@ header {
     background: rgba(0, 0, 0, 0.09);
     // max-width: 120px;
   }
+
+  .home {
+    background-color: red;
+    border-radius: 0.5rem;
+    aspect-ratio: 1;
+    color: white;
+    font-size: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-content: center;
+  }
+
   .user-part {
     display: flex;
     width: 100%;

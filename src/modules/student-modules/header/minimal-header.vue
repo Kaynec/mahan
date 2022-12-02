@@ -40,14 +40,16 @@ export default defineComponent({
   color: white;
   position: sticky; /* Set the navbar to fixed position */
   z-index: 9999;
-  padding: 1rem;
-  background-color: #171717;
+  background-color: white;
   top: 0;
   max-height: 10vh;
   font-family: IRANSans;
+  padding: 0.3rem;
+
+  color: #e51c21;
 
   i {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 
   img {
@@ -55,7 +57,7 @@ export default defineComponent({
     margin: 0;
   }
   span {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: bold;
     padding: 0.4rem;
   }
