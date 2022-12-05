@@ -1,6 +1,7 @@
 <template>
   <div class="comp-test-answer">
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader onePageBack="Duel" title="پاسخنامه تشریحی دوئل" />
 
     <div class="quiz-card shadow animate__animated animate__fadeIn">
@@ -11,7 +12,7 @@
           v-if="question.question.images.length"
           @click="setCurrentImages(question.question.images)"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 2.5rem; margin-right: 0.5rem;"
+          style="max-width: 2.5rem; margin-right: 0.5rem"
           alt="image of question"
         />
       </p>
@@ -73,79 +74,57 @@
   />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
-import router from '@/router';
 import { useRoute } from 'vue-router';
 import ShowImages from '@/modules/student-modules/show-images.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 
-export default defineComponent({
-  components: { MinimalHeader, ShowImages, DesktopMinimalHeader },
-  setup() {
-    const route = useRoute();
+const route = useRoute();
 
-    const questions = ref(store.getters.getCurrentDuel);
+const questions = ref(store.getters.getCurrentDuel);
 
-    const id = ref(+route.params.id);
+const id = ref(+route.params.id);
 
-    const question = computed(() => {
-      return questions.value.answers[id.value];
-    });
-
-    const goOnePageBack = () => router.go(-1);
-
-    const getClass = (idx: number) => {
-      if (question.value.correct == idx + 1) return 'card active';
-      else if (
-        question.value.answer === idx + 1 &&
-        question.value.correct != idx + 1
-      ) {
-        return 'card danger';
-      } else {
-        return 'card';
-      }
-    };
-
-    const showImages = ref(false);
-    const currentImages = ref([]);
-    // const currentUser = ref(store.getters.getCurrentStudent);
-    const setCurrentImages = (images) => {
-      currentImages.value = images;
-      showImages.value = true;
-    };
-
-    const previousQuestion = () => {
-      if (id.value - 1 >= 0) {
-        id.value = id.value - 1;
-      }
-    };
-
-    const nextQuestion = () => {
-      if (id.value + 1 <= questions.value.answers.length) {
-        id.value = id.value + 1;
-      }
-    };
-
-    return {
-      goOnePageBack,
-      toPersianNumbers,
-      getClass,
-      store,
-      question,
-      id,
-      questions,
-      setCurrentImages,
-      currentImages,
-      showImages,
-      previousQuestion,
-      nextQuestion
-    };
-  }
+const question = computed(() => {
+  return questions.value.answers[id.value];
 });
+
+const getClass = (idx: number) => {
+  if (question.value.correct == idx + 1) return 'card active';
+  else if (
+    question.value.answer === idx + 1 &&
+    question.value.correct != idx + 1
+  ) {
+    return 'card danger';
+  } else {
+    return 'card';
+  }
+};
+
+const showImages = ref(false);
+const currentImages = ref([]);
+// const currentUser = ref(store.getters.getCurrentStudent);
+const setCurrentImages = (images) => {
+  currentImages.value = images;
+  showImages.value = true;
+};
+
+const previousQuestion = () => {
+  if (id.value - 1 >= 0) {
+    id.value = id.value - 1;
+  }
+};
+
+const nextQuestion = () => {
+  if (id.value + 1 <= questions.value.answers.length) {
+    id.value = id.value + 1;
+  }
+};
 </script>
 
 <style lang="scss" scoped>

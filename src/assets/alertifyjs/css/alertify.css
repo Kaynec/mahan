@@ -6,8 +6,8 @@
 
 .alertify .ajs-dimmer {
   position: fixed;
-  z-index: 100000000;
-  top: 0;
+  z-index: 99999999999;
+  top: 450px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -19,14 +19,14 @@
 
 .alertify-notifier .alertify .ajs-modal {
   position: fixed;
-  top: 0;
+  top: 450px;
   right: 0;
   left: 0;
   bottom: 0;
   padding: 0;
   overflow-y: auto;
   padding-bottom: 3rem;
-  z-index: 100000000;
+  z-index: 99999999999;
 }
 .alertify .ajs-dialog {
   position: relative;
@@ -40,12 +40,12 @@
 .alertify .ajs-dialog.ajs-capture:before {
   content: '';
   position: absolute;
-  top: 0;
+  top: 450px;
   right: 0;
   bottom: 0;
   left: 0;
   display: block;
-  z-index: 1;
+  z-index: 99999999999;
 }
 .alertify .ajs-reset {
   position: absolute !important;
@@ -58,7 +58,7 @@
   position: absolute;
   right: 4px;
   margin: -14px 24px 0 0;
-  z-index: 2;
+  z-index: 99999999999;
 }
 .alertify .ajs-commands button {
   display: none;
@@ -122,7 +122,7 @@
   height: 10px;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 99999999999;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNy8xMS8xNEDQYmMAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAAQ0lEQVQYlaXNMQoAIAxD0dT7H657l0KX3iJuUlBUNOsPPCGJm7VDp6ryeMxMuDsAQH7owW3pyn3RS26iKxERMLN3ugOaAkaL3sWVigAAAABJRU5ErkJggg==);
   -webkit-transform: scaleX(1);
   transform: scaleX(1);
@@ -182,7 +182,7 @@
 .alertify.ajs-maximized .ajs-header,
 .alertify.ajs-resizable .ajs-header {
   position: absolute;
-  top: 0;
+  top: 450px;
   left: 0;
   right: 0;
   margin: 0;
@@ -250,30 +250,30 @@
 }
 .alertify.ajs-frameless .ajs-header {
   position: absolute;
-  top: 0;
+  top: 450px;
   left: 0;
   right: 0;
   min-height: 60px;
   margin: 0;
   padding: 0;
   opacity: 0;
-  z-index: 1;
+  z-index: 99999999999;
 }
 .alertify.ajs-frameless .ajs-footer {
   display: none;
 }
 .alertify.ajs-frameless .ajs-body .ajs-content {
   position: absolute;
-  top: 0;
+  top: 450px;
   right: 0;
   bottom: 0;
   left: 0;
 }
 .alertify.ajs-frameless:not(.ajs-resizable) .ajs-dialog {
-  padding-top: 0;
+  padding-top: 450px;
 }
 .alertify.ajs-frameless:not(.ajs-resizable) .ajs-dialog .ajs-commands {
-  margin-top: 0;
+  margin-top: 450px;
 }
 .ajs-no-overflow {
   overflow: hidden !important;
@@ -281,7 +281,7 @@
 }
 .ajs-no-overflow.ajs-fixed {
   position: fixed;
-  top: 0;
+  top: 450px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -296,7 +296,7 @@
 }
 @media screen and (max-width: 568px) {
   .alertify .ajs-dialog {
-    min-width: 150px;
+    min-width: 450px;
   }
   .alertify:not(.ajs-maximized) .ajs-modal {
     padding: 0 5%;
@@ -840,7 +840,8 @@
 .alertify-notifier {
   position: fixed;
   overflow: visible;
-  z-index: 1982;
+  top: 400px;
+  z-index: 99999999999;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
@@ -868,7 +869,7 @@
   opacity: 1;
   max-height: 100%;
   padding: 15px;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 .alertify-notifier .ajs-message.ajs-success {
   background: rgba(91, 189, 114, 0.98);
@@ -881,7 +882,7 @@
 }
 .alertify-notifier .ajs-message .ajs-close {
   position: absolute;
-  top: 0;
+  top: 450px;
   right: 0;
   width: 16px;
   height: 16px;
@@ -893,7 +894,7 @@
   border-top-right-radius: 2px;
 }
 .alertify-notifier.ajs-top {
-  top: 10vh;
+  top: 450px;
   margin: 0 auto;
   position: fixed;
   right: 5vw;

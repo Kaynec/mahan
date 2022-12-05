@@ -2,6 +2,7 @@
   <div class="desktop" v-if="!isMobile.value"></div>
   <div v-else class="w-100 setting">
     <Header />
+    <MinimalHeader title="تنظیمات" onePageBack="Home" />
     <!-- Main Content -->
     <div
       class="w-100 d-flex justify-content-center align-items-center flex-column p-2 animate__animated animate__fadeIn"
@@ -53,28 +54,16 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
 import Footer from '@/modules/student-modules/footer/footer.vue';
 import Header from '@/modules/student-modules/header/header.vue';
 import Card from '@/modules/student-modules/card.vue';
-
-export default defineComponent({
-  components: {
-    Header,
-    Footer,
-    Card
-  },
-  setup() {
-    console.log('w');
-  }
-});
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 </script>
 <style lang="scss" scoped>
 .setting {
   width: 100%;
   height: 100%;
-  padding-top: 8vh;
   position: relative;
   background-color: #f4f4f4;
   font-family: IRANSans;

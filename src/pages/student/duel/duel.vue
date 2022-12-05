@@ -1,9 +1,14 @@
 <template>
   <div class="comp-test" :style="`padding-top:${!isMobile.value ? '6vh' : ''}`">
-    <SmallHeader onePageBack="Home" v-if="isMobile.value" />
+    <Header />
+    <MinimalHeader
+      onePageBack="Home"
+      v-if="isMobile.value"
+      title="دوئل حرفه‌ای‌ها"
+    />
     <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader
-      :style="`${!isMobile.value ? 'margin-top:2rem' : ''}`"
+      style="margin-top: 2rem"
       onePageBack="Home"
       v-if="!isMobile.value"
       title="دوئل حرفه‌ای‌ها"
@@ -106,7 +111,7 @@
       class="comptest flex-column d-flex justify-content-end align-items-center"
     >
       <div
-        style="z-index: 5; color: #fff;"
+        style="z-index: 5; color: #fff"
         class="d-inline-flex flex-column justify-content-between align-items-center w-100 flex-child"
       >
         <div
@@ -116,17 +121,20 @@
             label="پاسخنامه"
             componentName="DuelAnswers"
             :params="currentItem._id"
+            v-if="currentItem.shouldSeeResultPage"
           />
           <Dialog
             label="کارنامه"
             componentName="DuelReportCard"
             :params="currentItem._id"
+            v-if="currentItem.shouldSeeResultPage"
           />
 
           <Dialog
             label="آزمون "
             componentName="DuelStart"
             :params="currentItem._id"
+            v-if="!currentItem.shouldSeeResultPage"
           />
         </div>
         <img
@@ -142,7 +150,6 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
 import Dialog from '@/modules/student-modules/dialog.vue';
@@ -152,9 +159,12 @@ import router from '@/router';
 import shamsi_be_miladi from '@/utilities/date-converter';
 import max from 'date-fns/max';
 import { compareAsc } from 'date-fns';
+import Header from '@/modules/student-modules/header/header.vue';
 
 const azmoonData = reactive([] as any);
-const currentItem = ref({});
+const currentItem = ref<{
+  [index: string]: any;
+}>({});
 const showDetail = ref(false);
 const currentTypeOfDuel = ref('all');
 const countOfDuelsParticipated = ref(0);
@@ -254,9 +264,18 @@ const filteredDuels = computed(() => {
   }
 })();
 
-const moveToDuelStart = (item) => {
+// Send A Request
+const moveToDuelStart = async (item) => {
   currentItem.value = item;
-  showDetail.value = true;
+  try {
+    const res = await StudentDuelApi.getResult(item._id);
+    console.log('response', res);
+    showDetail.value = true;
+    currentItem.value.shouldSeeResultPage = true;
+  } catch (error) {
+    showDetail.value = true;
+    currentItem.value.shouldSeeResultPage = false;
+  }
 };
 
 const moveToDuelAll = () => {
@@ -315,10 +334,8 @@ const toggleShowDuels = () => {
   position: relative;
   max-width: 1000px;
 
-  overflow: hidden;
-
   .hero {
-    background: $redish-background;
+    background: $dark;
     width: 100%;
     color: #fff;
     display: flex;
@@ -365,7 +382,7 @@ const toggleShowDuels = () => {
   .points {
     width: 92%;
     margin: 0 auto;
-    background-color: #171717;
+    background: $blueish-background;
     display: flex;
     z-index: 5;
     color: #fff;
@@ -377,7 +394,7 @@ const toggleShowDuels = () => {
     justify-content: space-evenly;
     align-items: center;
     p {
-      color: #4ac367;
+      color: #fff;
       font-size: 20px;
       margin-top: 10px;
     }
@@ -391,10 +408,7 @@ const toggleShowDuels = () => {
   .card-container {
     width: 90%;
     margin: 0 auto;
-    height: calc(100vh - 150px);
     max-height: 96%;
-    overflow-y: auto;
-    padding-bottom: 3rem;
     transform: translateY(-2.5rem);
 
     .orange {
@@ -404,7 +418,7 @@ const toggleShowDuels = () => {
       letter-spacing: -1.2px;
       text-align: center;
       color: #fff;
-      background: #f3925d;
+      background: $blueish;
       border-radius: 25px;
       padding: 4px 25px;
     }
@@ -428,7 +442,7 @@ const toggleShowDuels = () => {
           font-size: 9.6px;
           letter-spacing: -0.88px;
           text-align: right;
-          color: #d26c34;
+          color: $blueish;
         }
 
         h5 {
@@ -443,7 +457,7 @@ const toggleShowDuels = () => {
           font-size: 11.6px;
           letter-spacing: -0.88px;
           text-align: right;
-          color: #d26c34;
+          color: $blueish;
           padding: 0.45rem;
         }
         .label {

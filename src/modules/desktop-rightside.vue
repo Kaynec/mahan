@@ -4,72 +4,66 @@
       <aside>
         <img
           @click="moveToComponent('Home')"
-          src="@/assets/img/logo-mahan.png"
+          src="@/assets/img/mahan-logo.png"
           class="header"
           alt="header"
         />
         <div class="cart-container">
-          <div class="Cart" @click="moveToComponent('MyProfile')">
+          <div @click="moveToComponent('ShopBundle')">
             <img
-              src="@/assets/img/home-icons/profile.png"
-              :class="`${componentname == 'MyProfile' ? 'active' : ''}`"
+              src="@/assets/img/home-icons/bundle.png"
+              :class="`${componentname == 'ShopBundle' ? 'active' : ''}`"
               alt="StudentProfile"
             />
           </div>
+          <div @click="moveToComponent('SelfTest')">
+            <img
+              src="@/assets/img/home-icons/selftest.png"
+              :class="`${componentname == 'SelfTest' ? 'active' : ''}`"
+              alt="selftest"
+            />
+          </div>
 
-          <div class="Cart" @click="moveToComponent('ClassRoom')">
+          <div @click="moveToComponent('ClassRoom')">
             <img
               src="@/assets/img/home-icons/class.png"
               :class="`${componentname == 'ClassRoom' ? 'active' : ''}`"
               alt="class"
             />
           </div>
-
-          <div class="Cart" @click="moveToComponent('ContactBackup')">
+          <div @click="moveToComponent('ShopBookList')">
+            <img
+              src="@/assets/img/home-icons/book.png"
+              :class="`${componentname == 'ShopBookList' ? 'active' : ''}`"
+              alt="class"
+            />
+          </div>
+          <div @click="moveToComponent('ContactBackup')">
             <img
               src="@/assets/img/home-icons/support.png"
               :class="`${componentname == 'ContactBackup' ? 'active' : ''}`"
               alt="backup"
             />
           </div>
-
-          <div class="Cart" @click="moveToComponent('compTest')">
+          <div @click="moveToComponent('contactUs')">
             <img
-              src="@/assets/img/home-icons/azmoon.png"
-              :class="`${componentname == 'compTest' ? 'active' : ''}`"
-              alt="azmoon"
+              src="@/assets/img/home-icons/contact-us.png"
+              :class="`${componentname == 'contactUs' ? 'active' : ''}`"
+              alt="backup"
             />
           </div>
-
-          <div class="Cart" @click="moveToComponent('SelfTest')">
-            <img
-              src="@/assets/img/home-icons/lessons.png"
-              :class="`${componentname == 'SelfTest' ? 'active' : ''}`"
-              alt="selftest"
-            />
-          </div>
-
-          <div class="Cart" @click="moveToComponent('Calendar')">
-            <img
-              src="@/assets/img/home-icons/calendar.png"
-              :class="`${componentname == 'Calendar' ? 'active' : ''}`"
-              alt="calendar"
-            />
-          </div>
-
-          <div class="Cart" @click="moveToComponent('StudentGroupPage')">
-            <img
-              src="@/assets/img/home-icons/group.png"
-              :class="`${componentname == 'Duel' ? 'active' : ''}`"
-              alt="roadmap"
-            />
-          </div>
-
-          <div class="Cart" @click="moveToComponent('studentShop')">
+          <div @click="moveToComponent('studentShop')">
             <img
               :class="`${componentname == 'studentShop' ? 'active' : ''}`"
               src="@/assets/img/home-icons/shop.png"
               alt="shop"
+            />
+          </div>
+          <div @click="moveToComponent('MyProfile')">
+            <img
+              src="@/assets/img/home-icons/profile.png"
+              :class="`${componentname == 'MyProfile' ? 'active' : ''}`"
+              alt="StudentProfile"
             />
           </div>
         </div>
@@ -80,28 +74,23 @@
 </template>
 
 <script lang="ts">
-import { StudentproductApi } from '@/api/services/student/student-product';
 import router from '@/router';
 import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { store } from '@/store';
 
 export default defineComponent({
   setup() {
-    let id = ref('');
     const route = useRoute();
     const componentname = computed(() => {
       return route.name;
     });
 
     const moveToComponent = (componentName: string) => {
-      StudentproductApi.getAllCategories().then((res) => {
-        res.data.data.forEach((category) => {
-          if (category.title == 'کتاب') id.value = category._id;
-        });
-      });
       if (componentName == 'ShopBookList') {
-        router.push({ name: componentName, params: { id: id.value } });
+        router.push({
+          name: componentName,
+          params: { id: '627b5419c6a709fd06348039' }
+        });
         return;
       } else {
         router.push({ name: componentName });

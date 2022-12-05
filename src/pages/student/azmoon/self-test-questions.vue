@@ -7,6 +7,8 @@
   <!--  -->
 
   <div class="self-test-questions" v-else>
+    <SelfTestFinish v-if="showSelfTestFinish" :session="session" />
+    <Header />
     <MinimalHeader
       :title="`
      امتیازات کسب شده :
@@ -28,7 +30,7 @@
           }}
         </span>
       </div>
-      <div class="progress" style="height: 5px;">
+      <div class="progress" style="height: 5px">
         <div
           class="progress-bar bg-success"
           role="progressbar"
@@ -45,10 +47,8 @@
     <!-- Quiz Card -->
 
     <div class="quiz-card shadow animate__animated animate__fadeIn">
-      <div class="number-of-question">
-        <p>
-          سوال شماره <span> {{ currentQuestionIndex + 1 }} </span>
-        </p>
+      <div class="number-of-question" style="font-weight: 600">
+        <span> {{ currentQuestionIndex + 1 }}. </span>
 
         <img
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
@@ -78,6 +78,7 @@
               : 'card animate__animated animate__fadeIn'
           }`"
           :key="option._id"
+          @click.self="changeQuestionsAnswer(index)"
         >
           <p v-if="option.text">
             <!-- Answer Text -->
@@ -124,10 +125,14 @@
         قبلی
       </button>
 
+      <!-- Show If More Questions Are There To load  -->
       <button
         class="red"
-        v-if="currentQuestionIndex + 1 == questions[currentChunk].length"
-        @click="submitSelfTest"
+        v-if="
+          currentQuestionIndex + 1 == questions[currentChunk].length &&
+          !!model.questions[currentChunk + 1]
+        "
+        @click="moreQuestionsRequest"
       >
         سوالات بیشتر <i class="fas fa-arrow-right"></i>
       </button>
@@ -161,231 +166,260 @@
   <!--  -->
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref, onBeforeMount } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import { StudentExamApi } from '@/api/services/student/student-exam-service';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
-import router from '@/router';
 import { useRoute } from 'vue-router';
-import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import ShowImages from '@/modules/student-modules/show-images.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
+import Header from '@/modules/student-modules/header/header.vue';
+import { AxiosError } from 'axios';
+import SelfTestFinish from '@/modules/student-modules/azmoon/self-test-finish.vue';
+import router from '@/router';
 
-export default defineComponent({
-  components: { MinimalHeader, ShowImages, DesktopMinimalHeader },
-  setup() {
-    const route = useRoute();
-    const id = route.params.id as string;
-    const title = ref('');
+const route = useRoute();
+const id = route.params.id as string;
+const title = ref('');
 
-    const isFetching = ref(true);
+const isFetching = ref(true);
 
-    const model = ref({} as any);
+const model = ref({} as any);
 
-    const questions = ref([] as any);
-    // const currentQuestion = ref({} as any)
-    const currentQuestionIndex = ref(0);
+const questions = ref([] as any);
+// const currentQuestion = ref({} as any)
+const currentQuestionIndex = ref(0);
 
-    const currentChunk = ref(0);
+const currentChunk = ref(0);
 
-    const allBookmarkedQuestions = ref([] as any);
+const allBookmarkedQuestions = ref([] as any);
 
-    const currentImages = ref([] as any);
+const currentImages = ref([] as any);
 
-    const showImages = ref(false);
+const showImages = ref(false);
 
-    const setCurrentImages = (images) => {
-      if (images.length) currentImages.value = images;
-      showImages.value = true;
-    };
-    (async () => {
-      // Get The Title and details of that session
-      const resForModel = await StudentSelfTestApi.getOneSession(id);
-      model.value = resForModel.data.data;
-      model.value;
-      title.value = `${resForModel.data.data.title} ${model.value.course.title}`;
-      // Check For Duplicate Exam And increase currentChunk if true
-      const res = await StudentSelfTestApi.selfTestResult({
-        course: model.value.course._id,
-        session: model.value._id
-      });
+const session = ref({});
 
-      const amountToslice = res.data.data.totalQuestion;
+const showSelfTestFinish = ref(false);
 
-      console.log(res.data.data);
+const setCurrentImages = (images) => {
+  if (images.length) currentImages.value = images;
+  showImages.value = true;
+};
 
-      model.value.questions.splice(0, amountToslice);
+const fetchNextQuestionsChunk = async () => {
+  const tmpArray = [] as any;
 
-      if (model.value.questions.length <= 0) {
-        alertify
-          .alert('شما قبلا این فصل را امتحان داده اید')
-          .set('basic', true);
-        router.push({
-          name: 'SelfTest'
-        });
-      }
+  const listOfPromises = [] as any;
 
-      //  // // // //
-      const tmpArray = [] as any;
-
-      const listOfPromises = [] as any;
-
-      // Push Every Promise of Question to It's List
-      for (let i = 0; i < model.value.questions.length; i++) {
-        const question = model.value.questions[i];
-        listOfPromises.push(StudentExamApi.getOneQuestion(question));
-      }
-      // When It's done add it to list of questions
-
-      Promise.all(listOfPromises)
-        .then((questions) => {
-          questions.forEach((question: any, i) => {
-            tmpArray[i] = {
-              ...question.data.data,
-              answer: null,
-              correct: i
-            };
-          });
-        })
-        //  finally Split The Questions to array of 10
-        .then(() => {
-          for (let i = 0, j = tmpArray.length; i < j; i += 10)
-            questions.value.push(tmpArray.slice(i, i + 10));
-
-          isFetching.value = false;
-        });
-    })();
-
-    const submitSelfTest = async () => {
-      const arrayToSend = questions.value[currentChunk.value].map(
-        (question) => {
-          return {
-            question: { _id: question._id },
-            answer: question.answer,
-            correct: question.correct
-          };
-        }
-      );
-
-      const res = await StudentSelfTestApi.registerSelfTest({
-        course: { _id: model.value.course._id },
-        session: { _id: model.value._id },
-        answers: arrayToSend
-      });
-
-      if (res.data.status == 0 || res.data.status == 200 || res.data) {
-        currentQuestionIndex.value = 0;
-        currentChunk.value = 0;
-
-        alertify.success('امتحان با موفقیت ثبت شد');
-        router.push({
-          name: 'Home'
-        });
-      }
-    };
-
-    const openSelfTestQuestionsAnswers = () => {
-      store.commit(StudentMutationTypes.SET_CURRENT_QUESTIONS, {
-        title: title.value,
-        questions: questions.value,
-        currentChunk: currentChunk.value
-      });
-      router.push({
-        name: 'SelfTestAnswersList'
-      });
-    };
-
-    // Make The Answer the clicked one 1 based instead of zero
-
-    const changeQuestionsAnswer = (idx: number) =>
-      (questions.value[currentChunk.value][currentQuestionIndex.value].answer =
-        idx + 1);
-
-    const goOnePageBack = () => router.go(-1);
-    const showNextQuestion = () => {
-      if (
-        currentQuestionIndex.value + 1 <
-        questions.value[currentChunk.value].length
-      )
-        currentQuestionIndex.value++;
-    };
-
-    const showPreviousQuestion = () => {
-      if (currentQuestionIndex.value - 1 >= 0) currentQuestionIndex.value--;
-    };
-
-    const isBookmarked = () => {
-      let item = allBookmarkedQuestions.value.find((item) => {
-        if (questions.value[currentChunk.value]) {
-          return (
-            item.question._id ===
-            questions.value[currentChunk.value][currentQuestionIndex.value]._id
-          );
-        }
-      });
-
-      return item || false;
-    };
-
-    (async () => {
-      const res = await StudentSelfTestApi.AllBookmarkQuestions();
-      res.data.data.forEach((question) => {
-        if (question.question != null) {
-          allBookmarkedQuestions.value.push(question);
-        }
-      });
-    })();
-
-    const bookmarkQuestion = async (question) => {
-      const isBookmark = isBookmarked();
-
-      const tmp = {
-        question: { _id: question._id },
-        session: { _id: question.session._id },
-        course: { _id: question.course._id }
-      };
-
-      // If The Question Is Not Bookmarked
-      if (!isBookmark) await StudentSelfTestApi.bookmarkQuestion(tmp);
-      else if (isBookmark)
-        await StudentSelfTestApi.unBookmarkQuestion(isBookmark._id);
-
-      // Re Fill The Bookmarked Array
-      const res = await StudentSelfTestApi.AllBookmarkQuestions();
-      allBookmarkedQuestions.value = [];
-      res.data.data.forEach((question) => {
-        if (question.question != null)
-          allBookmarkedQuestions.value.push(question);
-      });
-    };
-
-    return {
-      goOnePageBack,
-      openSelfTestQuestionsAnswers,
-      model,
-      toPersianNumbers,
-      currentQuestionIndex,
-      currentChunk,
-      questions,
-      submitSelfTest,
-      changeQuestionsAnswer,
-      store,
-      showNextQuestion,
-      showPreviousQuestion,
-      title,
-      isBookmarked,
-      bookmarkQuestion,
-      currentImages,
-      setCurrentImages,
-      showImages,
-      isFetching
-    };
+  // If no More Chunks
+  if (!model.value.questions?.[currentChunk.value]) return;
+  // Push Every Promise of Question to It's List
+  for (let i = 0; i < model.value.questions[currentChunk.value].length; i++) {
+    const question = model.value.questions[currentChunk.value][i];
+    console.log(question);
+    if (!question) break;
+    listOfPromises.push(StudentExamApi.getOneQuestion(question));
   }
+
+  // When It's done add it to list of questions
+
+  const questionsPromise = await Promise.all(listOfPromises);
+
+  questionsPromise.forEach((question: any, i) => {
+    tmpArray[i] = {
+      ...question.data.data,
+      answer: null,
+      correct: i
+    };
+  });
+  //  finally Split The Questions to array of 10
+  for (let i = 0, j = tmpArray.length; i < j; i += 10)
+    questions.value.push(tmpArray.slice(i, i + 10));
+};
+
+onBeforeMount(async () => {
+  // Get The Title and details of that session
+  const resForModel = await StudentSelfTestApi.getOneSession(id);
+
+  model.value = resForModel.data.data;
+  model.value;
+  title.value = `${resForModel.data.data.title} ${model.value.course.title}`;
+  // Check For Duplicate Exam And increase currentChunk if true
+  const res = await StudentSelfTestApi.selfTestResult({
+    course: model.value.course._id,
+    session: model.value._id
+  });
+  // Cut This many questions off because they have been answered before
+  const amountToslice = res.data.data.totalQuestion;
+
+  model.value.questions.splice(0, amountToslice);
+
+  // Split Array BY smaller Arrays
+  const amoutToSplit = Math.ceil(model.value.questions.length / 10);
+
+  const temp = model.value.questions;
+  model.value.questions = [];
+
+  for (let i = 0; i < amoutToSplit; i++) {
+    model.value.questions.push(temp.splice(0, 10));
+  }
+
+  console.log(model.value.questions);
+  await fetchNextQuestionsChunk();
+
+  isFetching.value = false;
 });
+
+const moreQuestionsRequest = async () => {
+  const arrayToSend = questions.value[currentChunk.value].map((question) => {
+    return {
+      question: { _id: question._id },
+      answer: question.answer,
+      correct: question.correct
+    };
+  });
+
+  try {
+    const res = await StudentSelfTestApi.registerSelfTest({
+      course: { _id: model.value.course._id },
+      session: { _id: model.value._id },
+      answers: arrayToSend
+    });
+
+    if (res.data.status == 0 || res.data.status == 200) {
+      currentQuestionIndex.value = 0;
+      currentChunk.value = currentChunk.value + 1;
+      //
+
+      isFetching.value = true;
+      await fetchNextQuestionsChunk();
+      isFetching.value = false;
+    }
+  } catch (error) {
+    alertify.error((error as AxiosError).message);
+  }
+};
+
+const submitSelfTest = async () => {
+  const dataForSend = await StudentSelfTestApi.selfTestResult({
+    course: { _id: model.value.course._id },
+    session: { _id: id }
+  });
+
+  session.value = dataForSend.data.data;
+  showSelfTestFinish.value = true;
+  return;
+  //
+  const arrayToSend = questions.value[currentChunk.value].map((question) => {
+    return {
+      question: { _id: question._id },
+      answer: question.answer,
+      correct: question.correct
+    };
+  });
+
+  const res = await StudentSelfTestApi.registerSelfTest({
+    course: { _id: model.value.course._id },
+    session: { _id: model.value._id },
+    answers: arrayToSend
+  });
+
+  if (res.data.status == 0 || res.data.status == 200 || res.data) {
+    currentQuestionIndex.value = 0;
+    currentChunk.value = 0;
+    //
+    if (!questions.value[currentChunk.value + 1]) {
+      const dataForSend = await StudentSelfTestApi.selfTestResult({
+        course: { _id: model.value.questions[currentChunk.value][0].course },
+        session: { _id: id }
+      });
+
+      session.value = dataForSend.data.data;
+      //
+      showSelfTestFinish.value = true;
+    } else {
+      const dataForSend = await StudentSelfTestApi.selfTestResult({
+        course: { _id: model.value.questions[currentChunk.value][0].course },
+        session: { _id: id }
+      });
+
+      session.value = dataForSend.data.data;
+      showSelfTestFinish.value = true;
+
+      // alertify.success('امتحان شما با موفقیت ثبت شد');
+      // router.push({
+      //   name: 'SelfTest'
+      // });
+    }
+  }
+};
+
+// Make The Answer the clicked one 1 based instead of zero
+
+const changeQuestionsAnswer = (idx: number) =>
+  (questions.value[currentChunk.value][currentQuestionIndex.value].answer =
+    idx + 1);
+
+const showNextQuestion = () => {
+  if (
+    currentQuestionIndex.value + 1 <
+    questions.value[currentChunk.value].length
+  )
+    currentQuestionIndex.value++;
+};
+
+const showPreviousQuestion = () => {
+  if (currentQuestionIndex.value - 1 >= 0) currentQuestionIndex.value--;
+};
+
+const isBookmarked = () => {
+  let item = allBookmarkedQuestions.value.find((item) => {
+    if (questions.value[currentChunk.value]) {
+      return (
+        item.question._id ===
+        questions.value[currentChunk.value][currentQuestionIndex.value]._id
+      );
+    }
+  });
+
+  return item || false;
+};
+
+(async () => {
+  const res = await StudentSelfTestApi.AllBookmarkQuestions();
+  res.data.data.forEach((question) => {
+    if (question.question != null) {
+      allBookmarkedQuestions.value.push(question);
+    }
+  });
+})();
+
+const bookmarkQuestion = async (question) => {
+  const isBookmark = isBookmarked();
+
+  const tmp = {
+    question: { _id: question._id },
+    session: { _id: question.session._id },
+    course: { _id: question.course._id }
+  };
+
+  // If The Question Is Not Bookmarked
+  if (!isBookmark) await StudentSelfTestApi.bookmarkQuestion(tmp);
+  else if (isBookmark)
+    await StudentSelfTestApi.unBookmarkQuestion(isBookmark._id);
+
+  // Re Fill The Bookmarked Array
+  const res = await StudentSelfTestApi.AllBookmarkQuestions();
+  allBookmarkedQuestions.value = [];
+  res.data.data.forEach((question) => {
+    if (question.question != null) allBookmarkedQuestions.value.push(question);
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -426,37 +460,6 @@ export default defineComponent({
     border-radius: 25px;
     white-space: wrap;
     word-wrap: break-word;
-
-    .number-of-question {
-      display: flex;
-      align-items: center;
-
-      img {
-        margin-right: 0.5rem;
-        max-width: 2rem;
-      }
-      p {
-        font-family: IRANSans;
-        font-size: 12px;
-        text-align: right;
-        color: #ed1b24;
-        margin: 0.7rem 0;
-
-        span {
-          display: inline-block;
-          margin-right: 0.25rem;
-          width: 1.5rem;
-          height: 1.5rem;
-          font-size: 11.8px;
-          font-weight: bold;
-          text-align: center;
-          color: #fff;
-          background: #c01a22;
-          border-radius: 50%;
-          padding: 0.4rem;
-        }
-      }
-    }
 
     h5 {
       margin: 25px 0 2.2rem;

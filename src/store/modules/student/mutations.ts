@@ -32,6 +32,7 @@ export type Mutations<S = State> = {
   [StudentMutationTypes.SET_ONE_QUESTION_FOR_SELFTEST](state: S, payload: any);
   [StudentMutationTypes.SET_CURRENT_DUEL](state: S, payload: any);
   [StudentMutationTypes.SET_AUTH_OBJECT](state: S, payload: any);
+  [StudentMutationTypes.SET_SHOW_MSG](state: S, payload: any);
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -46,6 +47,9 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [StudentMutationTypes.SET_CURRENT_SHOP_INFO](state: State, payload: any) {
     state.CurrentShopInfo = payload;
+  },
+  [StudentMutationTypes.SET_SHOW_MSG](state: State) {
+    state.showedMessage = !state.showedMessage;
   },
   [StudentMutationTypes.SET_CURRENT_SUPPORT_PERSON](
     state: State,

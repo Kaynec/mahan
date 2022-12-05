@@ -2,7 +2,8 @@
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <main :class="`${isMobile.value ? 'class ' : 'class pc '}`">
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <SmallHeader goOnePageBack="Home" v-if="isMobile.value" />
+    <Header onePageBack="Home" />
+    <MinimalHeader title="کلاس" onePageBack="ClassRomm" />
 
     <img src="@/assets/img/class/hero@3x.png" alt="hero img" class="hero" />
     <section class="grid animate__animated animate__fadeInUp">
@@ -26,13 +27,14 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentClassApi } from '@/api/services/student/student-class-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/store';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 export default defineComponent({
-  components: { SmallHeader, DesktopMinimalHeader },
+  components: { DesktopMinimalHeader, MinimalHeader, Header },
   setup() {
     const route = useRoute();
     // Change THis With The Current Data
@@ -137,6 +139,7 @@ export default defineComponent({
 
 .pc {
   max-width: 1000px;
+
   padding-top: 8vh;
 
   .hero {

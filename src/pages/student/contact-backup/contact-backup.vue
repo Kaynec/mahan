@@ -11,7 +11,8 @@
     :style="`padding-top :${isMobile.value ? '' : '8vh'}`"
   >
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <SmallHeader v-if="isMobile.value" onePageBack="Home" />
+    <Header />
+    <MinimalHeader title="پشتیبانی" v-if="isMobile.value" onePageBack="Home" />
     <h6>پشتیبان‌های فعال</h6>
     <!-- Change THis With Real Data Coming From Some Server-->
     <div
@@ -81,12 +82,13 @@
 
 <script lang="ts" setup>
 import { ref, onUpdated } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
 import router from '@/router';
 import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import alertify from '@/assets/alertifyjs/alertify';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 
 let data = ref();
 StudentSupportApi.getAll().then((res) => {

@@ -46,12 +46,12 @@
   </main>
 
   <div class="contact-us" v-else>
-    <SmallHeader />
-    <img
-      src="@/assets/img/contact-us.png"
-      alt="contact us img"
-      class="hero animate__animatd animate__fadeIn"
-    />
+    <Header />
+
+    <MinimalHeader title="پروفایل من" onePageBack="Home" />
+    <div class="hero animate__animatd animate__fadeIn">
+      <img src="@/assets/img/contact-us.png" alt="contact us img" />
+    </div>
     <div class="contact-us-card animate__animated animate__fadeIn">
       <div class="first-section">
         <h6>تلفن های تماس</h6>
@@ -83,24 +83,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
-
+<script lang="ts" setup>
 import router from '@/router';
+import Header from '@/modules/student-modules/header/header.vue';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 
-export default defineComponent({
-  components: {
-    SmallHeader
-  },
-  setup() {
-    const goOnepageBack = () => {
-      router.go(-1);
-    };
-
-    return { goOnepageBack };
-  }
-});
+const goOnepageBack = () => {
+  router.go(-1);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -112,7 +102,8 @@ export default defineComponent({
   position: relative;
 
   .contact-us-card {
-    margin: 15px 15px 0;
+    margin: 15px auto 0 auto;
+    width: 90%;
     box-shadow: 0 11px 17px 0 rgba(41, 94, 255, 0.05);
     h6 {
       font-weight: bold;
@@ -167,9 +158,14 @@ export default defineComponent({
   }
 
   .hero {
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
     max-height: 35vh;
     object-fit: contain;
+    margin-top: 1rem;
+    img {
+      width: 100%;
+    }
   }
 }
 
@@ -251,7 +247,7 @@ export default defineComponent({
     }
 
     .hero {
-      width: 100%;
+      width: 95%;
       max-height: 35vh;
       object-fit: cover;
       border-top-left-radius: 15px;

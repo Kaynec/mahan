@@ -2,9 +2,10 @@
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <main class="report-card">
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader OnePageBack="Selftest" title="کارنامه آزمون خودسنجی" />
     <!--  -->
-    <section class="label">
+    <section class="label" style="padding-top: 2rem">
       <p>آزمون خودسنجی {{ courseTitle }} {{ sessionTitle }}</p>
       <!-- Info -->
       <h6>
@@ -75,13 +76,15 @@ import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minim
 import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import ShowImages from '@/modules/student-modules/show-images.vue';
 import router from '@/router';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
   components: {
     Vue3ChartJs,
     MinimalHeader,
     DesktopMinimalHeader,
-    ShowImages
+    ShowImages,
+    Header
   },
   props: {
     data: { type: String }
@@ -89,6 +92,8 @@ export default defineComponent({
 
   setup(props) {
     const model = ref();
+
+    console.log(store.getters.getCurrentSelfTestReport);
 
     if (props.data) {
       model.value = JSON.parse(props.data);
@@ -108,10 +113,9 @@ export default defineComponent({
     sessionTitle.value = model.value.title;
 
     (async () => {
-      const titleRes = await StudentSelfTestApi.getOneCourse(
-        model.value.course
-      );
-      courseTitle.value = titleRes.data.data.title;
+      const courseID = model.value?.course || model.value.answers?.[0].course;
+      const titleRes = await StudentSelfTestApi.getOneCourse(courseID);
+      courseTitle.value = titleRes.data.data.title || 'درس';
     })();
 
     const allQuestions = model.value.totalQuestion;

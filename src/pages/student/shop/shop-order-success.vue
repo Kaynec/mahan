@@ -5,7 +5,7 @@
     }`"
   >
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <img src="@/assets/img/vpn-key-green@2x.png" alt="White Success Key" />
+    <img src="@/assets/img/shop/tick.png" alt="White Success Key" />
     <h6>خرید شما با موفقیت انجام شد</h6>
     <div class="middle-card animate__animated animate__fadeIn">
       <div class="left">

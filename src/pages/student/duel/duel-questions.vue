@@ -8,16 +8,18 @@
   <div
     v-bind="$attrs"
     v-else-if="!isFetching"
-    class="self-test-questions animate__animated animate__fadeIn"
+    class="duel-questions animate__animated animate__fadeIn"
   >
-    <MinimalHeader
-      v-if="isMobile.value"
-      :title="`
+    <template v-if="isMobile.value">
+      <Header />
+      <MinimalHeader
+        :title="`
     امتیازات کسب شده :
-          ${toPersianNumbers(store.getters?.getCurrentStudent?.point)} 
+    ${toPersianNumbers(store.getters?.getCurrentStudent?.point)} 
     `"
-      onePageBack="Home"
-    />
+        onePageBack="Home"
+      />
+    </template>
     <MinimalHeader
       v-else-if="!isMobile.value"
       :title="` دوثل  رشته ${data?.field?.title}`"
@@ -213,6 +215,7 @@ import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minim
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
 import shamsi_be_miladi from '@/utilities/date-converter';
 import alertify from '@/assets/alertifyjs/alertify';
+import Header from '@/modules/student-modules/header/header.vue';
 
 const showImages = ref(false);
 const isFetching = ref(true);
@@ -377,8 +380,8 @@ const endAzmoon = () => {
       if (res.data) {
         alertify.success('امتحان شما با موفقیت ثبت گردید');
         router.push({
-          name: 'ReportCard',
-          params: { id: res.data.data._id }
+          name: 'DuelReportCard',
+          params: { id: route.params.id }
         });
       } else {
         alertify.error('مشکلی رخ داده است! لطفا دوباره امتحان کنید');
@@ -400,7 +403,7 @@ const endAzmoon = () => {
   align-items: center;
   justify-content: center;
 }
-.self-test-questions {
+.duel-questions {
   width: 100%;
   background: #f4f4f4;
   height: 100%;

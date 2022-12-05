@@ -24,6 +24,14 @@ class product {
       }
     });
   }
+  async getAllBundles() {
+    return instance.get('productBundle/getByStudentProperties', {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        'Content-Type': 'application/json'
+      }
+    });
+  }
   async getBoughtProducts() {
     return instance.get('order/getBoughtProducts', {
       headers: {

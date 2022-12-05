@@ -1,6 +1,7 @@
 <template>
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <div class="self-test-questions">
+    <Header />
     <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader title="سوالات برگزیده" onePageBack="QuestionsChoosenList" />
     <!-- Progress Bar And Count -->
@@ -10,7 +11,7 @@
         <span> </span>
         <span> </span>
       </div>
-      <div class="progress" style="height: 5px;"></div>
+      <div class="progress" style="height: 5px"></div>
     </div>
 
     <div
@@ -23,7 +24,7 @@
           v-if="allData[currentChunk][idx].question.images.length"
           @click="setCurrentImages(item.images)"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 3rem; margin-right: 0.5rem;"
+          style="max-width: 3rem; margin-right: 0.5rem"
           alt="azmoon icon"
         />
       </p>
@@ -100,9 +101,10 @@ import { StudentSelfTestApi } from '@/api/services/student/student-selftest-serv
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import ShowImages from '@/modules/student-modules/show-images.vue';
-import alertify from '@/assets/alertifyjs/alertify'
+import alertify from '@/assets/alertifyjs/alertify';
+import Header from '@/modules/student-modules/header/header.vue';
 export default defineComponent({
-  components: { MinimalHeader, DesktopMinimalHeader, ShowImages },
+  components: { MinimalHeader, DesktopMinimalHeader, ShowImages, Header },
   setup() {
     const route = useRoute();
 

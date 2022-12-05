@@ -1,6 +1,7 @@
 <template>
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <div class="shop-basket" v-if="isMobile.value">
+    <Header />
     <MinimalHeader title="سبد خرید شما" />
 
     <div class="error" v-if="basketItems.length < 0">
@@ -17,8 +18,8 @@
         <span> {{ faDate }} </span>
       </div>
 
-      <div class="basket-card" v-for="item in basketItems" :key="item._id">
-        <div class="right">
+      <!-- 
+  <div class="right">
           <div v-if="!item.img" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
@@ -44,6 +45,74 @@
             {{ toPersianNumbers(`${item.product.price}`) }} تومان
           </p>
         </div>
+ -->
+      <div class="basket-card" v-for="item in basketItems" :key="item._id">
+        <template
+          v-if="
+            item.hasOwnProperty('session') ||
+            item.hasOwnProperty('productBundle')
+          "
+        >
+          <div class="right">
+            <div v-if="!item.img" class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <img :src="item.img" alt="product img" v-else />
+            <!-- If The Type is product (has quantiy) -->
+            <div class="label" style="margin-right: 0.5rem">
+              <span>
+                {{ item.productBundle?.title || item.session?.title }}
+              </span>
+              <span
+                @click="
+                  item.hasOwnProperty('productBundle')
+                    ? removeBundleFromBasket(item._id)
+                    : removeSessionFromBasket(item)
+                "
+                style="display: block"
+                class="red"
+                >حذف محصول</span
+              >
+            </div>
+          </div>
+          <div class="left">
+            <p>
+              {{ toPersianNumbers(`${item?.price}`) }}
+              تومان
+            </p>
+          </div>
+        </template>
+        <!--  -->
+        <template v-else>
+          {{ data.items }}
+          <div class="right">
+            <div v-if="!item.img" class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <img :src="item.img" alt="product img" v-else />
+            <div class="label" style="margin-right: 0.5rem">
+              {{
+                `${item.product.title} ${
+                  +item.quantity > 1 ? `تعداد (${item.quantity})` : ''
+                }`
+              }}
+              <span @click="removeItem(item)" style="display: block" class="red"
+                >حذف محصول</span
+              >
+            </div>
+          </div>
+          <div class="left">
+            <p v-if="item.product.specialPrice">
+              {{ toPersianNumbers(`${item.product.specialPrice}`) }}
+              تومان
+            </p>
+            <p
+              :class="`${item.product.specialPrice ? 'red line-through' : ''}`"
+            >
+              {{ toPersianNumbers(`${item.product.price}`) }} تومان
+            </p>
+          </div>
+        </template>
       </div>
       <!--  -->
       <div class="price">
@@ -101,33 +170,78 @@
           <span> {{ faDate }} </span>
         </div>
 
-        <div class="basket-card" v-for="item in basketItems" :key="item._id">
-          <div class="right">
-            <div v-if="!item.img" class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <img :src="item.img" alt="product img" v-else />
-            <div class="label" style="margin-right: 0.5rem">
-              {{
-                `${item.product.title} ${
-                  +item.quantity > 1 ? `تعداد (${item.quantity})` : ''
-                }`
-              }}
-              <span @click="removeItem(item)" style="display: block" class="red"
-                >حذف محصول</span
-              >
-            </div>
-          </div>
-          <div class="left">
-            <p v-if="item.product.specialPrice">
-              {{ toPersianNumbers(`${item.product.specialPrice}`) }}
-              تومان
-            </p>
-            <p
-              :class="`${item.product.specialPrice ? 'red line-through' : ''}`"
+        <div class="basket-container">
+          <div class="basket-card" v-for="item in basketItems" :key="item._id">
+            <template
+              v-if="
+                item.hasOwnProperty('session') ||
+                item.hasOwnProperty('productBundle')
+              "
             >
-              {{ toPersianNumbers(`${item.product.price}`) }} تومان
-            </p>
+              <div class="right">
+                <div v-if="!item.img" class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <img :src="item.img" alt="product img" v-else />
+                <!-- If The Type is product (has quantiy) -->
+                <div class="label" style="margin-right: 0.5rem">
+                  <span>
+                    {{ item.productBundle?.title || item.session?.title }}
+                  </span>
+                  <span
+                    @click="
+                      item.hasOwnProperty('productBundle')
+                        ? removeBundleFromBasket(item._id)
+                        : removeSessionFromBasket(item)
+                    "
+                    style="display: block"
+                    class="red"
+                    >حذف محصول</span
+                  >
+                </div>
+              </div>
+              <div class="left">
+                <p>
+                  {{ toPersianNumbers(`${item?.price}`) }}
+                  تومان
+                </p>
+              </div>
+            </template>
+            <!--  -->
+            <template v-else>
+              <div class="right">
+                <div v-if="!item.img" class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <img :src="item.img" alt="product img" v-else />
+                <div class="label" style="margin-right: 0.5rem">
+                  {{
+                    `${item.product.title} ${
+                      +item.quantity > 1 ? `تعداد (${item.quantity})` : ''
+                    }`
+                  }}
+                  <span
+                    @click="removeItem(item)"
+                    style="display: block"
+                    class="red"
+                    >حذف محصول</span
+                  >
+                </div>
+              </div>
+              <div class="left">
+                <p v-if="item.product.specialPrice">
+                  {{ toPersianNumbers(`${item.product.specialPrice}`) }}
+                  تومان
+                </p>
+                <p
+                  :class="`${
+                    item.product.specialPrice ? 'red line-through' : ''
+                  }`"
+                >
+                  {{ toPersianNumbers(`${item.product.price}`) }} تومان
+                </p>
+              </div>
+            </template>
           </div>
         </div>
         <!--  -->
@@ -176,7 +290,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import ChapterList from '@/modules/student-modules/chapter-list.vue';
 import router from '@/router';
 import { StudentBasketApi } from '@/api/services/student/student-basket-service';
@@ -186,7 +300,35 @@ import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { baseUrl } from '@/api/apiclient';
+import Header from '@/modules/student-modules/header/header.vue';
+import { addSessionToBasket, getBasketInfo } from '@/api/basket-functions';
 import { returnAProtectedUrl } from '@/utilities/get-image-from-url';
+
+// Remove Item From Basket
+
+const removeBundleFromBasket = async (id) => {
+  try {
+    await StudentBasketApi.removeBundle(id);
+    store.commit(
+      StudentMutationTypes.SET_BASKET_COUNT,
+      store.state.students.BasketCount - 1
+    );
+    // updateBasket();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const removeSessionFromBasket = (item) => {
+  addSessionToBasket(item, true);
+  // updateBasket();
+};
+
+onBeforeMount(() => {
+  updateBasket();
+});
+
+//
 
 const date = new Date();
 const faDate = new Intl.DateTimeFormat('fa', {
@@ -198,38 +340,53 @@ const faDate = new Intl.DateTimeFormat('fa', {
 const point = ref(store.getters.getCurrentStudent.point);
 const allPrice = ref(0);
 const allSpecialPrice = ref(0);
-const basketItems = ref([]) as any;
+const basketItems = ref<any[]>([]);
 const purchaseId = ref(0);
 
-(async () => {
-  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-    method: 'GET',
-    headers: {
-      token: store.getters.getStudentToken
-    }
-  });
-  const res = await resPromise.json();
+const updateBasket = async () => {
+  allPrice.value = 0;
+  allSpecialPrice.value = 0; //
+  basketItems.value = [];
+  const imgPromises: any[] = [];
+  const res = await getBasketInfo();
 
-  const imgPromises = [] as any;
+  purchaseId.value = res.data._id || '';
 
-  purchaseId.value = res.data._id;
   res.data.items.forEach((item) => {
     const imageUrl = `${baseUrl}product/coverImage/${item.product._id}`;
+    item.img = imageUrl;
     imgPromises.push(returnAProtectedUrl(imageUrl));
-    if (item.product != null) {
-      allPrice.value += item.product.price * item.quantity;
-      allSpecialPrice.value += item.product.specialPrice * item.quantity;
+    allPrice.value += item.product.price * item.quantity;
+    allSpecialPrice.value += item.product.specialPrice * item.quantity;
 
-      basketItems.value.push(item);
-    }
+    basketItems.value.push(item);
   });
 
-  const imgs = await Promise.all(imgPromises);
+  //
+  res.data.bundles.forEach((item) => {
+    const imageUrl = `${baseUrl}product/coverImage/${item.productBundle._id}`;
+    item.img = imageUrl;
+    imgPromises.push(returnAProtectedUrl(imageUrl));
+    allPrice.value += item.price;
 
-  imgs.forEach((img, idx) => {
+    basketItems.value.push(item);
+  });
+
+  //
+  res.data.sessions.forEach((item) => {
+    const imageUrl = `${baseUrl}product/coverImage/${item.session._id}`;
+    imgPromises.push(returnAProtectedUrl(imageUrl));
+    item.img = imageUrl;
+    allPrice.value += item.price;
+
+    basketItems.value.push(item);
+  });
+
+  const images = await Promise.all(imgPromises);
+  images.forEach((img, idx) => {
     basketItems.value[idx].img = img;
   });
-})();
+};
 
 const payment = ref();
 
@@ -241,9 +398,11 @@ const paidPrice = computed(() => {
 
 const discount = computed(() => {
   return basketItems.value.reduce((acc, item: any) => {
-    let discount =
-      (item.product.price - item.product.specialPrice) * item.quantity;
-    acc += discount;
+    if (item.hasOwnProperty('product')) {
+      let discount =
+        (item.product.price - item.product.specialPrice) * item.quantity;
+      acc += discount;
+    }
     return acc;
   }, 0);
 });
@@ -259,49 +418,13 @@ const removeItem = async (item) => {
     }
   };
 
-  const res = await StudentBasketApi.add(tmpObject);
+  try {
+    await StudentBasketApi.add(tmpObject);
 
-  if (res.data) {
-    (basketItems.value = []), (allPrice.value = 0);
-    store.commit(
-      StudentMutationTypes.SET_BASKET_COUNT,
-      store.getters.getBasketCount - item.quantity
-    );
-    const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-      method: 'GET',
-      headers: {
-        token: store.getters.getStudentToken
-      }
-    });
-    const response = await resPromise.json();
-
-    // Reset The data And fill Again
-
-    allSpecialPrice.value = 0;
-
-    response.data.items.forEach((item) => {
-      if (!item.product) return;
-
-      allPrice.value += item.product.price;
-
-      basketItems.value.push(item);
-
-      if (item.product.specialPrice)
-        allSpecialPrice.value += item.product.specialPrice;
-    });
-
-    const imgPromises = [] as any;
-
-    basketItems.value.forEach((item: any) => {
-      const imageUrl = `${baseUrl}product/coverImage/${item.product._id}`;
-      imgPromises.push(returnAProtectedUrl(imageUrl));
-    });
-
-    const imgs = await Promise.all(imgPromises);
-
-    imgs.forEach((img, idx) => {
-      basketItems.value[idx].img = img;
-    });
+    //
+    // updateBasket();
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -546,5 +669,13 @@ const goOnepageBack = () => {
       border-bottom: none;
     }
   }
+}
+
+.basket-container {
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 2rem 0;
 }
 </style>

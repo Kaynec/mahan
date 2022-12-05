@@ -1,28 +1,23 @@
 <template>
-  <SmallHeader onePageBack="SelfTest" v-show="isMobile.value" />
   <!-- Spinner -->
   <div class="loader-parent" v-show="isLoading">
     <div class="loading1"></div>
   </div>
 
   <!--  -->
-  <main class="roadmap" ref="roadmap" v-if="!isLoading">
-    <nav class="nav sm-nav">
-      <div>
-        <img :src="imageUrl" class="profile-image" alt="Image Url" />
-        <span class="user-parts">
-          {{ `${currentUser.firstname} ${currentUser.lastname}` }} | امتیاز شما:
-          {{ toPersianNumbers(`${currentUser.point ? currentUser.point : 0}`) }}
-        </span>
-      </div>
-      <i class="fas fa-arrow-left" @click="goOnePageBack()"></i>
-    </nav>
-
-    <img
-      src="@/assets/img/roadmap/3-d-space-scene@3x.png"
-      alt="background img"
-      class="background"
-      v-if="allSessions.length"
+  <main class="roadmap" ref="roadmap" v-if="!isLoading" v-dragscroll>
+    <!-- Show Buy Session Component -->
+    <BuySession
+      v-if="showBuySession"
+      :data="allSessions[currentIndex]"
+      :allSessions="allSessions"
+      @cancel="showBuySession = false"
+    />
+    <!--  -->
+    <MinimalHeader
+      style="top: 0; margin-top: 0; position: absolute"
+      :title="`رودمپ`"
+      v-if="isMobile.value"
     />
 
     <DesktopMinimalHeader v-show="!isMobile.value" />
@@ -31,7 +26,12 @@
       محتوایی برای نمایش وجود ندارد
     </h1>
 
-    <div v-else class="circles animate__animatd animate__fadeIn" ref="circles">
+    <div
+      v-else
+      class="circles custom animate__animatd animate__fadeIn"
+      ref="circles"
+      v-dragscroll
+    >
       <div
         class="circle animate__animatd animate__fadeIn"
         v-for="(circle, i) in allSessions"
@@ -65,14 +65,15 @@
           <div class="control" v-else-if="circle.state === 1">
             <h1>آزمون خودسنجی</h1>
             <h2>{{ (circle.title as string).substring(0, 25) }}</h2>
-            <button
-              class="green"
-              @click="moveToSelfTestQuestions(i, circle._id)"
-            >
+            <button class="green" @click="moveToSelfTestQuestions(i, circle)">
               شروع آزمون
             </button>
 
-            <button class="red" @click="moveToReportCard(circle)">
+            <button
+              class="red"
+              @click="moveToReportCard(circle)"
+              v-if="circle.totalQuestion"
+            >
               مشاهده کارنامه
             </button>
 
@@ -133,19 +134,13 @@
           <div class="text">
             <span> میزان پیشرفت شما </span>
             <span>
-              {{
-                Math.floor(
-                  (circle.totalAnswer / circle.totalQuestion) * 100 || 0
-                ) + '%'
-              }}
+              {{ Math.floor(getProgressCount(circle)) + '%' }}
             </span>
           </div>
           <div class="bar">
             <div
               class="bar-child"
-              :style="` width : ${
-                (circle.totalAnswer / circle.totalQuestion) * 100 || 0
-              }% `"
+              :style="` width : ${getProgressCount(circle)}% `"
             ></div>
           </div>
         </div>
@@ -179,6 +174,9 @@ import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import Alert from '@/modules/student-modules/alert/alert.vue';
 import alertify from '@/assets/alertifyjs/alertify';
+import { dragscroll as vDragscroll } from 'vue-dragscroll';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
+import BuySession from '../azmoon/buy-session.vue';
 
 const isLoading = ref(true);
 const roadmap = ref();
@@ -192,6 +190,11 @@ const toggleShowNotif = () => (showNotif.value = !showNotif.value);
 const messageToShow = ref('');
 const textToShow = ref('');
 
+// Cacl The Prrcent Of Progress
+const getProgressCount = (circle) => {
+  return (circle.totalQuestion / circle.questions.length) * 100;
+};
+//
 onUpdated(() => {
   if (firstView.value) {
     if (roadmap.value) {
@@ -205,6 +208,8 @@ onUpdated(() => {
   const res = await StudentSelfTestApi.getSessionByCourse(
     Route.params.id as any
   );
+
+  res.data.data = [...res.data.data];
 
   const historyOfExamPromises = [] as any;
   // Looping Through Sessions of the Course
@@ -243,13 +248,20 @@ onUpdated(() => {
   isLoading.value = false;
 })();
 
-const moveToSelfTestQuestions = (index, id) => {
-  if (index >= 1 && !store.getters.getCurrentStudent.purchased) {
-    alertify.error('لطفا اول برنامه را خریداری کنید');
+// moving to quetions or prompt for boy
+
+const showBuySession = ref(false);
+
+const moveToSelfTestQuestions = (index, circle) => {
+  if (circle.totalQuestion >= circle.questions.length) {
+    alertify.error('شما قبلا در این امتحان شرکت کرده اید');
+  }
+  if (index >= 1 && !circle.bought) {
+    showBuySession.value = true;
   } else
     router.push({
       name: 'SelfTestQuestions',
-      params: { id }
+      params: { id: circle._id }
     });
 };
 
@@ -332,46 +344,14 @@ const showPdf = (pdf, index) => {
 };
 </script>
 <style lang="scss" scoped>
-/* width */
-::-webkit-scrollbar,
-::moz-sc {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
 //
 .roadmap {
-  font-family: IRANSans;
-  position: relative;
-  padding-bottom: 0;
-  width: 100%;
+  width: 100vw;
   height: 100%;
-  display: flex;
-  z-index: 99;
-
-  .background {
-    position: fixed;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
+  background: url('../../../assets/img/roadmap/3-d-space-scene@3x.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
 
   .circles {
     display: flex;
@@ -379,13 +359,19 @@ const showPdf = (pdf, index) => {
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-end;
-    height: 100%;
     width: 100vw;
-    z-index: 999;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Lets it scroll lazy */
     scrollbar-width: thin;
     scrollbar-color: orange red;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch; /* Lets it scroll lazy */
+
+    height: 100%;
 
     .circle {
       z-index: 999;

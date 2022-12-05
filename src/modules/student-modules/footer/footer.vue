@@ -1,72 +1,58 @@
 <template>
-  <footer class="footer" v-if="isMobile.value">
-    <router-link
-      :to="`home`"
-      class="nav-link"
-      exact
-      exact-active-class="active"
-    >
-      <img src="@/assets/img/home@3x.png" class="footer-icon" alt="home" />
-    </router-link>
-
-    <router-link
-      :to="`group`"
-      class="nav-link"
-      exact
-      exact-active-class="active"
-    >
-      <img src="@/assets/img/group@3x.png" class="footer-icon" alt="roadmap" />
-    </router-link>
-
-    <router-link
-      :to="`shop`"
-      class="nav-link"
-      exact
-      exact-active-class="active"
-    >
-      <img src="@/assets/img/shop@3x.png" class="footer-icon" alt="shop" />
-    </router-link>
-    <router-link
-      :to="`setting`"
-      class="nav-link"
-      exact
-      exact-active-class="active"
+  <footer v-if="isMobile.value" class="mobile-only">
+    <div @click="$router.push({ name: 'ClassRoom' })">
+      <img
+        src="@/assets/img/one-lesson.png"
+        :class="`${$route.name == 'ClassRoom' ? 'active' : ''}`"
+        alt="backup"
+      />
+    </div>
+    <div
+      @click="
+        $router.push({
+          name: 'ShopBookList',
+          params: { id: '627b5419c6a709fd06348039' }
+        })
+      "
     >
       <img
-        src="@/assets/img/setting@3x.png"
-        class="footer-icon"
-        alt="setting"
+        src="@/assets/img/home-icons/home-page/book.png"
+        :class="`${$route.name == 'ShopBookList' ? 'active' : ''}`"
+        alt="backup"
       />
-    </router-link>
+    </div>
+    <div @click="$router.push({ name: 'ShopBundle' })">
+      <img
+        :class="`${$route.name == 'ShopBundle' ? 'active' : ''}`"
+        src="@/assets/img/full-bundle.png"
+        alt="shop"
+      />
+    </div>
+    <div @click="$router.push({ name: 'SelfTest' })">
+      <img
+        src="@/assets/img/home-icons/home-page/selftest.png"
+        :class="`${$route.name == 'SelfTest' ? 'active' : ''}`"
+        alt="StudentProfile"
+      />
+    </div>
   </footer>
 </template>
 <style scoped lang="scss">
 // @import '@/css-variable/Global.scss';
-.footer {
-  width: 100%;
-  height: clamp(4rem, 4rem, 4rem);
-  flex-basis: clamp(10%, 12.5%, 17.5%);
-  position: fixed;
-  bottom: 0;
-  margin: 0;
+.mobile-only {
+  width: 90%;
+  margin: 1rem auto;
+  // box-shadow: 0px -2px 4px rgba(227, 227, 227, 0.25), 0px 2px 4px #e3e3e3;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
-  background-image: linear-gradient(to right, #880e13 7%, #ec3538);
-  z-index: 4;
-  .footer-icon {
-    object-fit: contain;
-    width: 25vw;
-    max-width: 5rem;
+
+  gap: 1rem;
+  justify-content: space-between;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 20px;
+
+  img {
+    width: 3rem;
   }
-}
-.nav-link {
-  padding: 0;
-  transition: ease 0.3s;
-}
-.active {
-  transform: scale(1.25);
 }
 </style>

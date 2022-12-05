@@ -16,6 +16,38 @@ class Basket {
       }
     });
   }
+  async addBundle(bundle: any) {
+    return instance.post('shopping-cart/add-bundle', bundle, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        // 'Content-Type': 'application/json'
+      }
+    });
+  }
+  async addSession(session: any) {
+    return instance.post('shopping-cart/add-session', session, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        // 'Content-Type': 'application/json'
+      }
+    });
+  }
+  async removeSession(id: number) {
+    return instance.delete(`shopping-cart/delete-session/${id}`, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        // 'Content-Type': 'application/json'
+      }
+    });
+  }
+  async removeBundle(id: number) {
+    return instance.delete(`shopping-cart/delete-bundle/${id}`, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        // 'Content-Type': 'application/json'
+      }
+    });
+  }
   async finalizeOrder() {
     return instance.post('order', {
       headers: {
@@ -24,7 +56,6 @@ class Basket {
       }
     });
   }
-
   async HistoryOfBoughtProducts() {
     return instance.get('order/get', {
       headers: {

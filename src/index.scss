@@ -7,6 +7,166 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import 'assets/alertifyjs/css/alertify.rtl.min.css';
 
+// Scroll
+.custom {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: -o-grab;
+  cursor: grab;
+
+  &:active {
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: -o-grabbing;
+    cursor: grabbing;
+  }
+}
+.custom {
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  overflow: scroll;
+}
+
+.custom::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+/* width */
+::-webkit-scrollbar,
+::moz-sc {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+// Header
+
+.minimal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.09), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
+  color: white;
+  z-index: 9999;
+  background-color: white;
+  top: 10vh;
+  max-height: 10vh;
+  font-family: IRANSans;
+  position: sticky;
+  padding: 0.3rem;
+
+  color: #e51c21;
+
+  margin-top: 10vh;
+
+  i {
+    font-size: 1rem;
+  }
+
+  img {
+    padding: 0;
+    margin: 0;
+  }
+  span {
+    font-size: 9px;
+    font-weight: bold;
+    padding: 0.4rem;
+  }
+}
+
+.minimal-nav.pc {
+  box-shadow: none;
+  color: #000;
+  background: transparent;
+  max-width: 1000px;
+
+  margin-top: 3.5em;
+  top: 0;
+  padding: 0 20px;
+
+  span {
+    font-size: 14px;
+  }
+
+  i {
+    font-size: 25px !important;
+  }
+}
+
+.minimal-nav.dark {
+  background: #000;
+  color: #fff;
+  padding: 1rem;
+}
+
+.big-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.09);
+  background-color: white;
+  // height: 8vh;
+  height: 10vh;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+  z-index: 99999;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  img.logo-mahan {
+    width: clamp(5.5rem, 7rem, 120px);
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.09);
+    // max-width: 120px;
+  }
+
+  .home {
+    background-color: red;
+    border-radius: 0.5rem;
+    aspect-ratio: 1;
+    color: white;
+    font-size: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-content: center;
+  }
+
+  .user-part {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: 0.5rem;
+    z-index: 2;
+
+    .points {
+      font-family: IRANSans;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+    }
+  }
+}
+
+//
 @font-face {
   font-family: 'IRANSans';
   src: url('./assets/fonts/IRANSans.ttf');

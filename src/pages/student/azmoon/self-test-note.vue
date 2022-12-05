@@ -2,6 +2,7 @@
   <!-- Header -->
   <div class="class-note">
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader title="یادداشت ها " onePageBack="SelfTest" />
     <p
       v-if="store.getters.getCurrentStudent.note"
@@ -25,8 +26,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { store } from '@/store';
 import router from '@/router';
@@ -34,65 +35,50 @@ import { StudentAuthServiceApi } from '@/api/services/student/student-auth-servi
 import { StudentActionTypes } from '@/store/modules/student/action-types';
 import alertify from '@/assets/alertifyjs/alertify';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 
-export default defineComponent({
-  components: { MinimalHeader, DesktopMinimalHeader },
-  setup() {
-    store.dispatch(StudentActionTypes.CURRENT_STUDENT);
+store.dispatch(StudentActionTypes.CURRENT_STUDENT);
 
-    const noteText = ref('');
+const noteText = ref('');
 
-    const goOnePageBack = () =>
+const goOnePageBack = () =>
+  router.push({
+    name: 'SelfTest'
+  });
+
+let date;
+
+if (store.getters.getCurrentStudent?.noteUpdateAt) {
+  date = new Intl.DateTimeFormat('fa', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric'
+  }).format(new Date(store.getters.getCurrentStudent?.noteUpdateAt));
+}
+
+const day = date?.split(' ')[0];
+
+const month = date?.split(' ')[1];
+
+const year = date?.split(' ')[2];
+
+const hour = date?.split(' ')[3];
+
+const updateNote = async () => {
+  const res = await StudentAuthServiceApi.updateNote({
+    note: noteText.value
+  });
+  if (res.data) {
+    const res = await store.dispatch(StudentActionTypes.CURRENT_STUDENT);
+    if (res) {
+      alertify.success('یادداشت شما با موفقیت ویرایش شد');
       router.push({
         name: 'SelfTest'
       });
-
-    let date;
-
-    if (store.getters.getCurrentStudent?.noteUpdateAt) {
-      date = new Intl.DateTimeFormat('fa', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: 'numeric'
-      }).format(new Date(store.getters.getCurrentStudent?.noteUpdateAt));
     }
-
-    const day = date?.split(' ')[0];
-
-    const month = date?.split(' ')[1];
-
-    const year = date?.split(' ')[2];
-
-    const hour = date?.split(' ')[3];
-
-    const updateNote = async () => {
-      const res = await StudentAuthServiceApi.updateNote({
-        note: noteText.value
-      });
-      if (res.data) {
-        const res = await store.dispatch(StudentActionTypes.CURRENT_STUDENT);
-        if (res) {
-          alertify.success('یادداشت شما با موفقیت ویرایش شد');
-          router.push({
-            name: 'SelfTest'
-          });
-        }
-      }
-    };
-
-    return {
-      goOnePageBack,
-      store,
-      day,
-      hour,
-      year,
-      month,
-      noteText,
-      updateNote
-    };
   }
-});
+};
 </script>
 
 <style lang="scss" scoped>

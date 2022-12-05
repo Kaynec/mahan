@@ -1,5 +1,8 @@
 <template>
-  <div class="container" v-if="isLoading">
+  <div class="loader-parent" v-if="isLoading">
+    <div class="loading1"></div>
+  </div>
+  <div class="container" v-else>
     <div
       @click="moveToReportCardOrExam(item)"
       class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv warning"
@@ -37,9 +40,6 @@
     </div>
   </div>
   <!--  -->
-  <div class="loader-parent" v-else>
-    <div class="loading1"></div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -54,7 +54,7 @@ const { id } = defineProps({
   id: { type: String, required: true }
 });
 
-const isLoading = ref(false);
+const isLoading = ref(true);
 const azmoonData = reactive([] as any);
 
 onBeforeMount(async () => {
@@ -75,7 +75,7 @@ onBeforeMount(async () => {
     // let mDate = moment(date.date, 'jYYYY/jM/jD');
     if (compareAsc(mDate, new Date()) <= 0) azmoonData.push(date);
   });
-  isLoading.value = true;
+  isLoading.value = false;
 });
 
 azmoonData.forEach((child: any) => {
@@ -120,10 +120,11 @@ const moveToReportCardOrExam = (item) => {
 
 <style lang="scss" scoped>
 .container {
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
   overflow-y: auto;
   padding-bottom: 3rem;
+  background-color: red;
   overflow-x: hidden;
 }
 .card {
@@ -131,6 +132,7 @@ const moveToReportCardOrExam = (item) => {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
   font-family: IRANSans;
+  background-color: red;
 
   &:hover {
     cursor: pointer;

@@ -1,6 +1,7 @@
 <template>
   <div class="self-test-questions">
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader onePageBack="SelfTest" title="سوالات برگزیده " />
     <!-- Progress Bar And Count -->
 
@@ -16,7 +17,7 @@
         <!-- Change This And Width Of The Progress Bar Dynamically -->
         <span> {{ toPersianNumbers(allCount) }} </span>
       </div>
-      <div class="progress" style="height: 5px;">
+      <div class="progress" style="height: 5px">
         <div
           class="progress-bar bg-success"
           role="progressbar"
@@ -52,67 +53,52 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, ref } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import router from '@/router';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 
-export default defineComponent({
-  components: { MinimalHeader, DesktopMinimalHeader },
-  setup() {
-    const allData = ref([]) as any;
+const allData = ref([]) as any;
 
-    const goOnePageBack = () => router.go(-1);
+const goOnePageBack = () => router.go(-1);
 
-    const currentChunk = ref(0) as any;
+const currentChunk = ref(0) as any;
 
-    const allCount = ref(0) as any;
+const allCount = ref(0) as any;
 
-    (async () => {
-      const resForModel = await StudentSelfTestApi.AllBookmarkQuestions();
+(async () => {
+  const resForModel = await StudentSelfTestApi.AllBookmarkQuestions();
 
-      resForModel.data.data.forEach((item) => {
-        if (item.question) allData.value.push(item);
-      });
-      // Count of all items before split
-      allCount.value = allData.value.length;
+  resForModel.data.data.forEach((item) => {
+    if (item.question) allData.value.push(item);
+  });
+  // Count of all items before split
+  allCount.value = allData.value.length;
 
-      const tmpArray = allData.value;
-      allData.value = [];
-      //  Split The Array to array of 20
-      for (let i = 0, j = tmpArray.length; i < j; i += 20)
-        allData.value.push(tmpArray.slice(i, i + 20));
-    })();
+  const tmpArray = allData.value;
+  allData.value = [];
+  //  Split The Array to array of 20
+  for (let i = 0, j = tmpArray.length; i < j; i += 20)
+    allData.value.push(tmpArray.slice(i, i + 20));
+})();
 
-    const nextPage = () => {
-      if (currentChunk.value + 1 < allData.value.length) currentChunk.value++;
-    };
-    const previousPage = () => {
-      if (currentChunk.value - 1 >= 0) currentChunk.value--;
-    };
+const nextPage = () => {
+  if (currentChunk.value + 1 < allData.value.length) currentChunk.value++;
+};
+const previousPage = () => {
+  if (currentChunk.value - 1 >= 0) currentChunk.value--;
+};
 
-    const openThePage = (item, idx) => {
-      router.push({
-        name: 'SelfTestQuestionsChoosen',
-        params: { idx, currentChunk: currentChunk.value }
-      });
-    };
-
-    return {
-      goOnePageBack,
-      toPersianNumbers,
-      allData,
-      currentChunk,
-      nextPage,
-      previousPage,
-      allCount,
-      openThePage
-    };
-  }
-});
+const openThePage = (item, idx) => {
+  router.push({
+    name: 'SelfTestQuestionsChoosen',
+    params: { idx, currentChunk: currentChunk.value }
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -159,10 +145,8 @@ export default defineComponent({
       display: flex;
       align-items: center;
       justify-content: center;
-      background: url('../../../assets/img/blur.png');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
+      background-color: $blueish;
+      color: white;
       aspect-ratio: 1;
       cursor: pointer;
       span {

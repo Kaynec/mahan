@@ -1,6 +1,7 @@
 <template>
   <div class="comp-test-answer">
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader title="پاسخنامه آزمون خودسنجی" />
 
     <div class="quiz-card shadow animate__animated animate__fadeIn">
@@ -11,7 +12,7 @@
           v-if="question.question.images.length"
           @click="setCurrentImages(question.question.images)"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 2.5rem; margin-right: 0.5rem;"
+          style="max-width: 2.5rem; margin-right: 0.5rem"
           alt="question img"
         />
       </p>
@@ -51,7 +52,7 @@
         v-if="question.question.descriptiveAnswer.images.length"
         @click="setCurrentImages(question.question.descriptiveAnswer.images)"
         src="@/assets/img/azmoon-icons/img-icon@3x.png"
-        style="max-width: 2.5rem; margin-right: 0.5rem;"
+        style="max-width: 2.5rem; margin-right: 0.5rem"
       />
 
       <p>
@@ -71,8 +72,8 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
@@ -80,60 +81,45 @@ import ShowImages from '@/modules/student-modules/show-images.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { useRoute } from 'vue-router';
+import Header from '@/modules/student-modules/header/header.vue';
 
-export default defineComponent({
-  props: {
-    answer: { type: String }
-  },
-  components: { MinimalHeader, ShowImages, DesktopMinimalHeader },
-  setup(props) {
-    const question = ref();
+const props = defineProps<{
+  answer: { type: String };
+}>();
+const question = ref();
 
-    const route = useRoute();
+const route = useRoute();
 
-    const id = route.params.id;
+const id = route.params.id;
 
-    if (props.answer) {
-      question.value = JSON.parse(props.answer);
-      store.commit(
-        StudentMutationTypes.SET_ONE_QUESTION_FOR_SELFTEST,
-        question.value
-      );
-    } else {
-      question.value = store.getters.getOneQuestionForSelfTestReport;
-    }
+if (props.answer) {
+  question.value = JSON.parse(props.answer);
+  store.commit(
+    StudentMutationTypes.SET_ONE_QUESTION_FOR_SELFTEST,
+    question.value
+  );
+} else {
+  question.value = store.getters.getOneQuestionForSelfTestReport;
+}
 
-    const getClass = (idx: number) => {
-      if (question.value.correct == idx + 1) return 'card active';
-      else if (
-        question.value.answer === idx + 1 &&
-        question.value.correct != idx + 1
-      ) {
-        return 'card danger';
-      } else {
-        return 'card';
-      }
-    };
-
-    const showImages = ref(false);
-    const currentImages = ref([]);
-    const setCurrentImages = (images) => {
-      currentImages.value = images;
-      showImages.value = true;
-    };
-
-    return {
-      toPersianNumbers,
-      getClass,
-      store,
-      question,
-      setCurrentImages,
-      currentImages,
-      showImages,
-      id
-    };
+const getClass = (idx: number) => {
+  if (question.value.correct == idx + 1) return 'card active';
+  else if (
+    question.value.answer === idx + 1 &&
+    question.value.correct != idx + 1
+  ) {
+    return 'card danger';
+  } else {
+    return 'card';
   }
-});
+};
+
+const showImages = ref(false);
+const currentImages = ref([]);
+const setCurrentImages = (images) => {
+  currentImages.value = images;
+  showImages.value = true;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -238,16 +224,16 @@ export default defineComponent({
 
       //
       .card.active {
-        border: solid 2px #4ac367;
+        border: solid 2px $blueish;
 
         span {
           font-family: IRANSans;
           font-size: 13px;
           font-weight: bold;
-          color: #4ac367;
+          color: $blueish;
         }
         .img {
-          background-color: #4ac367;
+          background-color: $blueish;
         }
       }
 
@@ -271,10 +257,10 @@ export default defineComponent({
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    width: 97%;
+    width: 90%;
     margin: 1rem auto;
     p {
-      background-color: #4ac367;
+      background-color: $blueish;
       padding: 20px;
       border-radius: 14.7px;
       box-shadow: 0 11px 17px 0 rgba(7, 125, 62, 0.1);

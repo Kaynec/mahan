@@ -263,6 +263,7 @@ main {
     width: 80%;
     margin: 0 auto;
     max-width: 1000px;
+    padding-top: 2rem;
 
     display: flex;
     flex-direction: column;
@@ -315,6 +316,7 @@ main {
     max-height: 550px;
     margin: 0 auto;
     max-width: 1000px;
+    padding-top: 2rem;
 
     display: flex;
     align-items: center;

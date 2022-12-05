@@ -348,6 +348,7 @@ const goToquestions = () => {
     margin: 0 auto;
     width: 95%;
     max-width: 1000px;
+    padding-top: 2rem;
   }
 
   button {

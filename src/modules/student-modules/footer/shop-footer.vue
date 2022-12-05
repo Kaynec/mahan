@@ -12,33 +12,28 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { store } from '@/store';
 import router from '@/router';
 // import { StudentBasketApi } from '@/api/services/student/student-basket-service';
 
-export default defineComponent({
-  setup(_, { emit }) {
-    // StudentBasketApi.get().then((res) => console.log(res))
+// StudentBasketApi.get().then((res) => console.log(res))
 
-    const moveToBasket = () => {
-      emit('iHaveBeenTouched');
-      router.push({
-        name: 'ShopBasket'
-      });
-    };
+const emit = defineEmits(['iHaveBeenTouched']);
 
-    return { store, moveToBasket };
-  }
-});
+const moveToBasket = () => {
+  emit('iHaveBeenTouched');
+  router.push({
+    name: 'ShopBasket'
+  });
+};
 </script>
 
 <style lang="scss" scoped>
 @import '@/css-variable/Global.scss';
 .footer {
   width: 100%;
-  background-image: $redish-background;
+  background: #2b2d42;
   display: flex;
   justify-content: space-between;
   align-items: center;

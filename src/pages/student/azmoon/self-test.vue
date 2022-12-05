@@ -2,13 +2,18 @@
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <main class="class" :style="`padding-top: ${isMobile.value ? '' : '6vh'}`">
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <SmallHeader v-if="isMobile.value" onePageBack="Home" />
+    <Header onePageBack="Home" />
+    <MinimalHeader
+      v-if="isMobile.value"
+      title="آزمون خودسنجی"
+      onePageBack="Home"
+    />
 
     <div class="hero" :style="`margin-top: ${isMobile.value ? '' : '50px'}`">
       <img
         :src="`${
           isMobile.value
-            ? require('@/assets/img/selftest.jpg')
+            ? require('@/assets/img/contact-us.png')
             : require('@/assets/img/selftest-pc@3x.png')
         }`"
         alt="header image of self test"
@@ -18,7 +23,7 @@
     <!-- <img src="../../../assets/img/selftest.png" alt="hero img" class="hero" /> -->
     <div class="grid animate__animated animate__fadeInUp">
       <div
-        class="card animate__animated animate__fadeIn"
+        class="Card animate__animated animate__fadeIn"
         v-for="course in allCourses"
         :key="course._id"
         @click="movetoRoadmap(course._id)"
@@ -37,13 +42,13 @@
         src="@/assets/img/class/pencil.png"
         alt="pencil icon"
         class="pencil"
-        style="animation: lightSpeedInLeft; animation-duration: 0.5s;"
+        style="animation: lightSpeedInLeft; animation-duration: 0.5s"
         @click="openNote"
       />
 
       <i
         class="fas fa-bookmark bookmarked"
-        style="animation: lightSpeedInRight; animation-duration: 0.5s;"
+        style="animation: lightSpeedInRight; animation-duration: 0.5s"
         @click="openBookmarked"
       ></i>
     </div>
@@ -52,11 +57,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import router from '@/router';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { baseUrl } from '@/api/apiclient';
+import Header from '@/modules/student-modules/header/header.vue';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 
 const allCourses = ref([] as any);
 
@@ -103,8 +109,10 @@ const openBookmarked = () => {
   max-width: 1000px;
 
   .hero {
-    width: 100%;
+    width: 92.5%;
+    margin: 0 auto;
     max-width: 1000px;
+    padding-top: 2rem;
 
     max-height: 300px;
     img {
@@ -122,16 +130,23 @@ const openBookmarked = () => {
     padding: 0.9rem;
     height: fit-content;
     padding-bottom: 7.25rem;
-    .card {
+    background-color: white;
+    box-shadow: -2px 2px 3px 0 rgba(0, 0, 0, 0.08);
+    width: 92.5%;
+    margin: 1rem auto;
+    max-width: 1000px;
+    padding-top: 2rem;
+    border-radius: 25px;
+
+    .Card {
       padding: 11px 36px 16.6px 38px;
       border-radius: 14.7px;
-      box-shadow: -2px 2px 3px 0 rgba(0, 0, 0, 0.08);
-      background-color: #fff;
       display: flex;
       flex-direction: column;
       font-family: IRANSans;
       align-items: center;
       transition: all 0.3s;
+      width: 100%;
 
       &:hover {
         cursor: pointer;

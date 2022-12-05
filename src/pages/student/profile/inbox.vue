@@ -1,6 +1,7 @@
 <template>
   <DesktopMinimalHeader v-if="!isMobile.value" />
   <div class="inbox">
+    <Header />
     <MinimalHeader goOnePageBack="MyProfile" title="پیام های دریافتی " />
     <!-- Container -->
     <div class="container">
@@ -50,9 +51,10 @@ import { StudentAuthServiceApi } from '@/api/services/student/student-auth-servi
 import { compareAsc } from 'date-fns';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { add } from 'date-fns';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
-  components: { Message, MinimalHeader, DesktopMinimalHeader },
+  components: { Message, MinimalHeader, DesktopMinimalHeader, Header },
   setup() {
     const showMessage = ref(false);
     // We Change This objects Information with the pressed div

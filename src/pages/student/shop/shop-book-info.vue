@@ -11,6 +11,7 @@
   <!--  -->
   <div class="shop-book-list" v-else>
     <DesktopMinimalHeader v-if="!isMobile.value" component="shop" />
+    <Header />
     <MinimalHeader :title="`${model.title}`" onePageBack="studentShop" />
 
     <div class="card animate__animated animate__fadeIn">
@@ -45,8 +46,23 @@
 
             <template v-else-if="!isSendingRequest">
               <div
+                v-if="model.hasOwnProperty('newBundle')"
+                style="width: 100%; display: flex; align-items: flex-start"
+                @click="addBundle"
+              >
+                <img
+                  src="@/assets/img/button_copy.png"
+                  style="width: 100%; height: 50px"
+                  alt="button copy"
+                  v-if="itemExists === false"
+                />
+                <RemoveBundle v-else @click="addBundle" />
+              </div>
+
+              <!--  -->
+              <div
                 class="img-add-div"
-                v-if="objectToAddToBasket.item.quantity > 0"
+                v-else-if="objectToAddToBasket.item.quantity > 0"
               >
                 <span @click="addToBasket(1)">➕ </span>
                 <strong style="color: #fff">
@@ -106,7 +122,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, computed, watch } from 'vue';
 import ShopFooter from '@/modules/student-modules/footer/shop-footer.vue';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { store } from '@/store';
@@ -121,6 +137,8 @@ import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import alertify from '@/assets/alertifyjs/alertify';
 import router from '@/router';
+import Header from '@/modules/student-modules/header/header.vue';
+import RemoveBundle from '@/modules/student-modules/remove-bundle.vue';
 
 const props = defineProps({
   item: { type: String, default: '{}' }
@@ -163,10 +181,47 @@ const updateCurrentProduct = async () => {
   const imageUrl = `${baseUrl}product/coverImage/${model.value._id}`;
   imgUrl.value = await returnAProtectedUrl(imageUrl);
 
-  const itemExistsInBasket = shopBasket.value.items.find(
-    (el: any) => el.product._id === model.value._id
-  );
+  const itemExistsInBasket =
+    shopBasket.value.items.find(
+      (el: any) => el.product._id === model.value._id
+    ) ||
+    shopBasket.value.bundles.find(
+      (el: any) => el.productBundle._id === model.value._id
+    ) ||
+    shopBasket.value.sessions.find(
+      (el: any) => el.session._id === model.value._id
+    );
+  itemExists.value = !!itemExistsInBasket ? true : false;
   return itemExistsInBasket;
+};
+
+const itemExists = ref(true);
+
+const addBundle = async () => {
+  const itemExistsInBasket = !!(await updateCurrentProduct());
+
+  isSendingRequest.value = true;
+
+  if (itemExistsInBasket === true) {
+    StudentBasketApi.removeBundle(model.value._id).then((res) => {
+      itemExists.value = false;
+      store.commit(
+        StudentMutationTypes.SET_BASKET_COUNT,
+        store.state.students.BasketCount - 1
+      );
+    });
+  } else {
+    StudentBasketApi.addBundle({
+      bundle: { _id: model.value._id }
+    }).then((res) => {
+      itemExists.value = true;
+      store.commit(
+        StudentMutationTypes.SET_BASKET_COUNT,
+        store.state.students.BasketCount + 1
+      );
+    });
+  }
+  isSendingRequest.value = false;
 };
 
 const addToBasket = async (quantity: number) => {
@@ -192,6 +247,7 @@ const addToBasket = async (quantity: number) => {
     }
   } catch (e) {
     alertify.error('مشکلی رخ داده است! لطفا دوباره امتحان کنید');
+    isSendingRequest.value = false;
   }
 };
 
@@ -216,22 +272,28 @@ const updateCount = async () => {
 };
 
 (async () => {
-  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-    method: 'GET',
-    headers: {
-      token: store.getters.getStudentToken
-    }
-  });
-  const res = await resPromise.json();
+  try {
+    const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
+      method: 'GET',
+      headers: {
+        token: store.getters.getStudentToken
+      }
+    });
+    const res = await resPromise.json();
 
-  shopBasket.value = res.data;
+    shopBasket.value = res.data;
 
-  const imageUrl = `${baseUrl}product/coverImage/${model.value._id}`;
-  imgUrl.value = await returnAProtectedUrl(imageUrl);
-  const itemInBasket = await updateCurrentProduct();
-  objectToAddToBasket.item.quantity = itemInBasket?.quantity;
+    const imageUrl = `${baseUrl}product/coverImage/${model.value._id}`;
+    imgUrl.value = await returnAProtectedUrl(imageUrl);
+    const itemInBasket = await updateCurrentProduct();
+    console.log(itemInBasket);
+    if (!itemInBasket) return;
+    objectToAddToBasket.item.quantity = itemInBasket?.quantity;
 
-  updateCount();
+    updateCount();
+  } catch (error) {
+    console.log(error);
+  }
 })();
 </script>
 

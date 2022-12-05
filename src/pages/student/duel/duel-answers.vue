@@ -5,6 +5,8 @@
 
   <main class="answers" v-bind="$attrs" v-else>
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
+
     <MinimalHeader onePageBack="Duel" title="پاسخنامه" />
 
     <section class="label" v-if="examData && examData.title">
@@ -63,9 +65,10 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import router from '@/router';
 import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
-  components: { DesktopMinimalHeader, MinimalHeader, ShowImages },
+  components: { DesktopMinimalHeader, MinimalHeader, ShowImages, Header },
   setup() {
     const isLoading = ref(true);
     const route = useRoute();

@@ -4,6 +4,7 @@
   </div>
 
   <main class="comp-test-answer" v-else>
+    <Header />
     <DesktopMinimalHeader v-if="!isMobile.value" />
     <MinimalHeader
       :title="`سوالات برگزیده`"
@@ -18,7 +19,7 @@
           @click="setCurrentImages(question.question.images)"
           v-if="question.question.images.length"
           src="@/assets/img/azmoon-icons/img-icon@3x.png"
-          style="max-width: 2.5rem; margin-right: 0.5rem;"
+          style="max-width: 2.5rem; margin-right: 0.5rem"
         />
       </p>
 
@@ -83,9 +84,10 @@ import { useRoute } from 'vue-router';
 import ShowImages from '@/modules/student-modules/show-images.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
-  components: { MinimalHeader, ShowImages, DesktopMinimalHeader },
+  components: { MinimalHeader, ShowImages, DesktopMinimalHeader, Header },
   setup() {
     const route = useRoute();
 

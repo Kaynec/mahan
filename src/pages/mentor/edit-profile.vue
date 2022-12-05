@@ -15,7 +15,7 @@
       <div class="img">
         <template v-if="imageIsBeingUploaded">
           <span
-            style="width: 1.3rem; height: 1.3rem;"
+            style="width: 1.3rem; height: 1.3rem"
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
@@ -40,7 +40,7 @@
         <input
           type="file"
           accept="image/x-png,image/jpeg,image/gif,image/svg"
-          style="display: none;"
+          style="display: none"
           ref="imgInput"
           name="image"
           @input="uploadImage"
@@ -60,7 +60,7 @@
     <!-- Form -->
     <form @submit.prevent="onSubmit" class="animate__animated animate__fadeIn">
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> نام </span>
+        <span style="white-space: nowrap; padding: 0"> نام </span>
         <input
           type="text"
           @blur="v$.firstname.$touch()"
@@ -77,7 +77,7 @@
       </p>
 
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> نام خانوادگی </span>
+        <span style="white-space: nowrap; padding: 0"> نام خانوادگی </span>
         <input
           type="text"
           @blur="v$.lastname.$touch()"
@@ -96,7 +96,7 @@
       <!--  -->
 
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> کد ملی </span>
+        <span style="white-space: nowrap; padding: 0"> کد ملی </span>
         <input
           type="text"
           @blur="v$.nationalId.$touch()"
@@ -115,7 +115,7 @@
       <!--  -->
 
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> شماره تلفن همراه </span>
+        <span style="white-space: nowrap; padding: 0"> شماره تلفن همراه </span>
         <input
           type="text"
           @blur="v$.phone.$touch()"
@@ -134,7 +134,7 @@
       <!--  -->
 
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> تاریخ تولد </span>
+        <span style="white-space: nowrap; padding: 0"> تاریخ تولد </span>
         <input
           type="text"
           data-jdp
@@ -153,7 +153,7 @@
       <!--  -->
 
       <div class="input radio">
-        <span style="white-space: nowrap; padding: 0;"> جنسیت </span>
+        <span style="white-space: nowrap; padding: 0"> جنسیت </span>
         <label>مونث</label>
         <input
           type="radio"
@@ -180,7 +180,7 @@
       <!--  -->
 
       <div class="input">
-        <span style="white-space: nowrap; padding: 0;"> توضیحات </span>
+        <span style="white-space: nowrap; padding: 0"> توضیحات </span>
         <textarea
           type="text"
           @blur="v$.shortDescription.$touch()"
@@ -199,7 +199,7 @@
       <button
         type="submit"
         class="button-linear"
-        style="padding: 1rem; color: #fff;"
+        style="padding: 1rem; color: #fff"
       >
         ثبت اطلاعات
       </button>
@@ -224,7 +224,7 @@ import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.css';
 import '@majidh1/jalalidatepicker/dist/jalaliDatepicker.js';
 import MentorDesktopHeader from '@/modules/mentor-main/mentor-header.vue';
 import { resizeImage } from '@/utilities/get-image-from-url';
-import alertify from "@/assets/alertifyjs/alertify"
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: {

@@ -504,17 +504,13 @@ const disableProductItem = (option) => {
 };
 
 const removeProduct = (index) => {
-  model.value.items.value = model.value.items.value.filter(
-    (el, idx) => idx !== index
-  );
+  model.value.items = model.value.items.filter((el, idx) => idx !== index);
 };
 const removeBundle = (index) => {
-  model.value.bundles.value = model.value.bundles.value.filter(
-    (el, idx) => idx !== index
-  );
+  model.value.bundles = model.value.bundles.filter((el, idx) => idx !== index);
 };
 const removeSession = (index) => {
-  model.value.sessions.value = model.value.sessions.value.filter(
+  model.value.sessions = model.value.sessions.filter(
     (el, idx) => idx !== index
   );
 };

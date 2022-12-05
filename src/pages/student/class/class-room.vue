@@ -2,7 +2,9 @@
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <main :class="`${isMobile.value ? 'class ' : 'class pc '}`">
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <SmallHeader goOnePageBack="Home" v-if="isMobile.value" />
+
+    <Header onePageBack="Home" />
+    <MinimalHeader title="کلاس" onePageBack="Home" />
 
     <img src="@/assets/img/class/hero@3x.png" alt="hero img" class="hero" />
     <section class="grid animate__animated animate__fadeInUp">
@@ -33,12 +35,18 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import ClassInfo from '@/modules/student-modules/class/class-info.vue';
 import { StudentClassApi } from '@/api/services/student/student-class-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import Header from '@/modules/student-modules/header/header.vue';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 export default defineComponent({
-  components: { SmallHeader, ClassInfo, DesktopMinimalHeader },
+  components: {
+    ClassInfo,
+    DesktopMinimalHeader,
+    Header,
+    MinimalHeader
+  },
   setup() {
     // Change THis With The Current Data
     const data = ref([]);

@@ -6,6 +6,7 @@
   </div>
   <!--  -->
   <div class="start" v-else>
+    <Header />
     <MinimalHeader title="دوئل" onePageBack="Duel" />
     <!--  -->
     <div class="label animate__animated animate__fadeIn">
@@ -50,7 +51,6 @@
     <div class="budget">
       <div class="budget-img">
         <h5>بودجه بندی دوئل</h5>
-        <img src="@/assets/img/start-test.png" alt="start test" />
       </div>
 
       <div
@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref , onBeforeMount } from 'vue';
+import { reactive, ref, onBeforeMount } from 'vue';
 import router from '@/router';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { useRoute } from 'vue-router';
@@ -81,7 +81,8 @@ import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import alertify from '@/assets/alertifyjs/alertify';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
-import  shamsi_be_miladi  from '@/utilities/date-converter';
+import shamsi_be_miladi from '@/utilities/date-converter';
+import Header from '@/modules/student-modules/header/header.vue';
 const orientationTitleInformation = reactive([] as any);
 const apiData = ref({}) as any;
 const route = useRoute();
@@ -98,8 +99,8 @@ const addMinutes = (time, minsToAdd) => {
   return D(((mins % (24 * 60)) / 60) | 0) + ':' + D(mins % 60);
 };
 
-onBeforeMount( async () => {
-   const res = await StudentDuelApi.get(route.params.id as any);
+onBeforeMount(async () => {
+  const res = await StudentDuelApi.get(route.params.id as any);
 
   timeInformation.value = res.data.data;
 
@@ -161,7 +162,7 @@ onBeforeMount( async () => {
     }
   });
   isFetching.value = false;
-})
+});
 
 const goOnePageBack = () => {
   router.push({
@@ -222,21 +223,19 @@ const goToquestions = () => {
 <style lang="scss" scoped>
 @import '@/css-variable//Global.scss';
 .start {
+  padding-bottom: 3rem;
   width: 100%;
-  height: 100%;
-  max-width: 1000px;
-
   background-color: #f4f4f4;
   font-family: IRANSans;
+  height: 100%;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-bottom: 3rem;
+  max-width: 1000px;
+  overflow: auto;
 
   .time {
     width: 95%;
     margin: 1rem auto;
-    background: linear-gradient(268deg, #ff545b 6%, #a50d14);
+    background: $blueish;
     border-radius: 1.2rem;
     display: flex;
     align-items: center;
@@ -302,17 +301,6 @@ const goToquestions = () => {
       }
     }
 
-    .budget-img::before {
-      content: '';
-      position: absolute;
-      width: 1px;
-      top: 80%;
-      right: 3px;
-      height: 40%;
-      margin-right: 10.5px;
-      background: #d21921;
-    }
-
     .budget-label {
       display: flex;
       width: 100%;
@@ -326,16 +314,12 @@ const goToquestions = () => {
         font-weight: bold;
         text-align: right;
         color: #646464;
-        word-break: break-word;
-        width: 70%;
       }
 
       .budget-label-second-p {
         font-size: 12px;
         text-align: left;
         color: #646464;
-        word-break: break-word;
-        width: 30%;
       }
     }
     .budget-label::after {
@@ -349,35 +333,25 @@ const goToquestions = () => {
       border-radius: 50%;
       margin-right: 10px;
     }
-    .budget-label::before {
-      content: '';
-      position: absolute;
-      width: 1px;
-      top: 55%;
-      height: 20px;
-      right: 0;
-      margin-right: 13px;
-      background: #d21921;
-    }
   }
 
   .label {
-    width: 95%;
+    width: 100%;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-    background-color: #fff;
+    background-color: $dark;
     margin: 0 auto 1rem;
     padding: 0.5rem;
 
     p {
       font-size: 11px;
       text-align: right;
-      color: #ed1b24;
+      color: $blueish;
     }
 
     h6 {
       font-size: 14px;
       font-weight: bold;
-      color: #171717;
+      color: white;
       display: inline-flex;
     }
     .second-h6 {
@@ -393,30 +367,31 @@ const goToquestions = () => {
     margin: 0 auto;
     width: 95%;
     max-width: 1000px;
-  }
+    padding-top: 2rem;
 
-  button {
-    background: $redish-background;
-    padding: 1rem 0;
-    border: none;
-    border-radius: 15px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    color: #fff;
-    width: 100%;
+    button {
+      background: $redish-background;
+      padding: 1rem 0;
+      border: none;
+      border-radius: 15px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+      width: 100%;
 
-    i {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 0.7rem;
-      background: rgb(207, 8, 8);
-      border-radius: 50%;
-      position: absolute;
-      right: 0;
-      top: 20%;
-      padding: 0.7rem;
+      i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.7rem;
+        background: rgb(207, 8, 8);
+        border-radius: 50%;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        padding: 0.7rem;
+      }
     }
   }
 }

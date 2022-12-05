@@ -6,18 +6,14 @@
     @touchend="touchend"
     class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv"
   >
-    <img
-      v-if="!active"
-      :src="getImgUrl(iconSrc, '-red')"
-      class="card-img"
-      alt="exam Icon"
-    />
-    <img
-      v-else-if="active"
-      :src="getImgUrl(iconSrc, '-white')"
-      class="card-img"
-      alt="exam Icon"
-    />
+    <div class="card-img">
+      <img v-if="active" :src="getImgUrl(iconSrc, '-red')" alt="exam Icon" />
+      <img
+        v-else-if="!active"
+        :src="getImgUrl(iconSrc, '-white')"
+        alt="exam Icon"
+      />
+    </div>
 
     <div
       class="d-flex flex-column mt-1 p-0 m-0"
@@ -36,52 +32,39 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import router from '@/router';
 
-export default defineComponent({
-  props: {
-    iconSrc: { type: String },
-    label: { type: String },
-    TextDetail: { type: String },
-    componentName: { type: String, default: 'empty' }
-  },
+const props = defineProps<{
+  iconSrc: string;
+  label: string;
+  TextDetail: string;
+  componentName: string;
+}>();
+let Card = ref();
+let active = ref(false);
 
-  setup(props) {
-    let Card = ref();
-    let active = ref(null);
+const touchstart = () => {
+  active.value = true;
+  Card.value.classList.add('active');
+};
 
-    const touchstart = () => {
-      active.value = true;
-      Card.value.classList.add('active');
-    };
-
-    const touchend = () => {
-      active.value = false;
-      Card.value.classList.remove('active');
-      if (props.componentName != 'empty') {
-        setTimeout(
-          () =>
-            router.push({
-              name: props.componentName
-            }),
-          100
-        );
-      }
-    };
-    const getImgUrl = (src, color) => {
-      return require('@/assets/img/Studentsetting/' + src + color + '.png');
-    };
-    return {
-      touchend,
-      touchstart,
-      getImgUrl,
-      Card,
-      active
-    };
+const touchend = () => {
+  active.value = false;
+  Card.value.classList.remove('active');
+  if (props.componentName != 'empty') {
+    setTimeout(
+      () =>
+        router.push({
+          name: props.componentName
+        }),
+      100
+    );
   }
-});
+};
+const getImgUrl = (src, color) =>
+  require('@/assets/img/Studentsetting/' + src + color + '.png');
 </script>
 
 <style lang="scss" scoped>
@@ -104,15 +87,26 @@ $size: 45px;
     font-size: 10px;
   }
   .card-img {
-    width: 29px;
-    height: 29px;
+    width: 45px;
+    height: 45px;
     margin: 8px 0 4px 11.4px;
-    object-fit: contain;
+    background-color: red;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+
+    img {
+      width: 35px;
+      object-fit: cover;
+    }
   }
   .card-icon {
-    color: #c73f44d3;
     margin: 8px 0 4px 11.4px;
     font-size: 1.4rem;
+    width: 50%;
   }
 }
 .customDiv {

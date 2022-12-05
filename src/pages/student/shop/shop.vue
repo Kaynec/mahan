@@ -28,7 +28,7 @@
     </section>
     <!--  -->
 
-    <div class="btns">
+    <div class="buttons">
       <button
         @click="() => (currentState = 'yourProduct')"
         :class="{ active: currentState == 'yourProduct' }"
@@ -168,7 +168,7 @@
       </div>
     </div>
     <!--  -->
-    <div class="btns">
+    <div class="buttons">
       <button
         @click="() => (currentState = 'yourProduct')"
         :class="{ active: currentState == 'yourProduct' }"
@@ -429,39 +429,37 @@ function showYourProductAlert() {
     position: relative;
   }
 
-  .btns {
-    margin: 0.8rem auto 0;
-    width: 100%;
+  .buttons {
+    margin: 1rem auto;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    gap: 0;
 
     button {
       font-family: IRANSans;
       font-size: 12px;
       font-weight: bold;
       text-align: center;
-      padding: 10px;
+      padding: 15px;
       outline: none;
       border: none;
-      width: 45%;
+      width: 50%;
       box-shadow: 0 0 23px 0 rgba(0, 0, 0, 0.13);
       background: white;
       color: #171717;
 
       &:nth-child(2) {
-        border-bottom-left-radius: 10px;
-        border-top-left-radius: 10px;
+        border-radius: 10px 0px 0px 10px;
       }
       &:nth-child(1) {
-        border-bottom-right-radius: 10px;
-        border-top-right-radius: 10px;
+        border-radius: 0px 10px 10px 0px;
       }
     }
   }
   button.active {
-    background-image: $redish-background;
+    background-image: $blueish-background;
     color: #fff;
   }
   //
@@ -504,7 +502,7 @@ function showYourProductAlert() {
   padding-top: 8vh;
   position: relative;
 
-  .btns {
+  .buttons {
     width: 100%;
     position: relative;
 

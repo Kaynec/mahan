@@ -13,6 +13,7 @@ export type State = {
   CurrentShopInfo: any | null;
   BasketCount: number;
   CurrentSuppertPerson: string | null;
+  showedMessage: boolean;
   CurrentQuestionsList: CurrentQuestionsListInterface | null;
   currentQuestion: Record<string, unknown> | null;
   currentSelfTestReport: Record<string, unknown> | null;
@@ -28,6 +29,7 @@ export const state: State = {
   CurrentShopInfo: null,
   CurrentSuppertPerson: null,
   BasketCount: 0,
+  showedMessage: false,
   CurrentQuestionsList: {
     title: '',
     currentChunk: 0,

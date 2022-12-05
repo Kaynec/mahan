@@ -1,20 +1,24 @@
 <template>
   <div class="comp-test" :style="`padding-top :${isMobile.value ? '' : '8vh'}`">
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <SmallHeader onePageBack="Home" v-if="isMobile.value" />
+    <Header />
+    <MinimalHeader
+      title="آزمون جامع"
+      onePageBack="Home"
+      v-if="isMobile.value"
+    />
     <div class="hero animate__animated animate__fadeIn">
       <img
         :src="`${
           isMobile.value
-            ? require('@/assets/img/comptest.png')
-            : require('@/assets/img/comptest-pc@3x.png')
+            ? require('@/assets/img/comptest-min.png')
+            : require('@/assets/img/comptest-pc.png')
         }`"
         :style="`margin-top  : ${isMobile.value ? '0' : '2rem'}`"
-        class="hero"
         alt="header of comp test"
       />
     </div>
-    <div class="btns animate__animated animate__fadeIn">
+    <div class="buttons animate__animated animate__fadeIn">
       <button
         @click="() => (currentState = 'future')"
         :class="{ active: currentState == 'future' }"
@@ -34,24 +38,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import CompTestPast from '@/modules/student-modules/azmoon/comp-test-past.vue';
 import CompTestFuture from '@/modules/student-modules/azmoon/comp-test-future.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-export default defineComponent({
-  components: {
-    SmallHeader,
-    CompTestPast,
-    CompTestFuture,
-    DesktopMinimalHeader
-  },
-  setup() {
-    const currentState = ref('past');
-    return { currentState };
-  }
-});
+import Header from '@/modules/student-modules/header/header.vue';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
+const currentState = ref('past');
 </script>
 
 <style lang="scss" scoped>
@@ -66,30 +60,31 @@ export default defineComponent({
   // padding-top: 5vh;
 
   .hero {
-    width: 100%;
+    width: 90%;
     max-width: 1000px;
-
+    padding-top: 2rem;
     max-height: 300px;
-    margin-top: 15px;
+    margin: 15px auto 0 auto;
     img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
   }
-  .btns {
+  .buttons {
     margin: 1rem auto;
-    width: 97%;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 0;
 
     button {
       font-family: IRANSans;
       font-size: 12px;
       font-weight: bold;
       text-align: center;
-      padding: 10px;
+      padding: 15px;
       outline: none;
       border: none;
       width: 50%;
@@ -98,17 +93,15 @@ export default defineComponent({
       color: #171717;
 
       &:nth-child(2) {
-        border-bottom-left-radius: 10px;
-        border-top-left-radius: 10px;
+        border-radius: 10px 0px 0px 10px;
       }
       &:nth-child(1) {
-        border-bottom-right-radius: 10px;
-        border-top-right-radius: 10px;
+        border-radius: 0px 10px 10px 0px;
       }
     }
   }
   button.active {
-    background-image: $redish-background;
+    background-image: $blueish-background;
     color: #fff;
   }
 }

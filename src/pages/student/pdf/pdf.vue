@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <MinimalHeader title="کتاب" v-if="isMobile.value" />
   <main class="book">
     <DesktopMinimalHeader v-if="!isMobile.value" />
@@ -33,9 +34,10 @@ import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minim
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { returnAProtectedUrl } from '@/utilities/get-image-from-url';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
-  components: { DesktopMinimalHeader, MinimalHeader },
+  components: { DesktopMinimalHeader, MinimalHeader, Header },
   setup() {
     const route = useRoute();
     // const pdfHref = route.params.filename;

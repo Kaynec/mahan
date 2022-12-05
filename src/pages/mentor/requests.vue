@@ -39,11 +39,11 @@
       v-if="showMessage"
     >
       <div
-        style="color: #fff; max-width: 600px;"
+        style="color: #fff; max-width: 600px"
         class="d-inline-flex flex-column justify-content-between align-items-center flex-child"
       >
         <div
-          style="color: #fff; max-width: 600px;"
+          style="color: #fff; max-width: 600px"
           class="d-inline-flex flex-column justify-content-center align-items-center"
         >
           <AcceptRequest :data="currentItem" @convertBoolean="denyOrAccept" />

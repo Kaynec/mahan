@@ -21,8 +21,11 @@ studentInstance.interceptors.response.use(
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response errord
-    if (error.response && error.response.data && error.response.data.message)
-      alertify.error(error.response.data.message);
+    if (error.response && error.response.data && error.response.data.message) {
+      // Check If Message is not 50  (in case of 50  we don't want to show the message)
+      if (error.response.status !== 500)
+        alertify.error(error.response.data.message);
+    }
     if (error.response && error.response.status == 401)
       store.dispatch(StudentActionTypes.LOG_OUT_STUDENT).then((res) => {
         if (res) router.push({ name: 'StudentLogin' });

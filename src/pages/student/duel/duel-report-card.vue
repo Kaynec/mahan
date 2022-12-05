@@ -6,6 +6,7 @@
 
   <div class="report-card" v-else>
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader title="کارنامه" onePageBack="Duel" />
 
     <div v-if="!model" class="center">
@@ -131,12 +132,14 @@ import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { useRoute } from 'vue-router';
 import { StudentDuelApi } from '@/api/services/student/student-duel-service';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
   components: {
     Vue3ChartJs,
     MinimalHeader,
-    DesktopMinimalHeader
+    DesktopMinimalHeader,
+    Header
   },
 
   setup() {
@@ -190,8 +193,6 @@ export default defineComponent({
       const res = await StudentDuelApi.getResult(route.params.id as any);
 
       model.value = res.data.data;
-
-      console.log(res.data.data);
 
       if (!model.value) {
         isFetching.value = false;

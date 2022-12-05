@@ -1,5 +1,8 @@
 <template>
-  <div class="container" v-if="isLoading">
+  <div class="loader-parent" v-if="isLoading">
+    <div class="loading1"></div>
+  </div>
+  <div class="container" v-else>
     <div
       class="card w-100 d-inline-flex align-items-center m-1 position-relative flex-row flex-wrap border border-white rounded-10 customDiv warning animate__animated animate__fadeIn"
       @click="moveToReportCardOrExam(item)"
@@ -43,11 +46,6 @@
       @convertBoolean="changeShowDetail"
     />
   </div>
-
-  <!--  -->
-  <div class="loader-parent" v-else>
-    <div class="loading1"></div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -60,7 +58,7 @@ import shamsi_be_miladi from '@/utilities/date-converter';
 import { useStudentStore } from '@/store';
 import alertify from '@/assets/alertifyjs/alertify';
 
-const isLoading = ref(false);
+const isLoading = ref(true);
 const azmoonData = reactive([] as any);
 
 StudentExamApi.getAll().then((res) => {
@@ -111,7 +109,7 @@ StudentExamApi.getAll().then((res) => {
     };
   });
 
-  isLoading.value = true;
+  isLoading.value = false;
 });
 
 const currentItem = ref({});
@@ -134,11 +132,12 @@ const moveToReportCardOrExam = (item) => {
 
 <style lang="scss" scoped>
 .container {
-  width: 100%;
+  width: 96%;
   height: 100%;
+  margin: 0 auto;
   overflow-y: auto;
-  padding-bottom: 3rem;
   overflow-x: hidden;
+  padding-bottom: 3rem;
 }
 .card {
   border-radius: 10px;
@@ -146,7 +145,6 @@ const moveToReportCardOrExam = (item) => {
   background-color: #fff;
   font-family: IRANSans;
   cursor: pointer;
-
   .img {
     width: 27px;
     height: 27px;

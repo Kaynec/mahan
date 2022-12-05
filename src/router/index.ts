@@ -90,6 +90,7 @@ const StudentSetting = () => import('@/pages/student/setting/setting.vue');
 
 const StudentShop = () => import('@/pages/student/shop/shop.vue');
 const ShopBookList = () => import('@/pages/student/shop/shop-book-list.vue');
+const ShopBundle = () => import('@/pages/student/shop/bundle.vue');
 const SingleBookInfo = () => import('@/pages/student/shop/shop-book-info.vue');
 const ShopSuccess = () => import('@/pages/student/shop/shop-order-success.vue');
 const ShopFailure = () => import('@/pages/student/shop/shop-order-fail.vue');
@@ -857,6 +858,13 @@ const routes: Array<RouteRecordRaw> = [
         path: 'shop-book-list/:id',
         name: 'ShopBookList',
         component: ShopBookList,
+        props: true,
+        beforeEnter: ifStudentAuthenticated
+      },
+      {
+        path: 'bundle',
+        name: 'ShopBundle',
+        component: ShopBundle,
         props: true,
         beforeEnter: ifStudentAuthenticated
       },

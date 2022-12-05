@@ -5,7 +5,7 @@
     }`"
   >
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <img src="@/assets/img/failkey-red@2x.png" alt="White failure Key" />
+    <img src="@/assets/img/shop/delete.png" alt="White failure Key" />
     <h6>سفارش شما ثبت نشد</h6>
     <div class="middle-card animate__animated animate__fadeIn">
       <div class="left">

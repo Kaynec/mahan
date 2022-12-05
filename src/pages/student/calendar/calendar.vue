@@ -5,7 +5,8 @@
     :style="`padding-top :${isMobile.value ? '' : '8vh'}`"
   >
     <DesktopMinimalHeader v-if="!isMobile.value" />
-    <SmallHeader v-if="isMobile.value" goOnePageBack="Home" />
+    <Header />
+    <MinimalHeader title="تقویم" onePageBack="Home" />
     <!--  -->
     <div
       :class="`${
@@ -31,7 +32,7 @@
             <span @click="onTouch"> پنج شنبه </span>
             <span @click="onTouch"> جمعه </span>
           </div>
-          <!-- Add Class Green For 'Green' Background And 'red' For a Red Background -->
+          <!-- Add Class blue For 'blue' Background And 'red' For a Red Background -->
           <div class="days-number" ref="daysNumber">
             <span v-for="i in numbersBeforeTheMonthStart" :key="i"> -- </span>
             <span
@@ -53,45 +54,45 @@
           ثبت رویداد جدید
         </span>
         <!--  -->
-        <div class="card" v-for="item in data" :key="item._id">
-          <div class="title">
-            <span>{{ item.title }}</span>
-            <div class="icons">
-              <i
-                class="fa fa-trash"
-                aria-hidden="true"
-                @click="removeEvent(item._id)"
-                style="
-                  margin-left: 0.5rem;
-                  margin-right: 1rem;
-                  cursor: pointer;
-                "
-              ></i>
+        <section class="card-container">
+          <div class="card" v-for="item in data" :key="item._id">
+            <div
+              class="flex"
+              :class="`${
+                +toEnglishNumbers(templateDate[0]) >
+                +toEnglishNumbers(formatCardDate(item.date)[3])
+                  ? 'red'
+                  : 'blue'
+              }`"
+            >
+              <span class="right">
+                {{ formatCardDate(item.date)[1] }} ماه
+              </span>
+              <span class="left"> {{ formatCardDate(item.date)[2] }} </span>
+            </div>
+            <div class="title">
+              <span>{{ item.title }}</span>
+              <div class="icons">
+                <i
+                  class="fa fa-trash"
+                  aria-hidden="true"
+                  @click="removeEvent(item._id)"
+                  style="
+                    margin-left: 0.5rem;
+                    margin-right: 1rem;
+                    cursor: pointer;
+                  "
+                ></i>
 
-              <i
-                style="cursor: pointer;"
-                class="fas fa-pen"
-                @click="showEditEvent(item)"
-              ></i>
+                <i
+                  style="cursor: pointer"
+                  class="fas fa-pen"
+                  @click="showEditEvent(item)"
+                ></i>
+              </div>
             </div>
           </div>
-          <div class="flex">
-            <span class="right">
-              <strong
-                :class="`${
-                  +toEnglishNumbers(templateDate[0]) >
-                  +toEnglishNumbers(formatCardDate(item.date)[3])
-                    ? 'red'
-                    : 'green'
-                }`"
-              >
-                {{ toPersianNumbers(formatCardDate(item.date)[3]) }}
-              </strong>
-              {{ formatCardDate(item.date)[1] }} ماه
-            </span>
-            <span class="left"> {{ formatCardDate(item.date)[2] }} </span>
-          </div>
-        </div>
+        </section>
       </div>
     </div>
     <!--  -->
@@ -112,7 +113,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentEventApi } from '@/api/services/student/student-event-service';
 import CalendarAddEvent from '@/modules/student-modules/calendar/calendar-add-event.vue';
 import CalendarEditEvent from '@/modules/student-modules/calendar/calendar-edit-event.vue';
@@ -124,6 +124,8 @@ import {
 import shamsi_be_miladi, {
   isLeapJalaaliYear
 } from '@/utilities/date-converter';
+import Header from '@/modules/student-modules/header/header.vue';
+import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 let currentDay = ref(),
   currentMonth = ref();
 const days = ref();
@@ -286,7 +288,7 @@ const changeCalendarAddEvent = async () => {
   updateCalendarClasses();
 };
 
-// Loop Through Dates And if It's passed give it a red class else green class
+// Loop Through Dates And if It's passed give it a red class else blue class
 
 const numberDays = ref([...Array(currentDaysOfMonth.days + 1).keys()]) as any;
 
@@ -301,7 +303,7 @@ const updateCalendarClasses = () => {
   dates.value = [];
   daysNumber.value.querySelectorAll('.span').forEach((span) => {
     span.classList.remove('red');
-    span.classList.remove('green');
+    span.classList.remove('blue');
   });
 
   data.value.forEach((el: any) => {
@@ -311,7 +313,7 @@ const updateCalendarClasses = () => {
   dates.value.forEach((el) => {
     if (+toEnglishNumbers(templateDate[0]) > el)
       numberDays.value[el] = { class: 'red', count: el };
-    else numberDays.value[el] = { class: 'green', count: el };
+    else numberDays.value[el] = { class: 'blue', count: el };
   });
 };
 
@@ -377,7 +379,7 @@ const formatCardDate = (date) => {
       width: 100%;
       border-radius: 9.4px;
       box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.1);
-      background-image: linear-gradient(266deg, #ec3538 5%, #880e13);
+      background-image: $blueish-background;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -451,7 +453,7 @@ const formatCardDate = (date) => {
     .plus {
       text-align: left;
       font-size: 12px;
-      color: #4ac367;
+      color: $blueish;
       font-weight: bold;
       float: left;
       margin-left: 0.75rem;
@@ -459,20 +461,27 @@ const formatCardDate = (date) => {
       cursor: pointer;
     }
   }
+  .card-container {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+  }
   .card {
     width: 100%;
     background-color: #fff;
     border-radius: 9.4px;
     margin: 0.4rem 0;
     position: relative;
-    padding: 1rem 0.75rem;
-    border: 3px solid #fff;
+    border-radius: 20px;
+    border: 1px solid #fff;
 
     .title {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 1.2rem;
+      padding: 1rem 0.75rem;
+
       span {
         font-size: 12px;
         text-align: right;
@@ -482,10 +491,15 @@ const formatCardDate = (date) => {
 
     .flex {
       display: flex;
+
       justify-content: space-between;
       align-items: center;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding: 1rem 0.75rem;
+      color: white;
+
       .right {
-        color: #646464;
         font-size: 12px;
         white-space: nowrap;
         strong {
@@ -497,9 +511,14 @@ const formatCardDate = (date) => {
         }
       }
       .left {
-        color: #646464;
         font-size: 12px;
       }
+    }
+    .flex.blue,
+    .flex.red {
+      border-radius: 0;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
     }
   }
 }
@@ -507,15 +526,15 @@ const formatCardDate = (date) => {
   color: #949494;
 }
 
-.green {
-  background-color: #4ac367;
+.blue {
+  background: $blueish-background;
   color: #fff;
   border-radius: 50%;
 }
 
 .red {
   color: #fff;
-  background-color: #d21921;
+  background: #d21921;
   border-radius: 50%;
 }
 </style>

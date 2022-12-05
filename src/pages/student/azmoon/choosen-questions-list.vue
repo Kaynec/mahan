@@ -5,14 +5,17 @@
 
   <main class="answers" v-bind="$attrs" v-else>
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
+
     <MinimalHeader title="سوالات برگزیده" onePageBack="SelfTest" />
     <section class="Cards">
       <div
         class="Card animate__animated animate__fadeIn"
         v-for="(answer, idx) in data"
         :key="answer._id"
+        @click.self="moveToAnswer(idx)"
       >
-        <span @click="moveToAnswer(idx)">
+        <span @click.self="moveToAnswer(idx)">
           {{ toPersianNumbers(idx + 1) }}.
           {{ answer.question.text }}
         </span>
@@ -47,9 +50,10 @@ import { store } from '@/store';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import router from '@/router';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
-  components: { DesktopMinimalHeader, MinimalHeader, ShowImages },
+  components: { DesktopMinimalHeader, MinimalHeader, ShowImages, Header },
   setup() {
     const isLoading = ref(true);
     const data = ref({}) as any;
