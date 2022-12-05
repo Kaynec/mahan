@@ -1,20 +1,12 @@
 <template>
-  <div
-    class="shop-message"
-    :style="`padding-top :${isMobile.value ? '6.5vh' : ' 9rem'}`"
-  >
-    <DesktopMinimalHeader v-if="!isMobile.value" />
-    <MinimalHeader
-      title="تازه های کنکور"
-      goOnePageBack="MyProfile"
-      v-if="isMobile.value"
-    />
-    <MinimalHeader
-      title="تازه های کنکور"
-      goOnePageBack="MyProfile"
-      :colors="true"
-      v-else-if="!isMobile.value"
-    />
+  <div class="shop-message">
+    <template v-if="isMobile.value">
+      <Header />
+      <MinimalHeader title="تازه های کنکور" goOnePageBack="MyProfile" />
+    </template>
+    <template v-else>
+      <DesktopMinimalHeader />
+    </template>
     <iframe
       src="https://www.mahan.ac.ir/home#!f-1"
       title="description"
@@ -28,11 +20,13 @@ import { defineComponent } from 'vue';
 import router from '@/router';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
+import Header from '@/modules/student-modules/header/header.vue';
 
 export default defineComponent({
   components: {
     MinimalHeader,
-    DesktopMinimalHeader
+    DesktopMinimalHeader,
+    Header
   },
   setup() {
     const goOnePageBack = () => {
@@ -52,15 +46,12 @@ export default defineComponent({
 @import '@/css-variable/Global.scss';
 .shop-message {
   overflow-x: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: #f4f4f4;
   font-family: IRANSans;
   position: relative;
   max-width: 1000px;
+  // background-color: red;
 
   .iframe {
     width: 100%;

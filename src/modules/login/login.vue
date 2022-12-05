@@ -4,7 +4,7 @@
     <div class="card card-outline card-primary">
       <div class="card-header text-center">
         <a href="../../index2.html" class="h1"
-          ><img src="../../assets/img/logo.png" alt="login img"
+          ><img src="../../assets/img/mahan-logo.png" alt="login img"
         /></a>
       </div>
       <div class="card-body">

@@ -1,6 +1,6 @@
 <template>
   <div class="desktop" v-if="!isMobile.value">
-    <img alt="logo" src="@/assets/img/logo-mahan.png" />
+    <img alt="logo" src="@/assets/img/mahan-logo.png" />
     <!-- Main Part -->
     <form
       @submit.prevent="sendToStudentAuthentication()"
@@ -38,7 +38,7 @@
         v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans;"
+        style="font-family: IRANSans"
       >
         {{ error.$message }}
       </span>
@@ -46,7 +46,7 @@
       <button class="button-linear">
         <span
           v-if="isSendingAMainReq"
-          style="width: 1.3rem; height: 1.3rem;"
+          style="width: 1.3rem; height: 1.3rem"
           class="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"
@@ -62,11 +62,7 @@
   </div>
 
   <div class="Forget-the-password" v-else>
-    <img
-      alt="logo 2x"
-      src="@/assets/img/logo-mahan@2x.png"
-      class="logo-mahan"
-    />
+    <img alt="logo 2x" src="@/assets/img/mahan-logo.png" class="logo-mahan" />
     <!-- Main Part -->
     <form @submit.prevent="sendToStudentAuthentication()" class="Rectangle">
       <span class="Rectangle-header hover-make-big"> تغییر رمز عبور </span>
@@ -101,7 +97,7 @@
         v-for="(error, index) in v$.username.$errors"
         :key="index"
         class="text-danger text-bold"
-        style="font-family: IRANSans;"
+        style="font-family: IRANSans"
       >
         {{ error.$message }}
       </span>
@@ -109,7 +105,7 @@
       <button class="button-linear">
         <span
           v-if="isSendingAMainReq"
-          style="width: 1.3rem; height: 1.3rem;"
+          style="width: 1.3rem; height: 1.3rem"
           class="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"

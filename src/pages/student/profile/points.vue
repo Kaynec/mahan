@@ -2,6 +2,7 @@
   <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
   <div class="history">
     <DesktopMinimalHeader v-if="!isMobile.value" />
+    <Header />
     <MinimalHeader title="امتیازات" onePageBack="MyProfile" />
     <!--  -->
     <div class="container">
@@ -19,32 +20,19 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import router from '@/router';
 import TableChild from '@/modules/student-modules/table-child.vue';
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
+import Header from '@/modules/student-modules/header/header.vue';
 
-export default defineComponent({
-  components: { MinimalHeader, DesktopMinimalHeader, TableChild },
-  setup() {
-    const goOnePageBack = () => {
-      router.push({
-        name: 'MyProfile'
-      });
-    };
+const data = ref([]);
 
-    const data = ref([]);
-
-    StudentAuthServiceApi.getStudentPoints().then((res) => {
-      data.value = res.data?.data;
-    });
-
-    return { data, goOnePageBack };
-  }
-});
+StudentAuthServiceApi.getStudentPoints().then(
+  (res) => (data.value = res.data?.data)
+);
 </script>
 
 <style lang="scss" scoped>

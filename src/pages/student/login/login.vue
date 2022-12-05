@@ -1,6 +1,6 @@
 <template>
   <div class="desktop" v-if="!isMobile.value">
-    <img src="@/assets/img/logo-mahan.png" alt="logo" />
+    <img src="@/assets/img/mahan-logo.png" alt="logo" />
     <div class="Login animate__animated animate__fadeIn">
       <div>
         <label class="floating-label">

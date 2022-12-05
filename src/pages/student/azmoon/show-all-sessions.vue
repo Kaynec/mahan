@@ -2,10 +2,10 @@
   <div class="Card">
     <button class="cancel" @click="$emit('cancel')">X</button>
 
-    <section>
+    <section v-dragscroll>
       <div class="item" v-for="session in allSessions">
         <div>
-          <span class="header"> {{ session.title.substring(0, 45) }} </span>
+          <span class="header"> {{ session.title }} </span>
           <span class="price"> قیمت : {{ session.price }} تومان </span>
         </div>
         <div>
@@ -44,10 +44,10 @@
 <script setup lang="ts">
 import { store } from '@/store';
 import { ref, onBeforeMount } from 'vue';
+import { dragscroll as vDragscroll } from 'vue-dragscroll';
 import {
   updateCount,
   addSessionToBasket,
-  getBasketInfo,
   itemExistsInBasket
 } from '@/api/basket-functions';
 
@@ -59,6 +59,10 @@ const allSessions = ref(allSessionsProps);
 
 onBeforeMount(async () => {
   allSessions.value = await itemExistsInBasket(allSessions.value, 'session');
+
+  allSessions.value = allSessions.value.filter((el) => el.bought === false);
+
+  console.log(allSessions.value);
 
   //
   updateCount();
@@ -77,9 +81,7 @@ onBeforeMount(async () => {
   width: 90%;
   max-width: 450px;
 
-  height: 75vh;
-  max-height: 850px;
-  // overflow-y: hidden;
+  overflow-y: visible;
 
   text-align: center;
 
@@ -88,38 +90,34 @@ onBeforeMount(async () => {
   }
 
   section {
-    overflow: auto;
+    overflow-y: auto;
     padding-bottom: 2rem;
+    height: 70vh;
+    max-height: 800px;
   }
 
   .item {
     display: flex;
     align-items: center;
-
+    justify-content: space-between;
+    padding: 0 0.5rem;
     div {
-      flex-basis: 30%;
-
       &:first-child {
-        flex-basis: 70%;
         flex-direction: column;
 
         display: flex;
         align-items: start;
-        padding-right: 1rem;
       }
     }
 
     // Button
     button {
-      padding: 0.6rem 0;
+      padding: 0.6rem 0.25rem;
       background-color: red;
       color: white;
       text-align: center;
       border-radius: 10px;
-      //   padding: 0.5rem 0;
       font-size: 0.65rem;
-      width: 100%;
-      max-width: 7.5rem;
     }
 
     .remove {
@@ -144,10 +142,9 @@ onBeforeMount(async () => {
   }
   .cancel {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -0.8rem;
+    right: -0.8rem;
     overflow: visible;
-    margin: -0.8rem;
     border: none;
     border-radius: 1rem;
     width: 3rem;
@@ -167,6 +164,8 @@ onBeforeMount(async () => {
     padding: 0.5rem;
     position: absolute;
     bottom: 0;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
 
     div {
       font-family: IRANSans;

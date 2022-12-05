@@ -84,7 +84,6 @@
         </template>
         <!--  -->
         <template v-else>
-          {{ data.items }}
           <div class="right">
             <div v-if="!item.img" class="spinner-border" role="status">
               <span class="sr-only">Loading...</span>
@@ -172,32 +171,39 @@
 
         <div class="basket-container">
           <div class="basket-card" v-for="item in basketItems" :key="item._id">
-            <template
-              v-if="
-                item.hasOwnProperty('session') ||
-                item.hasOwnProperty('productBundle')
-              "
-            >
+            <template v-if="item.hasOwnProperty('productBundle')">
               <div class="right">
                 <div v-if="!item.img" class="spinner-border" role="status">
                   <span class="sr-only">Loading...</span>
                 </div>
                 <img :src="item.img" alt="product img" v-else />
-                <!-- If The Type is product (has quantiy) -->
-                <div class="label" style="margin-right: 0.5rem">
-                  <span>
-                    {{ item.productBundle?.title || item.session?.title }}
-                  </span>
-                  <span
-                    @click="
-                      item.hasOwnProperty('productBundle')
-                        ? removeBundleFromBasket(item._id)
-                        : removeSessionFromBasket(item)
-                    "
-                    style="display: block"
-                    class="red"
-                    >حذف محصول</span
-                  >
+                <div class="flex-col">
+                  <!-- If The Type is product (has quantiy) -->
+                  <div class="product-container">
+                    <div
+                      class="product"
+                      v-for="product in item.productBundle.products"
+                    >
+                      <span class="title">{{ product.title }}</span>
+                      <span class="price">{{ product.price }}</span>
+                    </div>
+                  </div>
+                  <div class="label" style="margin-right: 0.5rem">
+                    <span>
+                      {{ item.productBundle?.title }}
+                    </span>
+
+                    <span
+                      @click="
+                        item.hasOwnProperty('productBundle')
+                          ? removeBundleFromBasket(item._id)
+                          : removeSessionFromBasket(item)
+                      "
+                      style="display: block"
+                      class="red"
+                      >حذف محصول</span
+                    >
+                  </div>
                 </div>
               </div>
               <div class="left">
@@ -364,7 +370,7 @@ const updateBasket = async () => {
 
   //
   res.data.bundles.forEach((item) => {
-    const imageUrl = `${baseUrl}product/coverImage/${item.productBundle._id}`;
+    const imageUrl = `${baseUrl}productBundle/coverImage/${item.productBundle._id}`;
     item.img = imageUrl;
     imgPromises.push(returnAProtectedUrl(imageUrl));
     allPrice.value += item.price;
@@ -374,7 +380,7 @@ const updateBasket = async () => {
 
   //
   res.data.sessions.forEach((item) => {
-    const imageUrl = `${baseUrl}product/coverImage/${item.session._id}`;
+    const imageUrl = `${baseUrl}course/download-image/${item.image}`;
     imgPromises.push(returnAProtectedUrl(imageUrl));
     item.img = imageUrl;
     allPrice.value += item.price;
@@ -497,7 +503,8 @@ const goOnepageBack = () => {
       .right {
         display: flex;
         align-items: center;
-        flex-basis: 65%;
+        flex-grow: 1;
+        background-color: red;
 
         img {
           width: 20%;
@@ -507,6 +514,16 @@ const goOnepageBack = () => {
           color: #171717;
           display: inline-flex;
           margin: 0.6rem 0.2rem;
+        }
+      }
+      .product-container {
+        display: flex;
+        flex-direction: column;
+
+        .product {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
         }
       }
       .left {

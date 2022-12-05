@@ -33,58 +33,39 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import ClassInfo from '@/modules/student-modules/class/class-info.vue';
 import { StudentClassApi } from '@/api/services/student/student-class-service';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import Header from '@/modules/student-modules/header/header.vue';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
-export default defineComponent({
-  components: {
-    ClassInfo,
-    DesktopMinimalHeader,
-    Header,
-    MinimalHeader
-  },
-  setup() {
-    // Change THis With The Current Data
-    const data = ref([]);
-    const currentItem = ref({});
-    StudentClassApi.getAll().then((res) => {
-      data.value = res.data.data;
-    });
 
-    const images = [
-      'class/purple@3x.png',
-      'class/orange@3x.png',
-      'class/pink@3x.png',
-      'class/green@3x.png'
-    ];
-
-    const currentImg = () => {
-      return require('../../../assets/img/' +
-        images[Math.floor(Math.random() * images.length)]);
-    };
-
-    const classInfo = ref(false);
-    const toggleClassInfo = () => (classInfo.value = !classInfo.value);
-    const toggleClassInfoAndCurrentItem = (item) => {
-      currentItem.value = item;
-      classInfo.value = !classInfo.value;
-    };
-
-    return {
-      classInfo,
-      toggleClassInfo,
-      data,
-      images,
-      currentImg,
-      currentItem,
-      toggleClassInfoAndCurrentItem
-    };
-  }
+// Change THis With The Current Data
+const data = ref([]);
+const currentItem = ref({});
+StudentClassApi.getAll().then((res) => {
+  data.value = res.data.data;
 });
+
+const images = [
+  'class/purple@3x.png',
+  'class/orange@3x.png',
+  'class/pink@3x.png',
+  'class/green@3x.png'
+];
+
+const currentImg = () => {
+  return require('../../../assets/img/' +
+    images[Math.floor(Math.random() * images.length)]);
+};
+
+const classInfo = ref(false);
+const toggleClassInfo = () => (classInfo.value = !classInfo.value);
+const toggleClassInfoAndCurrentItem = (item) => {
+  currentItem.value = item;
+  classInfo.value = !classInfo.value;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -159,8 +140,6 @@ export default defineComponent({
 
 .pc {
   max-width: 1000px;
-
-  padding-top: 8vh;
 
   .hero {
     width: 97%;

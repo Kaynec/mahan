@@ -49,16 +49,25 @@
 </template>
 
 <script setup lang="ts">
-import { addSessionToBasket } from '@/api/basket-functions';
+import { addSessionToBasket, getBasketInfo } from '@/api/basket-functions';
 import { ref } from 'vue';
 import ShowAllSessions from './show-all-sessions.vue';
 
-defineProps<{
+import { onBeforeMount } from 'vue';
+
+const { data } = defineProps<{
   data: { [index: string]: any };
   allSessions: { [index: string]: any };
 }>();
 
 const ShowAllSession = ref(false);
+
+onBeforeMount(async () => {
+  const res = await getBasketInfo();
+  if (res.data.sessions.find((el) => el.session._id === data._id)) {
+    data.exists = true;
+  }
+});
 </script>
 
 <style lang="scss" scoped>

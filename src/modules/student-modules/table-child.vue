@@ -115,6 +115,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '@/css-variable/Global.scss';
+
 .details {
   background-color: #fff;
   width: 100%;
@@ -155,7 +157,7 @@ export default defineComponent({
       color: #000;
       .img {
         color: #fff;
-        background-color: #4ac367;
+        background-color: $blueish;
         border-radius: 50px;
         padding: 3px;
       }

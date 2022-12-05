@@ -40,12 +40,12 @@
       <img
         src="@/assets/img/home-icons/home-page/selftest.png"
         alt="selftest"
-        @click="$router.push({ name: 'Selftest' })"
+        @click="$router.push({ name: 'SelfTest' })"
       />
       <img
         src="@/assets/img/home-icons/home-page/one-lesson.png"
         alt="selftest"
-        @click="$router.push({ name: 'Selftest' })"
+        @click="$router.push({ name: 'SelfSelfTesttest' })"
       />
       <img
         src="@/assets/img/home-icons/home-page/book.png"
@@ -60,17 +60,17 @@
       <img
         src="@/assets/img/home-icons/home-page/note.png"
         alt="selftest"
-        @click="$router.push({ name: 'selfTestNote' })"
+        @click="$router.push({ name: 'SelfTestNote' })"
       />
       <img
         src="@/assets/img/home-icons/home-page/comp-test.png"
         alt="selftest"
-        @click="$router.push({ name: 'CompTest' })"
+        @click="$router.push({ name: 'compTest' })"
       />
       <img
         src="@/assets/img/home-icons/home-page/support.png"
         alt="selftest"
-        @click="$router.push({ name: 'ContackBackup' })"
+        @click="$router.push({ name: 'ContactBackup' })"
       />
     </section>
     <!--  -->
@@ -96,11 +96,17 @@
       </div>
     </section>
     <!-- Count Down -->
-    <section class="count-down">
-      <img
-        src="@/assets/img/home-icons/home-page/static-count.png"
-        alt="count"
-      />
+    <section class="count-down" v-for="item in countDown">
+      <span class="second">
+        {{ timeForTemplate.second }}
+      </span>
+      <span class="minute">
+        {{ timeForTemplate.minute }}
+      </span>
+      <span class="hour">
+        {{ timeForTemplate.hour }}
+      </span>
+      <span class="day"> {{ item.remaining }} </span>
     </section>
     <!-- Select from List -->
     <span class="header">ازبین محصولات متنوع انتخاب کنید</span>
@@ -197,9 +203,8 @@
   <Azmoon v-if="showAzmoon" @convertBoolean="changeShowAzmoon(false)" />
 </template>
 <script setup lang="ts">
-import { onMounted, onBeforeMount, ref, computed } from 'vue';
+import { onMounted, onBeforeMount, ref, computed, onBeforeUnmount } from 'vue';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import { StudentproductApi } from '@/api/services/student/student-product';
 import Footer from '@/modules/student-modules/footer/footer.vue';
 import Header from '@/modules/student-modules/header/header.vue';
 import Azmoon from '@/modules/student-modules/azmoon/azmoon.vue';
@@ -232,15 +237,13 @@ let touchendX = 0;
 const images = ['comptest.png', 'class.png'];
 
 onBeforeMount(async () => {
-  const res = await StudentproductApi.getAllCategories();
-  res.data.data.forEach((category) => {
-    if (category.title == 'کتاب') id.value = category._id;
-  });
   //
   const getCurrentHourAndMinute =
     new Date().getHours().toString().padStart(2, '0') +
     ':' +
     new Date().getMinutes().toString().padStart(2, '0');
+
+  // This Part For Scheuled Message
 
   const showedMessage = store.state.students.showedMessage;
 
@@ -254,7 +257,34 @@ onBeforeMount(async () => {
   } catch (error) {
     console.log(error);
   }
+  //
 });
+
+// Count Down
+
+interface ICountDown {
+  title: string;
+  description: string;
+  countNumber: number;
+  remaining: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+}
+
+const countDown = ref<ICountDown[]>([]);
+
+//
+StudentMessageApi.getCountDown()
+  .then((res) => {
+    //
+
+    const data = res.data.data as ICountDown[];
+
+    countDown.value = data;
+  })
+  .catch((error) => console.log(error));
 
 onMounted(() => {
   startSlide();
@@ -263,6 +293,28 @@ onMounted(() => {
 const startSlide = () => {
   timer = setInterval(next, 5000);
 };
+
+// Timer For Hour Minute Second
+
+const timeForTemplate = ref({
+  hour: new Date().getHours().toString().padStart(2, '0'),
+  minute: new Date().getMinutes().toString().padStart(2, '0'),
+  second: new Date().getSeconds().toString().padStart(2, '0')
+});
+
+let timeID = setInterval(() => {
+  timeForTemplate.value = {
+    hour: new Date().getHours().toString().padStart(2, '0'),
+    minute: new Date().getMinutes().toString().padStart(2, '0'),
+    second: new Date().getSeconds().toString().padStart(2, '0')
+  };
+}, 1000);
+
+onBeforeUnmount(() => {
+  clearInterval(timeID);
+});
+
+//
 
 const next = () => {
   clearInterval(timer);
@@ -345,6 +397,7 @@ const changeShowAzmoon = (boolean: boolean) => {
 
     img {
       max-width: 100%;
+      cursor: pointer;
     }
   }
 
@@ -392,10 +445,65 @@ const changeShowAzmoon = (boolean: boolean) => {
   }
 
   .count-down {
-    margin: 1rem auto;
+    // background-color: red;
+
     width: 90%;
-    img {
+    margin: 1rem auto;
+    border-radius: 20px;
+    // padding: 2.5rem 0;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    color: white;
+
+    font-size: 2.5rem;
+
+    background: $dark;
+
+    span {
+      padding: 2.5rem 0;
       width: 100%;
+      text-align: center;
+      border-right: 3px solid white;
+      position: relative;
+
+      //
+      &::before {
+        position: absolute;
+        content: 'SALAM';
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.194);
+        font-size: 1rem;
+      }
+    }
+
+    .day {
+      background: linear-gradient(180deg, #fa2e33 0%, #d30e13 100%);
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      &::before {
+        border-bottom-left-radius: 20px;
+        content: 'روز';
+      }
+    }
+    .hour {
+      &::before {
+        content: 'ساعت';
+      }
+    }
+    .minute {
+      &::before {
+        content: 'دقیقه';
+      }
+    }
+    .second {
+      &::before {
+        border-bottom-right-radius: 20px;
+        content: 'ثانیه';
+      }
     }
   }
   .choose-parent {

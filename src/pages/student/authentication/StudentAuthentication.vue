@@ -5,7 +5,7 @@
   >
     <!-- This Img is White  -->
     <img
-      src="@/assets/img/logo-mahan@2x.png"
+      src="@/assets/img/mahan-logo.png"
       v-if="isMobile.value"
       alt="logo"
       class="logo-mahan"

@@ -22,12 +22,7 @@
 
     <DesktopMinimalHeader v-show="!isMobile.value" />
 
-    <h1 class="center" v-if="!allSessions.length">
-      محتوایی برای نمایش وجود ندارد
-    </h1>
-
     <div
-      v-else
       class="circles custom animate__animatd animate__fadeIn"
       ref="circles"
       v-dragscroll
@@ -45,7 +40,7 @@
             <h1>خواندن کتاب</h1>
             <h2>{{ (circle.title as string).substring(0, 25) }}</h2>
 
-            <button @click="showPdf(circle, i, index)" class="green">
+            <button @click="showPdf(circle, i)" class="green">
               شروع خواندن کتاب
             </button>
             <img
@@ -122,12 +117,14 @@
           v-if="circle.img"
           :src="circle.img"
           class="circle-main-img"
+          @click="currentIndex = i"
         />
         <img
           alt="circle lession img"
           v-else
           src="@/assets/img/roadmap/asset-11.png"
           class="circle-main-img"
+          @click="currentIndex = i"
         />
 
         <div class="bar-container">
@@ -164,14 +161,12 @@
 
 <script lang="ts" setup>
 import { ref, onUpdated } from 'vue';
-import SmallHeader from '@/modules/student-modules/header/small-header.vue';
 import { StudentSelfTestApi } from '@/api/services/student/student-selftest-service';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { baseUrl } from '@/api/apiclient';
 import { store } from '@/store';
-import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import Alert from '@/modules/student-modules/alert/alert.vue';
 import alertify from '@/assets/alertifyjs/alertify';
 import { dragscroll as vDragscroll } from 'vue-dragscroll';
@@ -192,7 +187,8 @@ const textToShow = ref('');
 
 // Cacl The Prrcent Of Progress
 const getProgressCount = (circle) => {
-  return (circle.totalQuestion / circle.questions.length) * 100;
+  console.log(circle);
+  return (circle.totalQuestion / circle.questions.length || 0) * 100;
 };
 //
 onUpdated(() => {
@@ -255,6 +251,7 @@ const showBuySession = ref(false);
 const moveToSelfTestQuestions = (index, circle) => {
   if (circle.totalQuestion >= circle.questions.length) {
     alertify.error('شما قبلا در این امتحان شرکت کرده اید');
+    return;
   }
   if (index >= 1 && !circle.bought) {
     showBuySession.value = true;
@@ -286,10 +283,6 @@ const moveToReportCard = (circle) => {
     name: 'SelfTestReportCard',
     params: { data: JSON.stringify(circle) }
   });
-};
-
-const goOnePageBack = () => {
-  router.push({ name: 'SelfTest' });
 };
 
 const currentUser = ref(store.getters.getCurrentStudent);

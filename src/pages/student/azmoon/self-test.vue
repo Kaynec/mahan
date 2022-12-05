@@ -9,13 +9,14 @@
       onePageBack="Home"
     />
 
-    <div class="hero" :style="`margin-top: ${isMobile.value ? '' : '50px'}`">
+    <div
+      class="hero"
+      :style="`margin-top: ${isMobile.value ? '' : '50px'} ; margin-bottom: ${
+        isMobile.value ? '' : '6rem'
+      }`"
+    >
       <img
-        :src="`${
-          isMobile.value
-            ? require('@/assets/img/contact-us.png')
-            : require('@/assets/img/selftest-pc@3x.png')
-        }`"
+        src="@/assets/img/contact-us-pc.png"
         alt="header image of self test"
       />
     </div>
@@ -106,7 +107,7 @@ const openBookmarked = () => {
   position: relative;
   height: 100%;
   overflow-y: auto;
-  max-width: 1000px;
+  max-width: 750px;
 
   .hero {
     width: 92.5%;

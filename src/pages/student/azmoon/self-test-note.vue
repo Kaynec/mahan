@@ -3,13 +3,8 @@
   <div class="class-note">
     <DesktopMinimalHeader v-if="!isMobile.value" />
     <Header />
-    <MinimalHeader title="یادداشت ها " onePageBack="SelfTest" />
-    <p
-      v-if="store.getters.getCurrentStudent.note"
-      class="currentNote animate__animated animate__fadeIn"
-    >
-      {{ store.getters.getCurrentStudent?.note?.trim() }}
-    </p>
+    <MinimalHeader title="یادداشت ها " />
+
     <!-- Save Section -->
     <div class="save">
       <!-- Change This TO Real Data Later -->
@@ -39,12 +34,7 @@ import Header from '@/modules/student-modules/header/header.vue';
 
 store.dispatch(StudentActionTypes.CURRENT_STUDENT);
 
-const noteText = ref('');
-
-const goOnePageBack = () =>
-  router.push({
-    name: 'SelfTest'
-  });
+const noteText = ref(store.getters.getCurrentStudent?.note?.trim() || '');
 
 let date;
 

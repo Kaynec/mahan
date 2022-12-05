@@ -39,7 +39,7 @@ const submitCountDown = async () => {
       countNumber: countDownNumber.value
     };
 
-    const res = await StudentMessageApi.adddCountDown(countDownObject);
+    const res = await StudentMessageApi.addCountDown(countDownObject);
 
     if (res.data?.data) {
       console.log(res.data.data);

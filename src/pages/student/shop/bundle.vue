@@ -46,7 +46,16 @@ script
               @click.stop="addBundle(product)"
             />
             <div v-else @click.stop="addBundle(product)" class="plus-icon">
-              <img src="@/assets/img/plus-icon.png" alt="button copy" />
+              <img
+                src="@/assets/img/plus-icon.png"
+                alt="button copy"
+                style="
+                  width: 1.5rem;
+                  height: 1.5rem;
+                  aspect-ratio: 1;
+                  object-fit: contain;
+                "
+              />
               اضافه به سبد خرید
             </div>
           </div>
@@ -80,7 +89,16 @@ script
               @click.stop="addBundle(product)"
             />
             <div v-else @click.stop="addBundle(product)" class="plus-icon">
-              <img src="@/assets/img/plus-icon.png" alt="button copy" />
+              <img
+                src="@/assets/img/plus-icon.png"
+                alt="button copy"
+                style="
+                  width: 1.5rem;
+                  height: 1.5rem;
+                  object-fit: contain;
+                  aspect-ratio: 1;
+                "
+              />
               اضافه به سبد خرید
             </div>
           </div>
@@ -134,7 +152,7 @@ const openSingleBookPage = (item) => {
 
     data.quantity = 1;
 
-    const imageUrl = `${baseUrl}product/coverImage/${data._id}`;
+    const imageUrl = `${baseUrl}productBundle/coverImage/${data._id}`;
     // For Each Data Element Set It's Image to Returned Image from DB
     imgPromises.push(returnAProtectedUrl(imageUrl));
   });
