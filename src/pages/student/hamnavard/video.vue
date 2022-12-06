@@ -112,7 +112,7 @@
   </main>
 </template>
 
-<script lang="ts" lang="ts">
+<script lang="ts" setup>
 import { baseUrl } from '@/api/apiclient';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
