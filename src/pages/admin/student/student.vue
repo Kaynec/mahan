@@ -31,8 +31,8 @@ import { defineComponent } from 'vue';
 import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
-const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import $ from 'jquery';
+import alertify from '@/assets/alertifyjs/alertify';
 import { StudentServiceApi } from '@/api/services/admin/student-service';
 import { string } from 'yup/lib/locale';
 export default defineComponent({

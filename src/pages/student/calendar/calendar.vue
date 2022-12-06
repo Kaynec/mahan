@@ -1,16 +1,13 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
-  <div
-    class="calendar-page"
-    :style="`padding-top :${isMobile.value ? '' : '8vh'}`"
-  >
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
+  <div class="calendar-page" :style="`padding-top :${mobile ? '' : '8vh'}`">
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
     <MinimalHeader title="تقویم" onePageBack="Home" />
     <!--  -->
     <div
       :class="`${
-        isMobile.value
+        mobile
           ? 'animate__animated animate__fadeIn'
           : 'wrapper animate__animated animate__fadeIn'
       }`"

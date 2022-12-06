@@ -8,18 +8,16 @@
   <div
     class="contact-backup"
     v-else
-    :style="`padding-top :${isMobile.value ? '' : '8vh'}`"
+    :style="`padding-top :${mobile ? '' : '8vh'}`"
   >
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
-    <MinimalHeader title="پشتیبانی" v-if="isMobile.value" onePageBack="Home" />
+    <MinimalHeader title="پشتیبانی" v-if="mobile" onePageBack="Home" />
     <h6>پشتیبان‌های فعال</h6>
     <!-- Change THis With Real Data Coming From Some Server-->
     <div
       class="flex animate__animated animate__fadeIn"
-      :style="`grid-template-columns : ${
-        !isMobile.value ? 'repeat(2 , 1fr)' : ''
-      }`"
+      :style="`grid-template-columns : ${!mobile ? 'repeat(2 , 1fr)' : ''}`"
     >
       <div class="card" v-for="item in data" :key="item._id">
         <div v-if="!item.img" class="spinner-border" role="status">

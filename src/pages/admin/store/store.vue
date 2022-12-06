@@ -40,7 +40,7 @@ import { defineComponent, ref, onMounted, reactive } from 'vue';
 import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
-const $ = require('jquery');
+import $ from 'jquery';
 import { StoreServiceApi } from '@/api/services/admin/store-service';
 import alertify from '@/assets/alertifyjs/alertify';
 

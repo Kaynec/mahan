@@ -32,6 +32,8 @@ export const updateCount = async () => {
   });
 
   store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
+  //
+  return res;
 };
 
 export const addSessionToBasket = async (session, DELETE_REQUEST = false) => {

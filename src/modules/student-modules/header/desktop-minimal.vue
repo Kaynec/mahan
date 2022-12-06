@@ -29,12 +29,12 @@
         برگشت
       </span>
       <!-- IF Shop Show search option  -->
-      <div class="search" v-if="component === 'shop'">
+      <div class="search" v-if="component === 'shop'" pl-4>
         <i @click="moveToBasket()" class="fas fa-shopping-cart"></i>
         {{ toPersianNumbers(itemCount) }}
         محصول
 
-        <div class="input">
+        <!-- <div class="input">
           <i @click="toggleShowResults" class="fas fa-search absolute"></i>
           <input
             v-model="search"
@@ -42,9 +42,9 @@
             type="search"
             placeholder="…جستجو"
           />
-        </div>
+        </div> -->
 
-        <div class="items" v-show="showResults">
+        <!-- <div class="items" v-show="showResults">
           <div
             class="card-small"
             v-for="item in filteredSearchResults"
@@ -53,7 +53,7 @@
           >
             <span class="label"> {{ item.title }} </span>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!--  -->
@@ -91,9 +91,6 @@ import router from '@/router';
 import { StudentActionTypes } from '@/store/modules/student/action-types';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
 import { useRoute } from 'vue-router';
-import { StudentBasketApi } from '@/api/services/student/student-basket-service';
-import { StudentproductApi } from '@/api/services/student/student-product';
-import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
 
 export default defineComponent({
   props: {
@@ -135,44 +132,26 @@ export default defineComponent({
       return route.name;
     });
 
-    if (props.component === 'shop') {
-      (async () => {
-        const promiseForShopItems = [] as any;
+    // if (props.component === 'shop') {
+    //   (async () => {
+    //     const promiseForShopItems = [] as any;
 
-        const resp = await StudentproductApi.getAllCategories();
+    //     const resp = await StudentproductApi.getAllCategories();
 
-        resp.data?.data?.forEach((item) => {
-          promiseForShopItems.push(StudentproductApi.getAllProducts(item._id));
-        });
+    //     resp.data?.data?.forEach((item) => {
+    //       promiseForShopItems.push(StudentproductApi.getAllProducts(item._id));
+    //     });
 
-        const products = await Promise.all(promiseForShopItems);
+    //     const products = await Promise.all(promiseForShopItems);
 
-        products.forEach((product: any) => {
-          allItemsForShop.value = [
-            ...allItemsForShop.value,
-            ...product.data.data
-          ];
-        });
-        //
-        const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-          method: 'GET',
-          headers: {
-            token: store.getters.getStudentToken
-          }
-        });
-        const res = await resPromise.json();
-
-        let quantity = 0;
-
-        res.data.items.forEach((item) => {
-          if (item) {
-            quantity += 1;
-          }
-        });
-
-        store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
-      })();
-    }
+    //     products.forEach((product: any) => {
+    //       allItemsForShop.value = [
+    //         ...allItemsForShop.value,
+    //         ...product.data.data
+    //       ];
+    //     });
+    //   })();
+    // }
 
     const goback = () => {
       if (componentName.value == 'StudentGroupPage') {

@@ -11,6 +11,7 @@ export type State = {
   user: UserDocuments | null;
   userProfileName: UserProfileName | null;
   CurrentShopInfo: any | null;
+  CurrentBundleInfo: any | null;
   BasketCount: number;
   CurrentSuppertPerson: string | null;
   showedMessage: boolean;
@@ -27,6 +28,7 @@ export const state: State = {
   user: null,
   userProfileName: null,
   CurrentShopInfo: null,
+  CurrentBundleInfo: null,
   CurrentSuppertPerson: null,
   BasketCount: 0,
   showedMessage: false,

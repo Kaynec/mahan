@@ -8,9 +8,9 @@
     <MinimalHeader
       style="top: 0; margin-top: 0; position: absolute"
       title="رودمپ"
-      v-if="isMobile.value"
+      v-if="mobile"
     />
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
 
     <section
       class="circles custom"

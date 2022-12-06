@@ -2,7 +2,7 @@
   <div
     class="desktop"
     :style="`width :${innerWidth}; height :${innerHeight}`"
-    v-if="!isMobile.value"
+    v-if="!mobile"
   >
     <img src="../../assets/img/logo-mahan.png" />
     <div class="Login animate__animated animate__fadeIn">
@@ -33,7 +33,7 @@
           v-for="error in v$.username.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -65,7 +65,7 @@
           v-for="error in v$.password.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -73,7 +73,7 @@
         <button @click="login" class="button-linear">
           <template v-if="isRequesting">
             <span
-              style="width: 1.3rem; height: 1.3rem;"
+              style="width: 1.3rem; height: 1.3rem"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -126,7 +126,7 @@
           v-for="error in v$.username.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -158,7 +158,7 @@
           v-for="error in v$.password.$errors"
           class="text-danger text-bold m-2"
           :key="error.$uid"
-          style="font-family: IRANSans; font-size: 12px;"
+          style="font-family: IRANSans; font-size: 12px"
         >
           {{ error.$message }}
         </p>
@@ -166,7 +166,7 @@
         <button @click="login" class="button-linear">
           <template v-if="isRequesting">
             <span
-              style="width: 1.3rem; height: 1.3rem;"
+              style="width: 1.3rem; height: 1.3rem"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -188,7 +188,7 @@ import router from '@/router';
 import useVuelidate from '@vuelidate/core';
 import { minLength, helpers, required } from '@vuelidate/validators';
 import { MentorActionTypes } from '@/store/modules/mentor/action-types';
-const alertify = require('../../assets/alertifyjs/alertify');
+import alertify from '@/assets/alertifyjs/alertify';
 const isRequesting = ref(false);
 const model = reactive({
   username: '',

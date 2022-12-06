@@ -1,7 +1,7 @@
 <template>
   <!-- Header -->
   <div class="class-note">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
     <MinimalHeader title="یادداشت ها " />
 

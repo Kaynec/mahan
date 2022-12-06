@@ -1,6 +1,6 @@
 <template>
   <div class="comp-test-answer">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
     <MinimalHeader onePageBack="Duel" title="پاسخنامه تشریحی دوئل" />
 

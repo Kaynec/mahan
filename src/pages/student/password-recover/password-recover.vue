@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile.value">
+  <div class="desktop" v-if="!mobile">
     <img alt="logo" src="@/assets/img/mahan-logo.png" />
     <!-- Main Part -->
     <form

@@ -1,14 +1,14 @@
 <template>
   <Header />
-  <MinimalHeader title="کتاب" v-if="isMobile.value" />
+  <MinimalHeader title="کتاب" v-if="mobile" />
   <main class="book">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <canvas v-if="!isLoading" id="canvas"></canvas>
     <div class="loader-parent" v-if="isLoading">
       <div class="loading1"></div>
     </div>
 
-    <div :class="{ mobile: isMobile.value }" class="controls">
+    <div :class="{ mobile: mobile }" class="controls">
       <i class="fas fa-fast-forward" @click="increase(allPages - 1)"></i>
 
       <div class="middle">

@@ -1,10 +1,6 @@
 <template>
-  <div
-    :class="`${
-      isMobile.value ? 'shop-order-success' : 'shop-order-success pc'
-    }`"
-  >
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <div :class="`${mobile ? 'shop-order-success' : 'shop-order-success pc'}`">
+    <DesktopMinimalHeader v-if="!mobile" />
     <img src="@/assets/img/shop/tick.png" alt="White Success Key" />
     <h6>خرید شما با موفقیت انجام شد</h6>
     <div class="middle-card animate__animated animate__fadeIn">

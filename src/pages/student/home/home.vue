@@ -1,11 +1,11 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile.value" />
+  <DesktopMinimalHeader v-if="!mobile" />
   <div class="user-home">
     <!-- Timed Message -->
     <TimedMessage :msg="msg" v-if="msg" @cancel="msg = ''" />
     <!--  -->
     <Header />
-    <section class="mobile-only" v-if="isMobile.value">
+    <section class="mobile-only" v-if="mobile">
       <div @click="$router.push({ name: 'ContactBackup' })">
         <img
           src="@/assets/img/home-icons/support.png"
@@ -219,12 +219,18 @@ const msg = ref('');
 //
 
 const currentImg = computed(() => {
-  return require('../../../assets/img/home-icons/home-page/' +
-    images[Math.abs(currentIndex.value) % images.length]);
+  return new URL(
+    '../../../assets/img/home-icons/home-page/' +
+      images[Math.abs(currentIndex.value) % images.length],
+    import.meta.url
+  ).href;
 });
 const currentImg2 = computed(() => {
-  return require('../../../assets/img/home-icons/home-page/' +
-    images[Math.abs(currentIndex.value) % images.length]);
+  return new URL(
+    '../../../assets/img/home-icons/home-page/' +
+      images[Math.abs(currentIndex.value) % images.length],
+    import.meta.url
+  ).href;
 });
 
 const showAzmoon = ref(false);

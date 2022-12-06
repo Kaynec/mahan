@@ -60,7 +60,7 @@ import { SessionServiceApi } from '@/api/services/admin/session-service';
 import { QuestionServiceApi } from '@/api/services/admin/question-service';
 import { useRoute } from 'vue-router';
 import readXlsxFile from 'read-excel-file';
-const $ = require('jquery');
+import $ from 'jquery';
 import alertify from '@/assets/alertifyjs/alertify';
 
 // import { string } from 'yup/lib/locale';

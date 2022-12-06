@@ -53,7 +53,7 @@ export default defineComponent({
     };
 
     const click = () => {
-      if (!isMobile.value) {
+      if (!mobile) {
         if (props.componentName != 'empty') {
           const tmp = {
             name: props.componentName
@@ -67,7 +67,10 @@ export default defineComponent({
       }
     };
     const getImgUrl = (src, color) => {
-      return require('@/assets/img/Studentsetting/' + src + color + '.png');
+      return new URL(
+        '@/assets/img/Studentsetting/' + src + color + '.png',
+        import.meta.url
+      ).href;
     };
 
     const mouseEnter = () => {

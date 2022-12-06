@@ -1,6 +1,6 @@
 <template>
   <nav
-    :class="`${isMobile.value ? 'minimal-nav' : 'minimal-nav pc'} ${
+    :class="`${mobile ? 'minimal-nav' : 'minimal-nav pc'} ${
       colors ? 'dark' : ''
     } `"
   >

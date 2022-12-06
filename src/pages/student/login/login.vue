@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile.value">
+  <div class="desktop" v-if="!mobile">
     <img src="@/assets/img/mahan-logo.png" alt="logo" />
     <div class="Login animate__animated animate__fadeIn">
       <div>

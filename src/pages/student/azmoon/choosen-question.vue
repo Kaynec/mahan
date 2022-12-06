@@ -5,7 +5,7 @@
 
   <main class="comp-test-answer" v-else>
     <Header />
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <MinimalHeader
       :title="`سوالات برگزیده`"
       onePageBack="QuestionsChoosenList"

@@ -1,6 +1,6 @@
 <template>
-  <main v-if="!isMobile.value" class="pc">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <main v-if="!mobile" class="pc">
+    <DesktopMinimalHeader v-if="!mobile" />
     <div class="loader-wrapper" v-if="isLoading">
       <div class="loader">
         <span></span>

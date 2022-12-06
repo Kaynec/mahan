@@ -1,6 +1,6 @@
 <template>
   <div class="duel-all">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <MinimalHeader onePageBack="Duel" title="مشاهده کلی رتبه ها " />
     <!--  -->
     <div class="list">

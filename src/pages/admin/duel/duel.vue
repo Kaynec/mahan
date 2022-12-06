@@ -41,8 +41,8 @@ import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { DuelServiceApi } from '@/api/services/admin/duel-service';
-const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import $ from 'jquery';
+import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({
   components: { grid },

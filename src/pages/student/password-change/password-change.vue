@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="Forget-the-password"
-    :class="`${isMobile.value ? '' : 'desktop'}`"
-  >
+  <div class="Forget-the-password" :class="`${mobile ? '' : 'desktop'}`">
     <!-- This Img is White  -->
     <img
       src="@/assets/img/mahan-logo.png"
-      v-if="isMobile.value"
+      v-if="mobile"
       alt="logo"
       class="logo-mahan"
     />
@@ -147,7 +144,7 @@
     <!--  -->
     <img
       style="margin-top: 2rem"
-      v-show="!isMobile.value"
+      v-show="!mobile"
       src="@/assets/img/mahan.png"
       alt="logo"
     />

@@ -19,7 +19,7 @@
       class="d-flex flex-column mt-1 p-0 m-0"
       @touchstart="touchstart()"
       @touchend="touchend()"
-      @click="isMobile.value ? '' : touchend()"
+      @click="mobile ? '' : touchend()"
     >
       <span class="label text-dark text-right mb-2"> {{ label }} </span>
       <span class="text-detail text-dark text-right">
@@ -64,7 +64,10 @@ const touchend = () => {
   }
 };
 const getImgUrl = (src, color) =>
-  require('@/assets/img/Studentsetting/' + src + color + '.png');
+  new URL(
+    '@/assets/img/Studentsetting/' + src + color + '.png',
+    import.meta.url
+  ).href;
 </script>
 
 <style lang="scss" scoped>

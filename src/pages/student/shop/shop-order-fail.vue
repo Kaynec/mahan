@@ -1,10 +1,6 @@
 <template>
-  <div
-    :class="`${
-      isMobile.value ? 'shop-order-failure' : 'shop-order-failure pc'
-    }`"
-  >
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <div :class="`${mobile ? 'shop-order-failure' : 'shop-order-failure pc'}`">
+    <DesktopMinimalHeader v-if="!mobile" />
     <img src="@/assets/img/shop/delete.png" alt="White failure Key" />
     <h6>سفارش شما ثبت نشد</h6>
     <div class="middle-card animate__animated animate__fadeIn">

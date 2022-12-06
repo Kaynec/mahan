@@ -48,9 +48,9 @@ export default class Main extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/adminlte.css';
-@import '~datatables.net-dt/css/jquery.dataTables.min.css';
-@import '~datatables.net-searchpanes-bs5/css/searchPanes.bootstrap5.min.css';
-@import '~datatables.net-searchbuilder-bs5/css/searchBuilder.bootstrap5.min.css';
-@import '~datatables.net-datetime/css/dataTables.dateTime.scss';
+@import '@/assets/css/adminlte.css';
+@import 'datatables.net-dt/css/jquery.dataTables.min.css';
+@import 'datatables.net-searchpanes-bs5/css/searchPanes.bootstrap5.min.css';
+@import 'datatables.net-searchbuilder-bs5/css/searchBuilder.bootstrap5.min.css';
+@import 'datatables.net-datetime/css/dataTables.dateTime.scss';
 </style>

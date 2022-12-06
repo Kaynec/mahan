@@ -35,7 +35,8 @@ export type ChatStore = ChatsStore<Pick<RootState, 'chats'>>;
 export type MentorStore = MentorsStore<Pick<RootState, 'mentors'>>;
 
 // Plug in logger when in development environment
-const debug = process.env.NODE_ENV !== 'production';
+
+const debug = import.meta.env.MODE !== 'production';
 const plugins = debug ? [createLogger({})] : [];
 
 const vuexLocal = new VuexPersistence<RootState>({

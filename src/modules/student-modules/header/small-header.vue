@@ -1,5 +1,5 @@
 <template>
-  <nav :class="`${isMobile.value ? 'nav sm-nav' : 'nav pc sm-nav'}`">
+  <nav :class="`${mobile ? 'nav sm-nav' : 'nav pc sm-nav'}`">
     <div>
       <div v-if="!imageUrl" class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>

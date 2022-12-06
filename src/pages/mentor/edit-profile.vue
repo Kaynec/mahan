@@ -1,15 +1,11 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile.value" />
+  <MentorDesktopHeader v-if="!mobile" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="showThisWhileUplading">
     <div class="loading1"></div>
   </div>
   <!--  -->
-  <div
-    class="edit"
-    v-else
-    :style="`${isMobile.value ? '' : 'margin-top : 1.5rem'}`"
-  >
+  <div class="edit" v-else :style="`${mobile ? '' : 'margin-top : 1.5rem'}`">
     <MinimalHeader title="ویرایش اطلاعات" onePageBack="MentorProfile" />
     <div class="img-container">
       <div class="img">

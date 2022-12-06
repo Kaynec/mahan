@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
-  <main :class="`${isMobile.value ? 'class ' : 'class pc '}`">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
+  <main :class="`${mobile ? 'class ' : 'class pc '}`">
+    <DesktopMinimalHeader v-if="!mobile" />
 
     <Header onePageBack="Home" />
     <MinimalHeader title="کلاس" onePageBack="Home" />
@@ -14,7 +14,6 @@
         v-for="item in data"
         :key="item._id"
       >
-        <!-- <img :src="currentImg()" alt="colored img" /> -->
         <i class="fas fa-angle-left"></i>
         <div>
           <span> {{ item.title }}</span
@@ -47,18 +46,6 @@ const currentItem = ref({});
 StudentClassApi.getAll().then((res) => {
   data.value = res.data.data;
 });
-
-const images = [
-  'class/purple@3x.png',
-  'class/orange@3x.png',
-  'class/pink@3x.png',
-  'class/green@3x.png'
-];
-
-const currentImg = () => {
-  return require('../../../assets/img/' +
-    images[Math.floor(Math.random() * images.length)]);
-};
 
 const classInfo = ref(false);
 const toggleClassInfo = () => (classInfo.value = !classInfo.value);

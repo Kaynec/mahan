@@ -1,8 +1,8 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
   <div class="self-test-questions">
     <Header />
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <MinimalHeader title="سوالات برگزیده" onePageBack="QuestionsChoosenList" />
     <!-- Progress Bar And Count -->
 

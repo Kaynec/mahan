@@ -1,5 +1,5 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile.value" />
+  <MentorDesktopHeader v-if="!mobile" />
   <div
     class="show-dialog flex-column d-flex justify-content-center align-items-center"
     v-if="showDialog"
@@ -44,11 +44,7 @@
     <div class="loading1"></div>
   </div>
 
-  <div
-    class="list"
-    v-else
-    :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`"
-  >
+  <div class="list" v-else :style="`padding-top : ${!mobile ? '3rem' : ''}`">
     <MinimalHeader title="لیست کاربران" />
     <div class="container">
       <div

@@ -1,5 +1,5 @@
 <template>
-  <div class="desktop" v-if="!isMobile.value"></div>
+  <div class="desktop" v-if="!mobile"></div>
   <div class="abobe" v-else>
     <MinimalHeader title="ادوبی کانکت" />
     <iframe :src="link" class="iframe" frameborder="0"></iframe>

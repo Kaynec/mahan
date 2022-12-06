@@ -1,5 +1,5 @@
 <template>
-  <div class="podcast pc" v-if="!isMobile.value" v-bind="$attrs">
+  <div class="podcast pc" v-if="!mobile" v-bind="$attrs">
     <DesktopMinimalHeader />
     <div class="audio-container">
       <img src="@/assets/img/podcast.webp" @click="pauseAndPlay" />

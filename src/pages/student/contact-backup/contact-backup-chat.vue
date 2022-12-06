@@ -1,7 +1,7 @@
 <template>
   <MinimalHeader
     title="گفتگو کنید "
-    v-if="isMobile.value"
+    v-if="mobile"
     onePageBack="ContactBackup"
   />
   <!-- Spinner -->
@@ -12,13 +12,13 @@
   <div
     class="chat"
     v-else-if="!isFetching"
-    :style="`padding-top: ${isMobile.value ? '' : '5rem'}; max-height : ${
-      !isMobile.value ? `${maxHeight + 60}px` : ''
+    :style="`padding-top: ${mobile ? '' : '5rem'}; max-height : ${
+      !mobile ? `${maxHeight + 60}px` : ''
     }`"
     v-bind="$attrs"
   >
-    <DesktopMinimalHeader v-if="!isMobile.value" />
-    <nav class="navbar" v-if="!isMobile.value">
+    <DesktopMinimalHeader v-if="!mobile" />
+    <nav class="navbar" v-if="!mobile">
       <div class="right">
         <img :src="imageUrl" alt="avatar" />
         <div class="txt" v-if="mentor">
@@ -54,7 +54,7 @@
       </div>
     </main>
     <!-- Keyboard -->
-    <form :class="`${isMobile.value ? 'toolbar' : 'pc-toolbar'}`">
+    <form :class="`${mobile ? 'toolbar' : 'pc-toolbar'}`">
       <div class="textarea">
         <textarea
           v-model="message"
@@ -89,12 +89,12 @@ import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import { store } from '@/store';
 
 import router from '@/router';
-import { connection } from '@/main';
 import { StudentSupportApi } from '@/api/services/student/student-support-service';
 import { useRoute } from 'vue-router';
 import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
+import { useConnection } from '@/api/connection';
 
 const mentor = ref();
 const route = useRoute();
@@ -140,7 +140,7 @@ const goOnePageBack = () =>
   });
 
 onUpdated(() => {
-  if (!isMobile.value) {
+  if (!mobile) {
     maxHeight.value = document
       .querySelector('aside')!
       .getClientRects()[0].height;
@@ -161,7 +161,7 @@ const sendMessage = async () => {
     sender: 'student',
     type: 'text'
   };
-  connection.emit('send-message', payload);
+  useConnection().emit('send-message', payload);
   await store.commit(ChatMutationTypes.ADD_MESSAGE, payload);
   await nextTick();
   instance?.proxy?.$forceUpdate();

@@ -3,7 +3,7 @@
     <div class="loading1"></div>
   </div>
   <main class="answers" v-else v-bind="$attrs">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <MinimalHeader onePageBack="compTest" title="پاسخنامه" />
 
     <section class="label" v-if="examData">

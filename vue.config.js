@@ -48,13 +48,5 @@ module.exports = {
       ]
     },
     workboxPluginMode: 'GenerateSW'
-  },
-  configureWebpack: {
-    plugins: [
-      require('unplugin-auto-import/webpack')({
-        dirs: ['src/mixins'],
-        vueTemplate: true
-      })
-    ]
   }
 };

@@ -41,8 +41,8 @@ import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { AnnouncementServiceApi } from '@/api/services/admin/announcement-service';
-const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import $ from 'jquery';
+import alertify from '@/assets/alertifyjs/alertify';
 
 // import { string } from 'yup/lib/locale';
 

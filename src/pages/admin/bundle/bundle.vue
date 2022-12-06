@@ -105,7 +105,7 @@ import alertify from '@/assets/alertifyjs/alertify';
 import { useRoute } from 'vue-router';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
 import { StoreServiceApi } from '@/api/services/admin/store-service';
-const $ = require('jquery');
+import $ from 'jquery';
 
 const products = ref<any[]>([]);
 

@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
-  <main :class="`${isMobile.value ? 'class ' : 'class pc '}`">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
+  <main :class="`${mobile ? 'class ' : 'class pc '}`">
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header onePageBack="Home" />
     <MinimalHeader title="کلاس" onePageBack="ClassRomm" />
 

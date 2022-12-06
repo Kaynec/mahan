@@ -4,7 +4,7 @@ import alertify from '@/assets/alertifyjs/alertify';
 import router from '@/router';
 import { AdminActionTypes } from '@/store/modules/admin/action-types';
 
-export const baseUrlDomain = process.env.VUE_APP_BASE_URL;
+export const baseUrlDomain = import.meta.env.VITE_APP_BASE_URL;
 
 export const baseUrl = `${baseUrlDomain}/api/`;
 
@@ -17,7 +17,7 @@ export const instance = axios.create({
   headers: {}
 });
 instance.interceptors.request.use((config) => {
-  const token = useAdminStore().getters.getUserToken;
+  const token = useAdminStore?.().getters.getUserToken;
   if (token) {
     config.headers.token = `${token}`;
   }

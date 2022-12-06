@@ -1,6 +1,6 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile.value" />
-  <div class="inbox" :style="`padding-top : ${!isMobile.value ? '3rem' : ''}`">
+  <MentorDesktopHeader v-if="!mobile" />
+  <div class="inbox" :style="`padding-top : ${!mobile ? '3rem' : ''}`">
     <MinimalHeader title="مشاهده درخواست ها" onePageBack="MentorProfile" />
     <!-- Container -->
     <div class="container">

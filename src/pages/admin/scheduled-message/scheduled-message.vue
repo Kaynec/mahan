@@ -46,7 +46,7 @@ import router from '@/router';
 import alertify from '@/assets/alertifyjs/alertify';
 import { ScheduledMessageServiceApi } from '@/api/services/admin/scheduled-message-service';
 import gridComponent from '@/modules/shared/grid.vue';
-const $ = require('jquery');
+import $ from 'jquery';
 
 const grid = ref();
 // Data

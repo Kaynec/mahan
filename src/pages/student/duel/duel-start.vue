@@ -1,5 +1,5 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile.value" />
+  <DesktopMinimalHeader v-if="!mobile" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>

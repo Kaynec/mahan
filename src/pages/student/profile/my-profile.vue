@@ -1,6 +1,6 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
-  <DesktopMinimalHeader v-if="!isMobile.value" />
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
+  <DesktopMinimalHeader v-if="!mobile" />
   <div class="my-profile">
     <CountDown
       v-if="showCountDown"

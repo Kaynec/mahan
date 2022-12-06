@@ -1,11 +1,11 @@
 <template>
   <div
-    :class="`${isMobile.value ? 'st-wrapper' : 'st-wrapper pc'}`"
+    :class="`${mobile ? 'st-wrapper' : 'st-wrapper pc'}`"
     :style="getMainStyle()"
   >
     <desktopRightSide
       v-show="
-        !isMobile.value &&
+        !mobile &&
         store.getters.getStudentToken &&
         componentname != 'StudentGroupPage' &&
         componentname != 'CustomGroupPage'
@@ -31,9 +31,8 @@ import { Options, Vue } from 'vue-class-component';
 import desktopRightSide from '@/modules/desktop-rightside.vue';
 import { store, useChatStore, useStudentStore } from '@/store';
 import router from '@/router';
-import { connection } from '@/main';
 import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
-import { isMobile } from '@/mixins/detectMobile';
+import { useConnection } from '@/api/connection';
 
 @Options({
   components: { desktopRightSide }
@@ -42,27 +41,28 @@ export default class Main extends Vue {
   public windowHeight = window.innerHeight;
   public store = store;
   public text = '';
-  public isMobile = isMobile;
 
   async mounted() {
     if (!store.getters.getStudentToken) return;
-    connection.connect().on('connect', () => {
-      connection.emit('register', {
-        _id: useStudentStore().getters.getCurrentStudent?._id,
-        userType: 'student'
+    useConnection()
+      .connect()
+      .on('connect', () => {
+        useConnection().emit('register', {
+          _id: useStudentStore().getters.getCurrentStudent?._id,
+          userType: 'student'
+        });
+
+        if (useChatStore().getters.getShowModal === false) {
+          return;
+        } else if (useChatStore().getters.getMessages?.length) {
+          store.commit(ChatMutationTypes.TOGGLE_MODAL);
+          this.text = `شما ${
+            useChatStore().getters.getMessages?.length
+          } پیام ناخوانده دارید`;
+        }
       });
 
-      if (useChatStore().getters.getShowModal === false) {
-        return;
-      } else if (useChatStore().getters.getMessages?.length) {
-        store.commit(ChatMutationTypes.TOGGLE_MODAL);
-        this.text = `شما ${
-          useChatStore().getters.getMessages?.length
-        } پیام ناخوانده دارید`;
-      }
-    });
-
-    connection.on('new-message', () => {
+    useConnection().on('new-message', () => {
       if (
         this.componentname != 'ContactBackupChat' &&
         this.componentname != 'ContactBackupInfo' &&
@@ -102,7 +102,7 @@ export default class Main extends Vue {
 
     // We Want One Part page on the roadmap pages
     if (
-      !this.isMobile &&
+      !mobile.value &&
       store.getters.getStudentToken &&
       this.$route.name != 'StudentGroupPage' &&
       this.$route.name != 'CustomGroupPage'

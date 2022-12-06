@@ -6,7 +6,7 @@ script
   </div>
   <!--  -->
   <div class="shop-book-list" v-else>
-    <DesktopMinimalHeader v-if="!isMobile.value" component="shop" />
+    <DesktopMinimalHeader v-if="!mobile" component="shop" />
     <Header />
     <MinimalHeader
       :title="`لیست محصولات ${title}  ( ${toPersianNumbers(
@@ -15,7 +15,7 @@ script
     />
     <main
       class="card-container animate__animated animate__fadeIn"
-      v-if="isMobile.value"
+      v-if="mobile"
     >
       <section
         class="card animate__animated animate__fadeIn"
@@ -212,23 +212,7 @@ const addToBasket = async (product) => {
 };
 
 (async () => {
-  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-    method: 'GET',
-    headers: {
-      token: store.getters.getStudentToken
-    }
-  });
-  const res = await resPromise.json();
-
-  let quantity = 0;
-
-  res.data.items.forEach((item) => {
-    if (item) {
-      quantity += 1;
-    }
-  });
-
-  store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
+  updateCount();
 })();
 </script>
 

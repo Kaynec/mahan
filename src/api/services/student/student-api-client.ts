@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useStudentStore, store } from '@/store';
+import { useStudentStore } from '@/store';
 import { baseUrl } from '@/api/apiclient';
 import alertify from '@/assets/alertifyjs/alertify';
 import { StudentActionTypes } from '@/store/modules/student/action-types';
@@ -12,7 +12,7 @@ export const studentInstance = axios.create({
   headers: {}
 });
 studentInstance.interceptors.request.use((config) => {
-  const token = useStudentStore().getters.getStudentToken;
+  const token = useStudentStore?.().getters.getStudentToken;
   if (token) config.headers.token = `${token}`;
   return config;
 });
@@ -23,7 +23,10 @@ studentInstance.interceptors.response.use(
     // Do something with response errord
     if (error.response && error.response.data && error.response.data.message) {
       // Check If Message is not 50  (in case of 50  we don't want to show the message)
-      if (error.response.status !== 500)
+      if (
+        error.response.status !== 500 &&
+        error.response.data.message != 'messages.notfound'
+      )
         alertify.error(error.response.data.message);
     }
     if (error.response && error.response.status == 401)

@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
   <!-- Spinner -->
 
   <div class="loader-parent" v-if="showThisWhileUplading">
@@ -7,7 +7,7 @@
   </div>
   <!--  -->
   <div class="edit" v-else>
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
     <MinimalHeader title="ویرایش اطلاعات" goOnePageBack="MyProfile" />
     <div class="img-container animate__animated animate__fadeIn">

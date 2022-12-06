@@ -92,6 +92,7 @@ const StudentShop = () => import('@/pages/student/shop/shop.vue');
 const ShopBookList = () => import('@/pages/student/shop/shop-book-list.vue');
 const ShopBundle = () => import('@/pages/student/shop/bundle.vue');
 const SingleBookInfo = () => import('@/pages/student/shop/shop-book-info.vue');
+const BundleInfo = () => import('@/pages/student/shop/shop-bundle-info.vue');
 const ShopSuccess = () => import('@/pages/student/shop/shop-order-success.vue');
 const ShopFailure = () => import('@/pages/student/shop/shop-order-fail.vue');
 const ShopBasket = () => import('@/pages/student/shop/shop-basket.vue');
@@ -185,30 +186,29 @@ const MentorChat = () => import('@/pages/mentor/chat.vue');
 
 const PageNotFound = () => import('@/pages/404.vue');
 
-import { useAdminStore, useStudentStore, useMentorStore } from '@/store';
 const ifNotAuthenticated = (to: any, from: any, next: any) => {
-  if (!useAdminStore().getters.getUserToken) {
+  if (!useAdminStore?.().getters.getUserToken) {
     next();
     return;
   }
   next('/admin');
 };
 const ifAuthenticated = (to: any, from: any, next: any) => {
-  if (useAdminStore().getters.getUserToken) {
+  if (useAdminStore?.().getters.getUserToken) {
     next();
     return;
   }
   next('/admin/login');
 };
 const ifStudentNotAuthenticated = (to: any, from: any, next: any) => {
-  if (!useStudentStore().getters.getStudentToken) {
+  if (!useStudentStore?.().getters.getStudentToken) {
     next();
     return;
   }
   next('/student/home');
 };
 const ifStudentAuthenticated = (to: any, from: any, next: any) => {
-  if (useStudentStore().getters.getStudentToken) {
+  if (useStudentStore?.().getters.getStudentToken) {
     next();
     return;
   }
@@ -216,7 +216,7 @@ const ifStudentAuthenticated = (to: any, from: any, next: any) => {
 };
 
 const ifMentorNotAuthenticated = (to: any, from: any, next: any) => {
-  if (!useMentorStore().getters.getMentorToken) {
+  if (!useMentorStore?.().getters.getMentorToken) {
     next();
     return;
   }
@@ -224,7 +224,7 @@ const ifMentorNotAuthenticated = (to: any, from: any, next: any) => {
 };
 
 const ifMentorAuthenticated = (to: any, from: any, next: any) => {
-  if (useMentorStore().getters.getMentorToken) {
+  if (useMentorStore?.().getters.getMentorToken) {
     next();
     return;
   }
@@ -876,6 +876,13 @@ const routes: Array<RouteRecordRaw> = [
         props: true
       },
       {
+        path: 'shop-bundle/:id',
+        name: 'BundleInfo',
+        component: BundleInfo,
+        beforeEnter: ifStudentAuthenticated,
+        props: true
+      },
+      {
         path: 'shop-failure',
         name: 'ShopFailure',
         component: ShopFailure,
@@ -1118,7 +1125,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
 

@@ -21,79 +21,67 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import router from '@/router/index';
-export default defineComponent({
-  props: {
-    label: { type: String },
-    componentName: { type: String, default: 'empty' },
-    params: { type: String }
-  },
 
-  setup(props) {
-    let Dialog = ref();
-    let active = ref(null);
+const {
+  componentName = 'empty',
+  params,
+  label
+} = defineProps<{
+  label: string;
+  componentName: string;
+  params: string;
+}>();
 
-    const touchstart = () => {
-      active.value = true;
-      Dialog.value.classList.add('active');
-    };
+let Dialog = ref();
+let active = ref(false);
 
-    const mouseEnter = () => {
-      active.value = true;
-      Dialog.value.classList.add('active');
-    };
+const touchstart = () => {
+  active.value = true;
+  Dialog.value.classList.add('active');
+};
 
-    const mouseLeave = () => {
-      active.value = false;
-      Dialog.value.classList.remove('active');
-    };
+const mouseEnter = () => {
+  active.value = true;
+  Dialog.value.classList.add('active');
+};
 
-    const touchend = () => {
-      active.value = false;
-      Dialog.value.classList.remove('active');
+const mouseLeave = () => {
+  active.value = false;
+  Dialog.value.classList.remove('active');
+};
 
-      if (props.componentName != 'empty') {
-        const tmp = {
-          name: props.componentName
-        };
-        props.params &&
-          (tmp.params = {
-            id: props.params
-          });
-        router.push(tmp);
-      }
+const touchend = () => {
+  active.value = false;
+  Dialog.value.classList.remove('active');
+
+  if (componentName !== 'empty') {
+    const tmp = {
+      name: componentName
     };
-    const click = () => {
-      if (!isMobile.value) {
-        if (props.componentName != 'empty') {
-          const tmp = {
-            name: props.componentName
-          };
-          props.params &&
-            (tmp.params = {
-              id: props.params
-            });
-          router.push(tmp);
-        }
-      }
-    };
-    const getImgUrl = (src, color) => {
-      return require('../../assets/img/Studentsetting/' + src + color + '.png');
-    };
-    return {
-      touchend,
-      touchstart,
-      getImgUrl,
-      Dialog,
-      active,
-      click,
-      mouseEnter,
-      mouseLeave
-    };
+    params &&
+      (tmp.params = {
+        id: params
+      });
+    router.push(tmp);
   }
-});
+};
+const click = () => {
+  if (!mobile) {
+    if (componentName != 'empty') {
+      const tmp = {
+        name: componentName
+      };
+      params &&
+        (tmp.params = {
+          id: params
+        });
+      router.push(tmp);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

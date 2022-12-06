@@ -105,7 +105,7 @@ import {
 import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
-const $ = require('jquery');
+import $ from 'jquery';
 import alertify from '@/assets/alertifyjs/alertify';
 import { OrientationServiceApi } from '@/api/services/admin/orientation-service';
 import { SessionServiceApi } from '@/api/services/admin/session-service';

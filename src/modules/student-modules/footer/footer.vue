@@ -1,5 +1,5 @@
 <template>
-  <footer v-if="isMobile.value" class="mobile-only">
+  <footer v-if="mobile" class="mobile-only">
     <div @click="$router.push({ name: 'ClassRoom' })">
       <img
         src="@/assets/img/one-lesson.png"

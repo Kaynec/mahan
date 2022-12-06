@@ -1,6 +1,6 @@
 <template>
   <div class="shop-message">
-    <template v-if="isMobile.value">
+    <template v-if="mobile">
       <Header />
       <MinimalHeader title="تازه های کنکور" goOnePageBack="MyProfile" />
     </template>

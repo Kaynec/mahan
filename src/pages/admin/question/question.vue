@@ -50,7 +50,7 @@ import grid from '@/modules/shared/grid.vue';
 import { QuestionServiceApi } from '@/api/services/admin/question-service';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-const $ = require('jquery');
+import $ from 'jquery';
 import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({

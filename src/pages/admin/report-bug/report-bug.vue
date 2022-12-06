@@ -35,7 +35,7 @@ import grid from '@/modules/shared/grid.vue';
 
 import { ReportBugServiceApi } from '@/api/services/admin/report-bug-service';
 import { useRoute } from 'vue-router';
-const $ = require('jquery');
+import $ from 'jquery';
 import alertify from '@/assets/alertifyjs/alertify';
 
 export default defineComponent({

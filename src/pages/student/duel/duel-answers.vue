@@ -4,7 +4,7 @@
   </div>
 
   <main class="answers" v-bind="$attrs" v-else>
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
 
     <MinimalHeader onePageBack="Duel" title="پاسخنامه" />

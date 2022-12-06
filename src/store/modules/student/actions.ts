@@ -5,7 +5,7 @@ import { Mutations } from './mutations';
 import { StudentActionTypes } from './action-types';
 import { StudentMutationTypes } from './mutation-types';
 import { StudentAuthServiceApi } from '@/api/services/student/student-auth-service';
-import { connection } from '@/main';
+import { useConnection } from '@/api/connection';
 
 type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -37,12 +37,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
       if (result.data && result.data.token) {
         commit(StudentMutationTypes.SET_TOKEN, result.data.token);
-        connection.connect().on('connect', () => {
-          connection.emit('register', {
-            _id: getters.getCurrentStudent?._id,
-            userType: 'student'
+        useConnection()
+          .connect()
+          .on('connect', () => {
+            useConnection().emit('register', {
+              _id: getters.getCurrentStudent?._id,
+              userType: 'student'
+            });
           });
-        });
       }
 
       return true;

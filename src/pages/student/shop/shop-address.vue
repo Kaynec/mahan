@@ -1,8 +1,8 @@
 <template>
-  <div :class="`${isMobile.value ? 'shop-address' : 'shop-address pc'}`">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <div :class="`${mobile ? 'shop-address' : 'shop-address pc'}`">
+    <DesktopMinimalHeader v-if="!mobile" />
     <MinimalHeader
-      v-if="isMobile.value"
+      v-if="mobile"
       title="سبد خرید شما"
       onePageBack="studentShop"
     />

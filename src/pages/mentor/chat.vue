@@ -1,5 +1,5 @@
 <template>
-  <MentorDesktopHeader v-if="!isMobile.value" />
+  <MentorDesktopHeader v-if="!mobile" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
@@ -8,16 +8,16 @@
   <div
     class="chat animate__animated animate__fadeIn"
     v-else-if="!isFetching"
-    :style="`padding-top : ${!isMobile.value ? '4rem' : ''} ; max-height : ${
-      !isMobile.value ? `${maxHeight + 110}px` : ''
+    :style="`padding-top : ${!mobile ? '4rem' : ''} ; max-height : ${
+      !mobile ? `${maxHeight + 110}px` : ''
     }`"
   >
     <MinimalHeader
       title="پیام دریافتی"
-      v-if="isMobile.value"
+      v-if="mobile"
       onePageBack="MentorProfile"
     />
-    <nav class="navbar" v-if="!isMobile.value">
+    <nav class="navbar" v-if="!mobile">
       <div class="right">
         <img :src="imageUrl" class="animate__animated animate__fadeIn" />
         <div class="txt" v-if="mentor">
@@ -60,7 +60,7 @@
       <!--  -->
     </main>
     <!-- Keyboard -->
-    <section :class="`${isMobile.value ? 'toolbar' : 'pc-toolbar'}`">
+    <section :class="`${mobile ? 'toolbar' : 'pc-toolbar'}`">
       <div class="textarea">
         <textarea
           v-model="message"
@@ -87,11 +87,10 @@ import MentorDesktopHeader from '@/modules/mentor-main/mentor-header.vue';
 import { store } from '@/store';
 
 import router from '@/router';
-import { connection } from '@/main';
 import { useRoute } from 'vue-router';
 import { baseUrl } from '@/api/apiclient';
 import { MentorChatApi } from '@/api/services/mentor/mentor-chat-api';
-import axios from 'axios';
+import { useConnection } from '@/api/connection';
 
 export default defineComponent({
   // components: { MinimalHeader },
@@ -117,7 +116,6 @@ export default defineComponent({
     );
 
     if (currentStudentInfoForChat.value.profileImage) {
-      console.log(currentStudentInfoForChat.value);
       imageUrl.value = `${baseUrl}student/getProfileImage/${currentStudentInfoForChat.value.profileImage}`;
     } else {
       imageUrl.value = require('@/assets/img/contact/avatar.png');
@@ -166,7 +164,7 @@ export default defineComponent({
         sender: 'mentor',
         type: 'text'
       };
-      connection.emit('send-message', payload);
+      useConnection().emit('send-message', payload);
 
       message.value = '';
 

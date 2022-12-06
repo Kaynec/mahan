@@ -1,5 +1,5 @@
 <template>
-  <DesktopMinimalHeader v-if="!isMobile.value" />
+  <DesktopMinimalHeader v-if="!mobile" />
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
@@ -10,7 +10,7 @@
     v-else-if="!isFetching"
     class="duel-questions animate__animated animate__fadeIn"
   >
-    <template v-if="isMobile.value">
+    <template v-if="mobile">
       <Header />
       <MinimalHeader
         :title="`
@@ -21,7 +21,7 @@
       />
     </template>
     <MinimalHeader
-      v-else-if="!isMobile.value"
+      v-else-if="!mobile"
       :title="` دوثل  رشته ${data?.field?.title}`"
       onePageBack="Home"
     />

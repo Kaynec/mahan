@@ -69,7 +69,7 @@ import alertify from '@/assets/alertifyjs/alertify';
 import { CountDownServiceApi } from '@/api/services/admin/count-down-service';
 import gridComponent from '@/modules/shared/grid.vue';
 import { GradeServiceApi } from '@/api/services/admin/grade-service';
-const $ = require('jquery');
+import $ from 'jquery';
 
 const route = useRoute();
 

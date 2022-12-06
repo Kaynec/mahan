@@ -19,6 +19,10 @@ export type Mutations<S = State> = {
     state: S,
     payload: any | null
   ): void;
+  [StudentMutationTypes.SET_CURRENT_BUNDLE_INFO](
+    state: S,
+    payload: any | null
+  ): void;
   [StudentMutationTypes.SET_CURRENT_SUPPORT_PERSON](
     state: S,
     payload: string | null
@@ -47,6 +51,9 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [StudentMutationTypes.SET_CURRENT_SHOP_INFO](state: State, payload: any) {
     state.CurrentShopInfo = payload;
+  },
+  [StudentMutationTypes.SET_CURRENT_BUNDLE_INFO](state: State, payload: any) {
+    state.CurrentBundleInfo = payload;
   },
   [StudentMutationTypes.SET_SHOW_MSG](state: State) {
     state.showedMessage = !state.showedMessage;

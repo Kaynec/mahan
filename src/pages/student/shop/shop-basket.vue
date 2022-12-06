@@ -1,6 +1,6 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
-  <div class="shop-basket" v-if="isMobile.value">
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
+  <div class="shop-basket" v-if="mobile">
     <Header />
     <MinimalHeader title="سبد خرید شما" />
 
@@ -150,8 +150,8 @@
   </div>
 
   <!--  -->
-  <div class="shop-basket pc" v-if="!isMobile.value">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <div class="shop-basket pc" v-if="!mobile">
+    <DesktopMinimalHeader v-if="!mobile" />
 
     <div class="error" v-if="basketItems.length < 0">
       <img src="@/assets/img/error.png" alt="error img" />
@@ -172,46 +172,62 @@
         <div class="basket-container">
           <div class="basket-card" v-for="item in basketItems" :key="item._id">
             <template v-if="item.hasOwnProperty('productBundle')">
-              <div class="right">
-                <div v-if="!item.img" class="spinner-border" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <img :src="item.img" alt="product img" v-else />
-                <div class="flex-col">
-                  <!-- If The Type is product (has quantiy) -->
-                  <div class="product-container">
-                    <div
-                      class="product"
-                      v-for="product in item.productBundle.products"
-                    >
-                      <span class="title">{{ product.title }}</span>
-                      <span class="price">{{ product.price }}</span>
-                    </div>
-                  </div>
-                  <div class="label" style="margin-right: 0.5rem">
-                    <span>
-                      {{ item.productBundle?.title }}
-                    </span>
-
-                    <span
-                      @click="
-                        item.hasOwnProperty('productBundle')
-                          ? removeBundleFromBasket(item._id)
-                          : removeSessionFromBasket(item)
-                      "
-                      style="display: block"
-                      class="red"
-                      >حذف محصول</span
-                    >
-                  </div>
-                </div>
+              <!-- Img -->
+              <div v-if="!item.img" class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
               </div>
-              <div class="left">
-                <p>
+              <img :src="item.img" alt="product img" v-else max-w-20 />
+              <!-- Right -->
+              <div flex flex-col gap-4 grow items-start>
+                <span text-black>
+                  {{ item.productBundle?.title }}
+                </span>
+                <span
+                  text="#646464 xs"
+                  v-for="product in item.productBundle.products"
+                  flex
+                  items-center
+                >
+                  <span
+                    mx-2
+                    w-1
+                    h-1
+                    bg="#646464"
+                    block
+                    rounded-full
+                    aspect-1
+                  ></span>
+                  {{ product.title }}
+                </span>
+
+                <span
+                  @click="
+                    item.hasOwnProperty('productBundle')
+                      ? removeBundleFromBasket(item._id)
+                      : removeSessionFromBasket(item)
+                  "
+                  style="display: block"
+                  class="text-#ED1B24 text-sm"
+                  >حذف محصول</span
+                >
+              </div>
+              <!-- Left -->
+              <div flex flex-col gap-3 items-end>
+                <span font-600 text-xs>
                   {{ toPersianNumbers(`${item?.price}`) }}
                   تومان
-                </p>
+                </span>
+                <span
+                  text-red
+                  font-600
+                  text-xs
+                  v-for="el in item.productBundle.products"
+                >
+                  {{ toPersianNumbers(`${el?.price}`) }}
+                  تومان
+                </span>
               </div>
+              <!--  -->
             </template>
             <!--  -->
             <template v-else>
@@ -408,6 +424,21 @@ const discount = computed(() => {
       let discount =
         (item.product.price - item.product.specialPrice) * item.quantity;
       acc += discount;
+    } else if (item.hasOwnProperty('productBundle')) {
+      // If Item Exists in bought
+      const allThatExistInBought: any[] = [];
+      item.productBundle.products.forEach((element) => {
+        if (boughtProducts.value.find((el) => el._id === element._id)) {
+          allThatExistInBought.push(element);
+        }
+      });
+      console.log(allThatExistInBought);
+      //
+      const allPrice = item.productBundle.products.reduce((acc2, item) => {
+        return (acc += item.price);
+      });
+
+      acc += item.productBundle.price - allPrice;
     }
     return acc;
   }, 0);
@@ -426,13 +457,17 @@ const removeItem = async (item) => {
 
   try {
     await StudentBasketApi.add(tmpObject);
-
-    //
     // updateBasket();
   } catch (error) {
     console.log(error);
   }
 };
+
+const boughtProducts = ref<any[]>([]);
+
+StudentBasketApi.HistoryOfBoughtProducts()
+  .then((res) => (boughtProducts.value = res.data.data))
+  .catch((err) => console.log(err));
 
 const goOnepageBack = () => {
   router.go(-1);
@@ -504,7 +539,6 @@ const goOnepageBack = () => {
         display: flex;
         align-items: center;
         flex-grow: 1;
-        background-color: red;
 
         img {
           width: 20%;

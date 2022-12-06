@@ -1,108 +1,82 @@
-script
 <template>
   <!-- Spinner -->
   <div class="loader-parent" v-if="isFetching">
     <div class="loading1"></div>
   </div>
   <!--  -->
+
   <div class="shop-book-list" v-else>
-    <DesktopMinimalHeader v-if="!isMobile.value" component="shop" />
+    <DesktopMinimalHeader v-if="!mobile" component="shop" />
     <Header />
     <MinimalHeader :title="`لیست باندل ها`" goOnePageBack="Shop" />
-    <main
-      class="card-container animate__animated animate__fadeIn"
-      v-if="isMobile.value"
-    >
-      <section
-        class="card animate__animated animate__fadeIn"
-        v-for="product in data"
-        :key="product"
-        @click="openSingleBookPage(JSON.stringify(product))"
-      >
-        <div class="image-container">
-          <div v-if="!product.img" class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <img
-            :src="product.img"
-            class="animate__animated animate__fadeInDownBig"
-            v-else
-            alt="product img"
-          />
-        </div>
 
-        <!--  -->
-        <div class="text">
-          <!-- <p class="name">{{ product.name || 'کارشناسی ارشد حقوق' }}</p> -->
-          <p class="text-detail">
-            {{ product.title }}
-          </p>
-          <p class="price line-t">
-            قیمت : {{ toPersianNumbers(product.price) }} تومان
-          </p>
-          <div style="width: 100%; display: flex; align-items: flex-start">
-            <RemoveBundle
-              v-if="!!product.exists"
-              @click.stop="addBundle(product)"
-            />
-            <div v-else @click.stop="addBundle(product)" class="plus-icon">
-              <img
-                src="@/assets/img/plus-icon.png"
-                alt="button copy"
-                style="
-                  width: 1.5rem;
-                  height: 1.5rem;
-                  aspect-ratio: 1;
-                  object-fit: contain;
-                "
-              />
-              اضافه به سبد خرید
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <main class="card-container-pc animate__animated animate__fadeIn" v-else>
+    <main class="flex flex-col gap-2 w-90% mx-auto space-y-3">
       <section
-        class="Card animate__animated animate__fadeIn"
+        class="shadow rounded-xl p-2 bg-white animate__animated animate__fadeIn"
         v-for="product in data"
-        @click.self="openSingleBookPage(JSON.stringify(product))"
+        @click="
+          $router.push({
+            name: 'BundleInfo',
+            params: { item: JSON.stringify(product) }
+          })
+        "
         :key="product"
       >
-        <img
-          class="animate__animated animate__fadeIn"
-          v-if="product.img"
-          :src="product.img"
-          style="margin: 0.4rem"
-          alt="product img"
-        />
-        <div class="txts" @click="openSingleBookPage(JSON.stringify(product))">
-          <p class="title">{{ product.title }}</p>
-          <p class="price">
-            قیمت : {{ toPersianNumbers(product.price) }} تومان
-          </p>
+        <div class="flex items-start py-3">
+          <div ml-2 p-2 rounded-xl w-38>
+            <!-- <el-carousel height="150px" indicator-position="outside">
+              <el-carousel-item v-for="item in product.products" :key="item">
+                <el-image :src="item.img" :key="item.img" fit="contain" />
+              </el-carousel-item>
+            </el-carousel> -->
+          </div>
+          <!--  -->
+          <div class="flex flex-col gap-3">
+            <p class="text-black">{{ product.title }}</p>
 
-          <div style="width: 100%; display: flex; align-items: flex-start">
-            <RemoveBundle
-              v-if="!!product.exists"
-              @click.stop="addBundle(product)"
-            />
-            <div v-else @click.stop="addBundle(product)" class="plus-icon">
-              <img
-                src="@/assets/img/plus-icon.png"
-                alt="button copy"
-                style="
-                  width: 1.5rem;
-                  height: 1.5rem;
-                  object-fit: contain;
-                  aspect-ratio: 1;
-                "
-              />
-              اضافه به سبد خرید
-            </div>
+            <span
+              text="#646464 xs"
+              v-for="el in product.products"
+              flex
+              items-center
+            >
+              <span
+                mx-2
+                w-1
+                h-1
+                bg="#646464"
+                block
+                rounded-full
+                aspect-1
+              ></span>
+              {{ el.title }}
+            </span>
+
+            <p class="text-blueish">
+              قیمت : {{ toPersianNumbers(product.price) }} تومان
+            </p>
           </div>
         </div>
+        <p text-xs pb-2>
+          مجموع قیمت محصولات این باندل به طور مجزا
+          {{
+            toPersianNumbers(
+              product.products.reduce((acc, i) => (acc += i.price), 0)
+            )
+          }}
+          تومان میباشد،قیمت دراین باندل
+          {{ toPersianNumbers(product.price) }} تومان است.
+        </p>
+        <span text-blueish text-xs>
+          سود شما از این خرید
+          {{
+            toPersianNumbers(
+              product.products.reduce((acc, i) => (acc += i.price), 0) -
+                product.price
+            )
+          }}
+          تومان است.
+        </span>
       </section>
     </main>
 
@@ -120,113 +94,80 @@ script
 import { ref } from 'vue';
 import { StudentproductApi } from '@/api/services/student/student-product';
 import { toPersianNumbers } from '@/utilities/to-persian-numbers';
-import router from '@/router';
 import ShopFooter from '@/modules/student-modules/footer/shop-footer.vue';
 import { returnAProtectedUrl } from '@/utilities/get-image-from-url';
 import MinimalHeader from '@/modules/student-modules/header/minimal-header.vue';
 import Header from '@/modules/student-modules/header/header.vue';
 import { baseUrl } from '@/api/apiclient';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
-import { StudentBasketApi } from '@/api/services/student/student-basket-service';
-import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
-import { store } from '@/store';
-import alertify from '@/assets/alertifyjs/alertify';
-import RemoveBundle from '@/modules/student-modules/remove-bundle.vue';
+
+// import { StudentBasketApi } from '@/api/services/student/student-basket-service';
+// import { StudentMutationTypes } from '@/store/modules/student/mutation-types';
+// import { store } from '@/store';
+// import alertify from '@/assets/alertifyjs/alertify';
+// import RemoveBundle from '@/modules/student-modules/remove-bundle.vue';
 
 const data = ref<any[]>([]);
 const isFetching = ref(false);
-
-const openSingleBookPage = (item) => {
-  router.push({ name: 'SingleBookInfo', params: { item } });
-};
 
 (async () => {
   isFetching.value = true;
   const getAllProducts = await StudentproductApi.getAllBundles();
   data.value = getAllProducts.data.data;
 
-  const imgPromises = [] as any;
-
-  data.value.forEach((data) => {
-    // Setting The Initial Quantity
-
-    data.quantity = 1;
-
-    const imageUrl = `${baseUrl}productBundle/coverImage/${data._id}`;
-    // For Each Data Element Set It's Image to Returned Image from DB
-    imgPromises.push(returnAProtectedUrl(imageUrl));
+  //
+  // Check FOr ITems TO Exist Or Not
+  data.value.forEach(async (element) => {
+    const imgPromises: any[] = [];
+    element.products.forEach((el) => {
+      const imageUrl = `${baseUrl}product/coverImage/${el._id}`;
+      // For Each Data Element Set It's Image to Returned Image from DB
+      imgPromises.push(returnAProtectedUrl(imageUrl));
+    });
+    Promise.all(imgPromises).then((imgs) => {
+      imgs.forEach((img, idx) => {
+        element.products[idx].img = img;
+      });
+    });
   });
-
-  const promises = await Promise.all(imgPromises);
-  promises.forEach((img, idx) => {
-    data.value[idx].img = img;
-  });
-
   // making a list of promises for images and appending them to their list
   isFetching.value = false;
 })();
 
-const addBundle = async (product) => {
-  // remove
-  if (product.exists) {
-    try {
-      await StudentBasketApi.removeBundle(product._id);
+// const addBundle = async (product) => {
+//   // remove
+//   if (product.exists) {
+//     try {
+//       await StudentBasketApi.removeBundle(product._id);
 
-      store.commit(
-        StudentMutationTypes.SET_BASKET_COUNT,
-        store.getters.getBasketCount - 1
-      );
-      product.exists = false;
-    } catch (error) {}
-    return;
-  }
-  // add
-  try {
-    const res = await StudentBasketApi.addBundle({
-      bundle: { _id: product._id }
-    });
+//       store.commit(
+//         StudentMutationTypes.SET_BASKET_COUNT,
+//         store.getters.getBasketCount - 1
+//       );
+//       product.exists = false;
+//     } catch (error) {}
+//     return;
+//   }
+//   // add
+//   try {
+//     const res = await StudentBasketApi.addBundle({
+//       bundle: { _id: product._id }
+//     });
 
-    if (res.data) {
-      store.commit(
-        StudentMutationTypes.SET_BASKET_COUNT,
-        store.getters.getBasketCount + 1
-      );
+//     if (res.data) {
+//       store.commit(
+//         StudentMutationTypes.SET_BASKET_COUNT,
+//         store.getters.getBasketCount + 1
+//       );
 
-      alertify.success('محصول مورد نظر به سبد شما اضافه شد');
-      product.exists = true;
-    }
-  } catch (error) {}
-};
+//       alertify.success('محصول مورد نظر به سبد شما اضافه شد');
+//       product.exists = true;
+//     }
+//   } catch (error) {}
+// };
 
 (async () => {
-  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-    method: 'GET',
-    headers: {
-      token: store.getters.getStudentToken
-    }
-  });
-  const res = await resPromise.json();
-
-  let quantity = 0;
-
-  res.data.items.forEach((item) => {
-    if (item) {
-      quantity += 1;
-    }
-  });
-
-  store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
-
-  // Check FOr ITems TO Exist Or Not
-
-  res.data.bundles.forEach((element) => {
-    console.log(data.value);
-    const Index = data.value.findIndex(
-      (el) => el._id === element.productBundle._id
-    );
-    if (Index < 0) return;
-    data.value[Index].exists = true;
-  });
+  const res = await updateCount();
 })();
 </script>
 

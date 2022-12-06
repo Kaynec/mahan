@@ -1,6 +1,6 @@
 <template>
   <!-- DESKTOP  -->
-  <main class="desktop" v-if="!isMobile.value">
+  <main class="desktop" v-if="!mobile">
     <DesktopMinimalHeader component="shop" />
     <img
       src="@/assets/img/shop/shop-pc@3x.png"
@@ -327,23 +327,7 @@ const yourProduct = ref([]) as any;
 })();
 
 (async () => {
-  const resPromise = await fetch(`${baseUrl}shopping-cart/get`, {
-    method: 'GET',
-    headers: {
-      token: store.getters.getStudentToken
-    }
-  });
-  const res = await resPromise.json();
-
-  let quantity = 0;
-
-  res.data.items.forEach((item) => {
-    if (item) {
-      quantity += 1;
-    }
-  });
-
-  store.commit(StudentMutationTypes.SET_BASKET_COUNT, quantity);
+  updateCount();
 })();
 
 const currentState = ref('newsetProduct');

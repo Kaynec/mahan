@@ -1,6 +1,6 @@
 <template>
   <div class="self-test-questions">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
     <MinimalHeader onePageBack="SelfTest" title="سوالات برگزیده " />
     <!-- Progress Bar And Count -->

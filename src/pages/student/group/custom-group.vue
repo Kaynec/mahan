@@ -17,10 +17,10 @@
     <MinimalHeader
       style="top: 0; margin-top: 0; position: absolute"
       :title="`رودمپ`"
-      v-if="isMobile.value"
+      v-if="mobile"
     />
 
-    <DesktopMinimalHeader v-show="!isMobile.value" />
+    <DesktopMinimalHeader v-show="!mobile" />
 
     <div
       class="circles custom animate__animatd animate__fadeIn"

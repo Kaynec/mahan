@@ -1,5 +1,5 @@
 <template>
-  <header class="big-header" v-if="isMobile.value">
+  <header class="big-header" v-if="mobile">
     <img alt="logo" src="@/assets/img/logo-mahan.png" />
     <div class="user-part">
       <span class="points">

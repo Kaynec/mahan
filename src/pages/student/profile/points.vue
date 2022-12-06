@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
   <div class="history">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header />
     <MinimalHeader title="امتیازات" onePageBack="MyProfile" />
     <!--  -->

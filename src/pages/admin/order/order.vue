@@ -41,9 +41,9 @@ import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
 import { OrderServiceApi } from '@/api/services/admin/order-service';
-const $ = require('jquery');
+import $ from 'jquery';
 import alertify from '@/assets/alertifyjs/alertify';
-var moment = require('jalali-moment');
+import moment from 'jalali-moment';
 
 export default defineComponent({
   components: { grid },

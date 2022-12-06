@@ -1,18 +1,14 @@
 <template>
-  <!-- <div class="desktop" v-if="!isMobile.value"></div> -->
-  <main class="class" :style="`padding-top: ${isMobile.value ? '' : '6vh'}`">
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+  <!-- <div class="desktop" v-if="!mobile"></div> -->
+  <main class="class" :style="`padding-top: ${mobile ? '' : '6vh'}`">
+    <DesktopMinimalHeader v-if="!mobile" />
     <Header onePageBack="Home" />
-    <MinimalHeader
-      v-if="isMobile.value"
-      title="آزمون خودسنجی"
-      onePageBack="Home"
-    />
+    <MinimalHeader v-if="mobile" title="آزمون خودسنجی" onePageBack="Home" />
 
     <div
       class="hero"
-      :style="`margin-top: ${isMobile.value ? '' : '50px'} ; margin-bottom: ${
-        isMobile.value ? '' : '6rem'
+      :style="`margin-top: ${mobile ? '' : '50px'} ; margin-bottom: ${
+        mobile ? '' : '6rem'
       }`"
     >
       <img

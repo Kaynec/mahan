@@ -144,15 +144,19 @@ const props = defineProps({
   item: { type: String, default: '{}' }
 });
 
-const model = ref(JSON.parse(props.item as any));
+const model = ref<{
+  [index: string]: any;
+}>(JSON.parse(props.item));
 const isSendingRequest = ref(false);
 const imgUrl = ref('');
 const shopBasket = ref();
 
 if (props.item != '{}') {
-  store.commit(StudentMutationTypes.SET_CURRENT_SHOP_INFO, model.value);
+  store.commit(StudentMutationTypes.SET_CURRENT_BUNDLE_INFO, model.value);
 }
-model.value = store.getters.getCurrentShopInfo;
+model.value = store.state.students.CurrentBundleInfo;
+
+console.log(model.value);
 
 function openPdfPage(filename) {
   router.push({

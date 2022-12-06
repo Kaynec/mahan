@@ -1,21 +1,17 @@
 <template>
-  <div class="comp-test" :style="`padding-top:${!isMobile.value ? '6vh' : ''}`">
+  <div class="comp-test" :style="`padding-top:${!mobile ? '6vh' : ''}`">
     <Header />
-    <MinimalHeader
-      onePageBack="Home"
-      v-if="isMobile.value"
-      title="دوئل حرفه‌ای‌ها"
-    />
-    <DesktopMinimalHeader v-if="!isMobile.value" />
+    <MinimalHeader onePageBack="Home" v-if="mobile" title="دوئل حرفه‌ای‌ها" />
+    <DesktopMinimalHeader v-if="!mobile" />
     <MinimalHeader
       style="margin-top: 2rem"
       onePageBack="Home"
-      v-if="!isMobile.value"
+      v-if="!mobile"
       title="دوئل حرفه‌ای‌ها"
     />
-    <main :class="`${isMobile.value ? 'wrapper' : 'wrapper-pc'}`">
+    <main :class="`${mobile ? 'wrapper' : 'wrapper-pc'}`">
       <section class="first">
-        <div :class="`${isMobile.value ? 'hero' : 'hero hero-pc'}`">
+        <div :class="`${mobile ? 'hero' : 'hero hero-pc'}`">
           <h1 class="right">
             <span> {{ toPersianNumbers(lastDuelRate) }} </span><br />
             آخرین رتبه دوئلی شما
@@ -29,7 +25,7 @@
             </p>
           </div>
         </div>
-        <div :class="`${isMobile.value ? 'points' : 'points points-pc'}`">
+        <div :class="`${mobile ? 'points' : 'points points-pc'}`">
           <div>
             <span> دوئل های انجام شده </span>
             <p>{{ toPersianNumbers(countOfDuelsParticipated) }}</p>

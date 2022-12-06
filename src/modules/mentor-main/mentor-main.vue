@@ -1,6 +1,6 @@
 <template>
   <div class="st-wrapper" :style="getMainStyle()">
-    <desktopRightSide v-if="!isMobile.value && store.getters.getMentorToken" />
+    <desktopRightSide v-if="!mobile && store.getters.getMentorToken" />
     <router-view></router-view>
     <alert
       messages
@@ -18,11 +18,10 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import desktopRightSide from '@/modules/mentor-main/desktop-rightside.vue';
-import { isMobile } from '@/mixins/detectMobile';
 import { store, useChatStore, useMentorStore } from '@/store';
-import { connection } from '@/main';
 import { ChatMutationTypes } from '@/store/modules/chat/mutation-types';
 import router from '@/router';
+import { useConnection } from '@/api/connection';
 
 @Options({
   components: { desktopRightSide }
@@ -30,34 +29,35 @@ import router from '@/router';
 export default class Main extends Vue {
   public windowHeight = window.innerHeight;
   public windowWidth = window.innerWidth;
-  public store = store
+  public store = store;
   public text = '';
-  public isMobile = isMobile;
 
   async mounted() {
     if (!useMentorStore().getters.getMentorToken) return;
-    connection.connect().on('connect', () => {
-      connection.emit('register', {
-        _id: useMentorStore().getters.getCurrentMentor?._id,
-        userType: 'mentor'
+    useConnection()
+      .connect()
+      .on('connect', () => {
+        useConnection().emit('register', {
+          _id: useMentorStore().getters.getCurrentMentor?._id,
+          userType: 'mentor'
+        });
+
+        if (useChatStore().getters.getShowModal === false) {
+          return;
+        }
+        if (useChatStore().getters.getMessages?.length) {
+          store.commit(ChatMutationTypes.TOGGLE_MODAL);
+          console.log(
+            useChatStore().getters.getMessages,
+            useChatStore().getters.getShowModal
+          );
+          this.text = `شما ${
+            useChatStore().getters.getMessages?.length
+          } پیام ناخوانده دارید`;
+        }
       });
 
-      if (useChatStore().getters.getShowModal === false) {
-        return;
-      }
-      if (useChatStore().getters.getMessages?.length) {
-        store.commit(ChatMutationTypes.TOGGLE_MODAL);
-        console.log(
-          useChatStore().getters.getMessages,
-          useChatStore().getters.getShowModal
-        );
-        this.text = `شما ${
-          useChatStore().getters.getMessages?.length
-        } پیام ناخوانده دارید`;
-      }
-    });
-
-    connection.on('new-message', () => {
+    useConnection().on('new-message', () => {
       if (this.componentname != 'Chat') {
         this.text = `شما ${
           useChatStore().getters.getMessages?.length
@@ -97,9 +97,9 @@ export default class Main extends Vue {
   getMainStyle() {
     let fraction = '';
 
-    if (this.isMobile) {
+    if (mobile.value) {
       fraction = '1fr';
-    } else if (!this.isMobile && !store.getters.getMentorToken) {
+    } else if (!mobile.value && !store.getters.getMentorToken) {
       fraction = '1fr';
     } else {
       fraction = '40% 60%';

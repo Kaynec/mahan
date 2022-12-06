@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${!isMobile.value ? 'Sign-up desktop' : 'Sign-up'}`">
+  <div :class="`${!mobile ? 'Sign-up desktop' : 'Sign-up'}`">
     <form
       @submit.prevent="register()"
       class="animate__animated animate__fadeIn"
@@ -33,7 +33,7 @@
         v-for="error in v$.firstname.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -65,7 +65,7 @@
         v-for="error in v$.lastname.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -97,7 +97,7 @@
         v-for="error in v$.password.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -128,7 +128,7 @@
         v-for="error in v$.repassword.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -139,7 +139,7 @@
           placeholder="شماره همراه"
           v-model="model.phone"
           @blur="onBlur('phone')"
-          style="appearance: none;"
+          style="appearance: none"
         />
         <span> شماره همراه </span>
       </label>
@@ -148,7 +148,7 @@
         v-for="error in v$.phone.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -159,7 +159,7 @@
           placeholder=" کد ملی"
           v-model="model.nationalId"
           @blur="onBlur('nationalId')"
-          style="appearance: none;"
+          style="appearance: none"
         />
         <span> کد ملی </span>
       </label>
@@ -168,7 +168,7 @@
         v-for="error in v$.nationalId.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -190,7 +190,7 @@
         v-for="error in v$.stateId.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -212,7 +212,7 @@
         v-for="error in v$.cityId.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -239,7 +239,7 @@
         v-for="error in v$.grade.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -266,7 +266,7 @@
         v-for="error in v$.group.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -293,7 +293,7 @@
         v-for="error in v$.field.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
@@ -320,14 +320,14 @@
         v-for="error in v$.orientation.$errors"
         class="text-danger text-bold m-2"
         :key="error.$uid"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ error.$message }}
       </p>
 
       <p
         class="text-danger text-bold m-2"
-        style="font-family: IRANSans; font-size: 12px;"
+        style="font-family: IRANSans; font-size: 12px"
       >
         {{ errorMessage }}
       </p>
@@ -335,7 +335,7 @@
       <button type="submit" class="button-linear">
         <template v-if="isRequesting">
           <span
-            style="width: 1.3rem; height: 1.3rem;"
+            style="width: 1.3rem; height: 1.3rem"
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
@@ -349,7 +349,7 @@
         برگشت به صفحه ورود
       </span>
     </form>
-    <img v-show="!isMobile.value" src="@/assets/img/mahan.png" alt="logo" />
+    <img v-show="!mobile" src="@/assets/img/mahan.png" alt="logo" />
   </div>
 </template>
 

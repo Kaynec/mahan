@@ -40,8 +40,8 @@ import { defineComponent, ref, onMounted, reactive } from 'vue';
 import { baseUrl } from '@/api/apiclient';
 import grid from '@/modules/shared/grid.vue';
 import router from '@/router';
-const $ = require('jquery');
-import alertify from '@/assets/alertifyjs/alertify'
+import $ from 'jquery';
+import alertify from '@/assets/alertifyjs/alertify';
 import { MentorServiceApi } from '@/api/services/admin/mentor-service';
 // import { string } from 'yup/lib/locale';
 

@@ -20,21 +20,22 @@ import { useAdminStore } from '@/store';
 import 'jquery/dist/jquery.min.js';
 import 'datatables.net-dt/js/dataTables.dataTables';
 
-require('jszip');
-require('datatables.net-bs5');
-require('datatables.net-buttons-bs5');
-require('datatables.net-buttons/js/buttons.colVis.js');
-require('datatables.net-buttons/js/buttons.html5.js');
-require('datatables.net-buttons/js/buttons.print.js');
-require('datatables.net-responsive-bs5');
-require('datatables.net-scroller-bs5');
-require('datatables.net-searchpanes');
-require('datatables.net-searchpanes-bs5');
-require('datatables.net-searchbuilder-bs5');
-require('datatables.net-select-bs5');
-require('datatables.net-datetime');
+import 'jszip';
+import 'datatables.net-bs5';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-buttons/js/buttons.colVis.js';
+import 'datatables.net-buttons/js/buttons.html5.js';
+import 'datatables.net-buttons/js/buttons.print.js';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-scroller-bs5';
+import 'datatables.net-searchpanes';
+import 'datatables.net-searchpanes-bs5';
+import 'datatables.net-searchbuilder-bs5';
+import 'datatables.net-select-bs5';
+import 'datatables.net-datetime';
 
-const $ = require('jquery');
+import $ from 'jquery';
+
 export default defineComponent({
   name: 'Grid',
   props: {
