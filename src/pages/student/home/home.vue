@@ -227,8 +227,9 @@ const currentImg = computed(() => {
 });
 const currentImg2 = computed(() => {
   return new URL(
-    '../../../assets/img/home-icons/home-page/' +
-      images[Math.abs(currentIndex.value) % images.length],
+    `../../../assets/img/home-icons/home-page/${
+      images[Math.abs(currentIndex.value) % images.length]
+    }`,
     import.meta.url
   ).href;
 });

@@ -68,9 +68,9 @@ export default defineComponent({
     };
     const getImgUrl = (src, color) => {
       return new URL(
-        '@/assets/img/Studentsetting/' + src + color + '.png',
+        `../../assets/img/Studentsetting/${src}${color}.png`,
         import.meta.url
-      ).href;
+      );
     };
 
     const mouseEnter = () => {

@@ -65,9 +65,9 @@ const touchend = () => {
 };
 const getImgUrl = (src, color) =>
   new URL(
-    '@/assets/img/Studentsetting/' + src + color + '.png',
+    `../../assets/img/Studentsetting/${src}${color}.png`,
     import.meta.url
-  ).href;
+  );
 </script>
 
 <style lang="scss" scoped>

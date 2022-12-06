@@ -4,44 +4,66 @@ import path from 'path';
 import Components from 'unplugin-vue-components/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Unocss from 'unocss/vite';
-// import { VitePWA } from 'vite-plugin-pwa';
 import Inspect from 'vite-plugin-inspect';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '~/': `${path.resolve(__dirname, 'src')}/`,
+      '@/': `${path.resolve(__dirname, 'src')}/`
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext'
+    }
+  },
+
+  build: {
+    target: 'esnext',
+    commonjsOptions: {
+      transformMixedEsModules: true,
+
+      exclude: ['src/assets/datepicker/**']
+    }
+  },
+
+  server: {
+    host: true
+  },
   base: './',
   plugins: [
     vue({
       include: [/\.vue$/]
     }),
-    // VitePWA({
-    //   registerType: 'autoUpdate',
-    //   includeAssets: ['favicon.svg', 'safari-pinned-tab.svg'],
-    //   manifest: {
-    //     name: 'Vitesse',
-    //     short_name: 'Vitesse',
-    //     theme_color: '#ffffff',
-    //     icons: [
-    //       {
-    //         src: '/pwa-192x192.png',
-    //         sizes: '192x192',
-    //         type: 'image/png'
-    //       },
-    //       {
-    //         src: '/pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png'
-    //       },
-    //       {
-    //         src: '/pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png',
-    //         purpose: 'any maskable'
-    //       }
-    //     ]
-    //   }
-    // }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'safari-pinned-tab.svg'],
+      manifest: {
+        name: 'Vitesse',
+        short_name: 'Vitesse',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: '/pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ]
+      }
+    }),
 
     // https://github.com/antfu/vite-plugin-inspect
     // Visit http://localhost:3333/__inspect/ to see the inspector
