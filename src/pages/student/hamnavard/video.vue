@@ -112,134 +112,109 @@
   </main>
 </template>
 
-<script lang="ts">
+<script lang="ts" lang="ts">
 import { baseUrl } from '@/api/apiclient';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import DesktopMinimalHeader from '@/modules/student-modules/header/desktop-minimal.vue';
 import router from '@/router';
 import { store } from '@/store';
 
-export default defineComponent({
-  components: { DesktopMinimalHeader },
-  setup() {
-    const route = useRoute();
-    const videoHref = route.params.filename;
-    const pausedStatus = ref(false);
-    const video = ref() as any;
-    const currentTime = ref(0) as any;
-    const videoSrc = ref('');
-    const isLoading = ref(true);
-    const videoUrl = `${baseUrl}session/download-file/${videoHref}`;
-    const progressbarChild = ref() as any;
-    const error = ref(false);
+const route = useRoute();
+const videoHref = route.params.filename;
+const pausedStatus = ref(false);
+const video = ref() as any;
+const currentTime = ref(0) as any;
+const videoSrc = ref('');
+const isLoading = ref(true);
+const videoUrl = `${baseUrl}session/download-file/${videoHref}`;
+const progressbarChild = ref() as any;
+const error = ref(false);
 
-    (async () => {
-      try {
-        const blob = await fetch(videoUrl, {
-          headers: {
-            token: store.getters.getStudentToken
-          }
-        }).then((r) => r.blob());
-        videoSrc.value = URL.createObjectURL(blob);
-        isLoading.value = false;
-      } catch (err) {
-        error.value = true;
-        isLoading.value = false;
+(async () => {
+  try {
+    const blob = await fetch(videoUrl, {
+      headers: {
+        token: store.getters.getStudentToken
       }
-
-      // You can now insert video into DOM
-    })();
-
-    const onUpdate = () => {
-      currentTime.value = ~~video.value?.currentTime;
-      video?.paused
-        ? (pausedStatus.value = true)
-        : (pausedStatus.value = false);
-
-      const tmp = currentTime?.value / 60;
-      let firstSide = tmp > 0 ? ~~tmp : `0${~~tmp}`;
-
-      let secondSide =
-        currentTime.value < 60 ? ~~currentTime.value : ~~currentTime.value % 60;
-      currentTime.value = firstSide + ':' + secondSide;
-    };
-
-    const pauseAndPlay = () => {
-      pausedStatus.value = !pausedStatus.value;
-      video.value.paused ? video.value.play() : video.value.pause();
-    };
-    ``;
-
-    const touchMove = (e: any) => {
-      let clientRect = e.currentTarget.getBoundingClientRect();
-      let fullWidth = clientRect.height;
-      let deltaX = e.changedTouches[0].clientY;
-      const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
-      video.value.currentTime = ~~Math.abs(tmp - ~~video.value.duration);
-    };
-
-    const onTouch = (e: any) => {
-      let clientRect = e.currentTarget.getBoundingClientRect();
-      let fullWidth = clientRect.height;
-      let deltaX = e.changedTouches[0].clientY;
-      const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
-      video.value.currentTime = ~~Math.abs(tmp - ~~video.value.duration);
-    };
-
-    const mousedown = (e) => {
-      let clientRect = e.currentTarget.getBoundingClientRect();
-      let fullWidth = clientRect.width;
-      // Account for margin and etc
-      let deltaX = e.clientX - clientRect.left;
-      const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
-      video.value.currentTime = ~~tmp;
-    };
-
-    const mouseup = (e) => {
-      let clientRect = e.currentTarget.getBoundingClientRect();
-      let fullWidth = clientRect.width;
-      // Account for margin and etc
-      let deltaX = e.clientX - clientRect.left;
-      const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
-      video.value.currentTime = ~~tmp;
-    };
-
-    const formatTime = (time) => {
-      const tmp = time / 60;
-      if (tmp > 0) {
-        let firstSide = tmp > 0 ? ~~tmp : `0${~~tmp}`;
-        let secondSide = currentTime.value < 60 ? ~~time : ~~time % 60;
-        time = firstSide + ':' + secondSide;
-        time = firstSide + ':' + secondSide;
-      }
-
-      return time;
-    };
-
-    const onePageBack = () => {
-      router.go(-1);
-    };
-
-    return {
-      videoSrc,
-      video,
-      formatTime,
-      pauseAndPlay,
-      pausedStatus,
-      onUpdate,
-      mouseup,
-      mousedown,
-      onTouch,
-      touchMove,
-      currentTime,
-      isLoading,
-      onePageBack,
-      progressbarChild,
-      error
-    };
+    }).then((r) => r.blob());
+    videoSrc.value = URL.createObjectURL(blob);
+    isLoading.value = false;
+  } catch (err) {
+    error.value = true;
+    isLoading.value = false;
   }
-});
+
+  // You can now insert video into DOM
+})();
+
+const onUpdate = () => {
+  currentTime.value = ~~video.value?.currentTime;
+  video?.paused ? (pausedStatus.value = true) : (pausedStatus.value = false);
+
+  const tmp = currentTime?.value / 60;
+  let firstSide = tmp > 0 ? ~~tmp : `0${~~tmp}`;
+
+  let secondSide =
+    currentTime.value < 60 ? ~~currentTime.value : ~~currentTime.value % 60;
+  currentTime.value = firstSide + ':' + secondSide;
+};
+
+const pauseAndPlay = () => {
+  pausedStatus.value = !pausedStatus.value;
+  video.value.paused ? video.value.play() : video.value.pause();
+};
+``;
+
+const touchMove = (e: any) => {
+  let clientRect = e.currentTarget.getBoundingClientRect();
+  let fullWidth = clientRect.height;
+  let deltaX = e.changedTouches[0].clientY;
+  const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
+  video.value.currentTime = ~~Math.abs(tmp - ~~video.value.duration);
+};
+
+const onTouch = (e: any) => {
+  let clientRect = e.currentTarget.getBoundingClientRect();
+  let fullWidth = clientRect.height;
+  let deltaX = e.changedTouches[0].clientY;
+  const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
+  video.value.currentTime = ~~Math.abs(tmp - ~~video.value.duration);
+};
+
+const mousedown = (e) => {
+  let clientRect = e.currentTarget.getBoundingClientRect();
+  let fullWidth = clientRect.width;
+  // Account for margin and etc
+  let deltaX = e.clientX - clientRect.left;
+  const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
+  video.value.currentTime = ~~tmp;
+};
+
+const mouseup = (e) => {
+  let clientRect = e.currentTarget.getBoundingClientRect();
+  let fullWidth = clientRect.width;
+  // Account for margin and etc
+  let deltaX = e.clientX - clientRect.left;
+  const tmp = ~~video.value.duration / (~~fullWidth / ~~deltaX);
+  video.value.currentTime = ~~tmp;
+};
+
+const formatTime = (time) => {
+  const tmp = time / 60;
+  if (tmp > 0) {
+    let firstSide = tmp > 0 ? ~~tmp : `0${~~tmp}`;
+    let secondSide = currentTime.value < 60 ? ~~time : ~~time % 60;
+    time = firstSide + ':' + secondSide;
+    time = firstSide + ':' + secondSide;
+  }
+
+  return time;
+};
+
+const onePageBack = () => {
+  router.go(-1);
+};
 </script>
 
 <style lang="scss" scoped>

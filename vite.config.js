@@ -5,15 +5,10 @@ import Components from 'unplugin-vue-components/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Unocss from 'unocss/vite';
 import Inspect from 'vite-plugin-inspect';
+import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  resolve: {
-    alias: {
-      '~/': `${path.resolve(__dirname, 'src')}/`,
-      '@/': `${path.resolve(__dirname, 'src')}/`
-    }
-  },
   optimizeDeps: {
     esbuildOptions: {
       target: 'esnext'
