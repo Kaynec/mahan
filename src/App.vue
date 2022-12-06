@@ -1,6 +1,5 @@
 <template>
   <SplashScreen v-if="loading" />
-
   <RouterView v-else />
 </template>
 <style lang="scss">
@@ -13,14 +12,8 @@ import { ref, onMounted } from 'vue';
 const loading = ref(true);
 
 onMounted(() => {
+  loading.value = false;
   document.body.style.height = window.innerHeight + 'px';
-
-  document.addEventListener('readystatechange', (e) => {
-    if (document.readyState == 'complete') {
-      // run code here
-      loading.value = false;
-    }
-  });
   window.addEventListener('resize', (e) => {
     document.body.style.height = window.innerHeight + 'px';
   });

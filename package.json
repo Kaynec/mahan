@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --base=./",
     "dev": "vite --port 3333 --open",
     "preview": "vite preview",
     "preview-https": "serve dist",

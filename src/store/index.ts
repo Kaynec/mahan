@@ -58,6 +58,7 @@ export function useAdminStore(): AdminStore {
 }
 
 export function useStudentStore(): StudentStore {
+  console.log(store);
   return store as StudentStore;
 }
 
